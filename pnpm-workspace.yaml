@@ -1,0 +1,9 @@
+packages:
+  - apps/admin
+  - apps/mobile
+  - packages/*
+onlyBuiltDependencies:
+  - sharp
+  - esbuild
+  - unrs-resolver
+  - '@tailwindcss/oxide'

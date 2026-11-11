@@ -1,0 +1,31 @@
+{
+  "name": "smartwear",
+  "private": true,
+  "version": "0.1.0",
+  "description": "SmartWear — premium fashion & beauty commerce platform (mobile, admin, API, workers)",
+  "packageManager": "pnpm@10.18.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "api": "cd apps/api && uv run python manage.py runserver 0.0.0.0:4000",
+    "api:migrate": "cd apps/api && uv run python manage.py migrate",
+    "api:seed": "cd apps/api && uv run python manage.py seed",
+    "api:test": "cd apps/api && uv run pytest -q",
+    "worker": "cd apps/api && uv run celery -A smartwear worker -l info -Q media,notifications,dispatch,scheduled,sms",
+    "worker:beat": "cd apps/api && uv run celery -A smartwear beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler",
+    "simulate:rider": "cd apps/api && uv run python manage.py simulate_rider",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,css}\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "prettier": "^3.6.2",
+    "turbo": "^2.11.10",
+    "typescript": "~5.9.3"
+  }
+}

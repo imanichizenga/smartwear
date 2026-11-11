@@ -1,0 +1,78 @@
+# One-command local stack: `docker compose up -d` then `pnpm dev`.
+# Images: PostGIS 16, Redis 7, RustFS (S3-compatible stand-in; MinIO's public images were withdrawn — see docs/DECISIONS.md).
+name: smartwear
+services:
+  postgres:
+    image: postgis/postgis:16-3.5
+    environment:
+      POSTGRES_USER: smartwear
+      POSTGRES_PASSWORD: smartwear
+      POSTGRES_DB: smartwear
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartwear -d smartwear"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "60", "1", "--appendonly", "no"]
+    ports: ["6379:6379"]
+    volumes: ["redisdata:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  s3:
+    image: rustfs/rustfs:latest
+    environment:
+      RUSTFS_ACCESS_KEY: smartwear
+      RUSTFS_SECRET_KEY: smartwear-secret
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports: ["9000:9000", "9001:9001"]
+    volumes: ["s3data:/data"]
+  api:
+    build: { context: ., dockerfile: apps/api/Dockerfile }
+    profiles: ["full"]
+    environment:
+      DATABASE_URL: postgresql://smartwear:smartwear@postgres:5432/smartwear
+      REDIS_URL: redis://redis:6379
+      MASTER_ENCRYPTION_KEY: ${MASTER_ENCRYPTION_KEY}
+      NODE_ENV: production
+      PORT: "4000"
+    ports: ["4000:4000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+  worker:
+    build: { context: ., dockerfile: apps/api/Dockerfile }
+    profiles: ["full"]
+    command: ["celery", "-A", "smartwear", "worker", "-l", "info", "-Q", "celery,media,notifications,dispatch,scheduled,sms"]
+    environment: &apienv
+      DATABASE_URL: postgresql://smartwear:smartwear@postgres:5432/smartwear
+      REDIS_URL: redis://redis:6379
+      MASTER_ENCRYPTION_KEY: ${MASTER_ENCRYPTION_KEY}
+      NODE_ENV: production
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+  beat:
+    build: { context: ., dockerfile: apps/api/Dockerfile }
+    profiles: ["full"]
+    command: ["celery", "-A", "smartwear", "beat", "-l", "info", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+    environment: *apienv
+    depends_on: [worker]
+  admin:
+    build: { context: ., dockerfile: apps/admin/Dockerfile }
+    profiles: ["full"]
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+      API_INTERNAL_URL: http://api:4000
+    ports: ["3000:3000"]
+    depends_on: [api]
+volumes:
+  pgdata: {}
+  redisdata: {}
+  s3data: {}

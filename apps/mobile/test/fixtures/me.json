@@ -1,0 +1,32 @@
+{
+ "id": "8048639d-0b0a-46b7-a4d0-1fdaa7930e56",
+ "name": "Demo Customer",
+ "displayName": "Demo Customer",
+ "phone": "+255713000999",
+ "phoneVerified": true,
+ "email": null,
+ "avatar": null,
+ "cover": null,
+ "customerType": "RETAIL",
+ "wholesaleApproved": false,
+ "locale": "en",
+ "theme": "system",
+ "styleProfile": {},
+ "quizCompleted": false,
+ "notificationPrefs": {},
+ "loyalty": {
+  "points": 62,
+  "tier": "Atelier",
+  "perk": "Welcome to SmartWear",
+  "nextTier": "Maison",
+  "pointsToNext": 438
+ },
+ "identities": [
+  "phone"
+ ],
+ "roles": [
+  "customer"
+ ],
+ "rider": null,
+ "createdAt": "2026-11-11T06:42:42.898329+00:00"
+}

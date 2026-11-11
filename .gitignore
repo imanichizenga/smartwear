@@ -1,0 +1,110 @@
+# ───────────────────────────── secrets & local env
+.env
+.env.*
+!.env.example
+.totp-secret
+*.pem
+*.p8
+*.keystore
+*.jks
+key.properties
+google-services.json
+GoogleService-Info.plist
+
+# ───────────────────────────── OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+*.iml
+*.ipr
+*.iws
+.idea/
+.history/
+
+# ───────────────────────────── logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ───────────────────────────── Node / pnpm / Turborepo
+node_modules/
+.pnpm-store/
+.turbo/
+dist/
+coverage/
+*.tsbuildinfo
+
+# ───────────────────────────── Admin (Next.js)
+.next/
+out/
+apps/admin/next-env.d.ts
+# Next 16 writes this agents guide on first `next dev`
+apps/admin/AGENTS.md
+# Regenerated from packages/design-tokens by `predev` / `prebuild`
+apps/admin/src/app/styles/tokens.css
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# ───────────────────────────── API (Django / Python / uv)
+apps/api/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+apps/api/staticfiles/
+apps/api/media/uploads/
+# Image downloads cached by `manage.py seed`
+apps/api/.seed-cache/
+celerybeat-schedule*
+celerybeat.pid
+
+# ───────────────────────────── Mobile (Flutter)
+# (ios/ and android/ ARE source — only their build outputs are ignored)
+apps/mobile/.dart_tool/
+apps/mobile/build/
+apps/mobile/.flutter-plugins
+apps/mobile/.flutter-plugins-dependencies
+apps/mobile/.pub-cache/
+apps/mobile/.pub/
+apps/mobile/coverage/
+apps/mobile/.widget_preview/
+apps/mobile/**/doc/api/
+apps/mobile/app.*.symbols
+apps/mobile/app.*.map.json
+apps/mobile/android/.gradle/
+apps/mobile/android/.kotlin/
+apps/mobile/android/captures/
+apps/mobile/android/local.properties
+apps/mobile/android/app/debug/
+apps/mobile/android/app/profile/
+apps/mobile/android/app/release/
+apps/mobile/android/**/gradle-wrapper.jar
+apps/mobile/android/gradlew
+apps/mobile/android/gradlew.bat
+apps/mobile/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+apps/mobile/ios/Pods/
+apps/mobile/ios/.symlinks/
+apps/mobile/ios/Flutter/Flutter.framework
+apps/mobile/ios/Flutter/Flutter.podspec
+apps/mobile/ios/Flutter/Generated.xcconfig
+apps/mobile/ios/Flutter/ephemeral/
+apps/mobile/ios/Flutter/app.flx
+apps/mobile/ios/Flutter/app.zip
+apps/mobile/ios/Flutter/flutter_assets/
+apps/mobile/ios/Flutter/flutter_export_environment.sh
+apps/mobile/ios/Flutter/.last_build_id
+apps/mobile/ios/Runner/GeneratedPluginRegistrant.*
+apps/mobile/ios/ServiceDefinitions.json
+apps/mobile/ios/**/xcuserdata/
+apps/mobile/ios/**/DerivedData/
+apps/mobile/ios/build/
+
+# ───────────────────────────── misc
+/data
+generated/

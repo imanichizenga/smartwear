@@ -1,0 +1,1736 @@
+{
+ "items": [
+  {
+   "id": "aa69891b-40d0-4d03-a3a9-f032276163c6",
+   "media": {
+    "id": "a16907dd-68d2-454e-a9fc-9f4b7a77e464",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1602.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ba3f2fbaa9f79bb288c602c667d46b7953c51b1e8428ca4254209cb127a98019",
+    "sources": {
+     "avif": [
+      {
+       "width": 214,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=153106bf05298b6a7ff9776027eabca8b28cc19590bab1af6649e3ce0a5477a1"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=40a3242503f003ff26d23746c89323e090dca468b36985ab9badfe71ee33812e"
+      },
+      {
+       "width": 641,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8e4edeb7ef1a394b4bd4b7b935b90c0d04249da42bdc94560ea725550a5c6051"
+      },
+      {
+       "width": 854,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=751cbab306685e8d9c405125c643d3340649223ea46dca2c531cbf0ee22b1b15"
+      },
+      {
+       "width": 1602,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1602.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a1396c46fd316c717508d1bf6e9efc353192b676fdf957bb0dcf73113079233c"
+      }
+     ],
+     "webp": [
+      {
+       "width": 214,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=044f5f67fb2c8f012202277bb2b53783d2024613fd1571012155b0e35eac23fb"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=567eade4bf190330e48c2a186ca7f5e92b7b22913076f0f978c7730010142a36"
+      },
+      {
+       "width": 641,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5264cc665dd60c6e94b590c62077a3aa521afc67f98d060838aa759aef0552c0"
+      },
+      {
+       "width": 854,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=84b178493a4d4ffb7cccb1167fa70fb3e5616cbf73fd2587a7d7905d194babe6"
+      },
+      {
+       "width": 1602,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1602.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fdaf03d61d98f621ac1bcd3fe3bc60d0cdf6ce0967ae259e42c77c7f4b252d82"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 214,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7106a968971e539b116c86e77c4d6cf7bec53889de5413ef93fc237768d3e6a6"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a2cc586b7d6ffadc2dccfcca57084f97e90a77f1379a208ff06779a489d59faf"
+      },
+      {
+       "width": 641,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=30e4e45736cac504857721f8990387003bab598c61e57c85ee84c103bc45c3b8"
+      },
+      {
+       "width": 854,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e72588529607108ca499ed1f17fae284d5558c2d12c1d4b8a42ecde37e21244a"
+      },
+      {
+       "width": 1602,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8f4a4df8f411a169/w1602.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ba3f2fbaa9f79bb288c602c667d46b7953c51b1e8428ca4254209cb127a98019"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dwJkv0xuR+o#_Nbbt7W=9aRjoKRjIVa}fQaytRj[jFjZ",
+    "thumbhash": "JPgVDQJ4mH94N3dniHl3ZzdicAMG",
+    "dominantColor": "#909592",
+    "width": 1602,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Sunday in white linen.",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "caption": "Sunday in white linen.",
+   "credit": "Unsplash",
+   "likes": 0,
+   "saves": 0,
+   "liked": false,
+   "saved": false,
+   "tags": [
+    {
+     "x": 0.5,
+     "y": 0.55,
+     "product": {
+      "id": "b491a9c3-d7aa-4285-b87d-663cbfa7d4c2",
+      "slug": "zuri-linen-maxi-dress",
+      "title": "Zuri linen maxi dress",
+      "brand": {
+       "id": "94ba7c3f-6651-4715-9609-b54ead549677",
+       "name": "Maison Pwani",
+       "slug": "maison-pwani"
+      },
+      "cover": {
+       "id": "483b5e56-9a1e-4ff1-bdea-a7bf7c4d3134",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=97fda38e06c1bbab859e02497adee2149309bfafc3548485bba9437ee9140ae7",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=26705e62edcc53539e31445fc6c65e4965edd1e8e61dd1f490bc987eb33e6aff"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fccfd0bd29fc11891b37b65c4683d508d801b14bd03c31b80bb70e3eb09a7632"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5e9fcaeb96ed8c933deb9186da957297aeb6bce2668e39a7b247a112e3dcdef2"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7593ae82bd1382d8504f2f466866402e470aad02f5fa3d0f9bd5d81baf87ca39"
+         },
+         {
+          "width": 1602,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1602.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=061ede2804dc2bd134da4107eafc8188a5d5ff87b5b58e3cad1d588d74e4e561"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=48a3b3d5a1a3a3f86587286e6abc11992f09d8ea926c046c462534d4fc16edcb"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=11065aacf4cfbc53dcae5dbe580800e010439325e706cc1620c1028863257acd"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=473edf6c7ae96be349ccd7b7dfa1fcdf1c45a701b40f6b3f73fb8d2c0b7b9671"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4be363a58f7307229b49c8ec44a7c2b372f6560042968a666bf29d5eade4e638"
+         },
+         {
+          "width": 1602,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1602.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=82cd31e25a193f8f9e2666d4138bf6be7d46847eedbf3a65ea9324062f8c36bb"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=10d1e9e2a818dd8ba3f38952168ede96bb7a0516b8c7385d4a014b541928caba"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b3197ba41ef39042983b8f9c88ac4222d6039fc167bc1586d836f008eb50855f"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=588b0b62fcbce34417455881eb964218fd7f2a1f56b1cac98054acb53c4cda2f"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=97fda38e06c1bbab859e02497adee2149309bfafc3548485bba9437ee9140ae7"
+         },
+         {
+          "width": 1602,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1602.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2fd29340ff1b989c40466b67a6e8470d1322743c5079f8734b5f080cec926d8f"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dkL4?2x]X8o}?^R+t6R*0KRkoLRjo}ofjFj@ozWBaeWC",
+       "thumbhash": "KfgRDgR5mPeXZgd3h4mHd2eIN2ByBDY=",
+       "dominantColor": "#A5AAA7",
+       "width": 1602,
+       "height": 2002,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Model in an ivory off-shoulder linen maxi dress",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 85000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 85000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [
+       {
+        "id": "1",
+        "key": "new",
+        "label": "New",
+        "labelSw": "Mpya",
+        "tone": "ink"
+       },
+       {
+        "id": "5",
+        "key": "made-in-tz",
+        "label": "Made in Tanzania",
+        "labelSw": "Imetengenezwa Tanzania",
+        "tone": "blush"
+       }
+      ],
+      "swatches": [
+       {
+        "valueId": "1",
+        "label": "Ivory",
+        "hex": "#F3EDE2",
+        "mediaUrl": null
+       },
+       {
+        "valueId": "2",
+        "label": "Sand",
+        "hex": "#D8C3A5",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "women",
+      "isBeauty": false,
+      "category": {
+       "id": "bbff356b-e784-4558-83ed-f4cf9b904d5b",
+       "slug": "women-maxi-dresses",
+       "name": "Maxi dresses"
+      }
+     }
+    },
+    {
+     "x": 0.52,
+     "y": 0.92,
+     "product": {
+      "id": "6068020d-22b5-42ff-8f37-69700ee99cff",
+      "slug": "cork-footbed-sandals",
+      "title": "Cork footbed sandals",
+      "brand": {
+       "id": "e16122af-6191-45fa-aa12-8296cac783a4",
+       "name": "Savanna Leather Co.",
+       "slug": "savanna-leather-co"
+      },
+      "cover": {
+       "id": "5610925a-1e12-4671-8991-a14e34a506b6",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c806131268f27ac091fe03290c93d76dadb514cfd3665c2668ae7b165bf93e83",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=89eb97f199e3a1e0ad0a947147933f0fc4ea8e7a71e955543be96547d55e96fe"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b666582623beb4294879fe410b8827e3000ec4239cdddbfec29161d1d8f50f38"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0fde2735fafeca7f3ff2dddb6dc04e1438df98a3ed1eeca3067dfa81156c6b8b"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=39af319e964760cc8f0f1719d0ea48aeef1bbfa0dabedd078a7cfe358cf841c7"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1600.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=64a32a14ea1df79f895a93541a6ebdadf94fd88ca515c4f8fb5bb91a65d1348e"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b397953a198122bd85b38466c294525676519f1ac2549b27bc827aba809ac226"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c9d2bb892f97658cf9eb2a10cea63991721f3096acebe8f3c6dad0ca92762ee9"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d374d0a3316520d3acbd2090c1aa1242e34e5e1f761d385d762e589e488a202a"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c25c565377cfcc56818a67029c104aeb6b29fe47f8ffd7be0e8455af2d058130"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1600.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ff8383f7b04f96042313675a8e9a64af33cfea3c9d39bc92897a82908277c05f"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=983fc797f5b8ac760487e73c0372c3b85d9b378a329a0d216539fe32ea7d8b77"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4c511832705157f93656a367fc186e17d559c266bab67aea8d665c7099777a30"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8793d2809000e4f0c6d9a1feebf05f740b24dfb48a0a090748b7e36ac810bd52"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c806131268f27ac091fe03290c93d76dadb514cfd3665c2668ae7b165bf93e83"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1600.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=426d63d0c10a7b550b8d23a09dc20a176a80543d4f1db54b522034d0a3249ba9"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dHJHgVtR?axt~pj]D%t6~p%ME1M{IUj[t7RjM|Rjj@ax",
+       "thumbhash": "5BgGBgDXl+g3aPhKdnF5dniIwIA4CVk=",
+       "dominantColor": "#A2957E",
+       "width": 1600,
+       "height": 2000,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Taupe two-strap cork sandals on a fur rug",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 62000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 62000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [],
+      "swatches": [
+       {
+        "valueId": "177",
+        "label": "Taupe",
+        "hex": "#B8AFA3",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "women",
+      "isBeauty": false,
+      "category": {
+       "id": "a077d0c9-82ca-44d1-b25a-6934a20c1ece",
+       "slug": "shoes-women-sandals",
+       "name": "Sandals & Slides"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "c0dd7f61-14c5-45b8-9e72-e20ef2691097",
+   "media": {
+    "id": "43eb630c-a3d1-4f9f-9331-790e73f35ef2",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1597.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7b3d5d71946638468e845c55200fb9be487fab51bf80b64fca1449d33dba4115",
+    "sources": {
+     "avif": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9b19e8e9699a52e685f16b8cefa82757255ab3763e60e2cda53acb96c474d8b0"
+      },
+      {
+       "width": 426,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9b528594bb6d092b301052054e51e3b6c8bd0194e5be61d0a6d5da94ed749d6b"
+      },
+      {
+       "width": 639,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=275c96b3be3f9eab66f52312319e746c713291f5bf629e3ca1567afa93306686"
+      },
+      {
+       "width": 852,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e37fe1708c99883690418bf3dce16145c5cb77143aa084c4c5e7354331d0a35f"
+      },
+      {
+       "width": 1597,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1597.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=cda7cbdb5b43ef30d11faf90a126cee1b520f5b79f7efdfafd9c04585acd335e"
+      }
+     ],
+     "webp": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=50ea686ae0073eb312ea5ea362b964bb53171c43cf27334cda732399f334c937"
+      },
+      {
+       "width": 426,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=44fdfedb685d8eca3a459c106cf63a2c90b949384822c956d5b5aaf8ad2cbac3"
+      },
+      {
+       "width": 639,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=112e67af4e2da34567eee81cfb42d96c6ddfed30e2be8d0aa92a7cc81fb68152"
+      },
+      {
+       "width": 852,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0d5483af7e411b26d29164be1c9bef9792c3a9db640cc0e55fd0dde5af6b6d34"
+      },
+      {
+       "width": 1597,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1597.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=77e2dc4598a70071a2a6551036c04d2c49322afe515b4e7af92bfdeaa86faf52"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1b1f56e2faafac589d6f16c5db207d3315ac5f73ff62b64bb04d3ff16dfb1adf"
+      },
+      {
+       "width": 426,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4f1bc63f14e293120ca24edd329435a83b32e3b0bcb4b83ef1cdce70ae41e0ba"
+      },
+      {
+       "width": 639,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7bb729772dde77fd3067119d6d4b2ad2a4ecf9c3ca9ccc698ea74747f9a605c4"
+      },
+      {
+       "width": 852,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=586c3e48571bcb6f0065686f51264bd4213fc1c090898e93801995b4ad55f4c1"
+      },
+      {
+       "width": 1597,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/edfcf044e8b043eb/w1597.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7b3d5d71946638468e845c55200fb9be487fab51bf80b64fca1449d33dba4115"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "daHU,~-qITRkX.jrtRWYBWRjkDS4yZt8R*WXyYbIR*s;",
+    "thumbhash": "YRgKHQYrhYl7aYX3aX5nt7aEcCgI",
+    "dominantColor": "#8E827E",
+    "width": 1597,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Ruffles, but make it effortless.",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "caption": "Ruffles, but make it effortless.",
+   "credit": "Unsplash",
+   "likes": 0,
+   "saves": 0,
+   "liked": false,
+   "saved": false,
+   "tags": [
+    {
+     "x": 0.45,
+     "y": 0.5,
+     "product": {
+      "id": "bd8e4dd7-3aeb-4b66-a0ae-3f4b996c18e2",
+      "slug": "asali-ruffle-dress",
+      "title": "Asali ruffle dress",
+      "brand": {
+       "id": "94ba7c3f-6651-4715-9609-b54ead549677",
+       "name": "Maison Pwani",
+       "slug": "maison-pwani"
+      },
+      "cover": {
+       "id": "94c62cb7-5e8f-4aed-98f5-fa56b3a68944",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c783cd460f41a8753a56686342a68fcf9c0d50ac80871fccbce8a586ea2976f2",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=dda0d8ec98591c3fecff07fac0499b1a3a8b3257dad1577f6a81e32412d8af65"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6c00bd4e098ac72a242c107414db02b44cfdccb97b78974ffe9bfac502651c56"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c807745e89eedb7c7b633d77a32cd37afae35a7b52790dd59cdf6a7affbfb0b7"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b67e1a107259a6df7f6d7ab6a9acbd6185855f3a2e155db9942cf54fc8bc635d"
+         },
+         {
+          "width": 1597,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1597.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5458fe8d388dcd00c716af86d6d627798d4f3c4633c768bc75d934dbd61ee1e5"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5b585a60e72953499f7122e13ddab8d0573b851a01b350e9a2c7cdaf83983354"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4779f07c95eff5b85f388fe8d2f9eb7d31029aea31cdfde07633d155a713cbc5"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3c2c69e4b8775c97eb257d2410e687d78ce1bf24ea22c823121c46ee14671f77"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6cbe60529893544ef36f868087aa5744dbc1ff87fff2df7309222835df0d1b44"
+         },
+         {
+          "width": 1597,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1597.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=08f526abd038a2fa1a28eaa2187612d4a80270d87ead3938d152abcbdcbc6111"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f77930555e0003123fc7f05ffe13025f67361ec002eb3605c4386e0e0f35f851"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c6b82d3df4f8d140525518c19f4cfe7859d0b45dd996e9a3b22957e429b70385"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9178a5cc3adca0bdf974e309182332470b49f95fd8269dc8c4cce6ac8fbfe427"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c783cd460f41a8753a56686342a68fcf9c0d50ac80871fccbce8a586ea2976f2"
+         },
+         {
+          "width": 1597,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1597.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c7a83191fa500fa0922563e1228b13f9f4d3d9304198f562d84f8b415383aeb1"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dhH-}s%NIUNHKQRjxuW=Kla}S4R+%%ozRkogT0WAa#WU",
+       "thumbhash": "IhgKJghLhXi2h6hnd4+XaJeIl5RwFwg=",
+       "dominantColor": "#928683",
+       "width": 1597,
+       "height": 1996,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Woman in a blush ruffled off-shoulder dress",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 69000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 69000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [
+       {
+        "id": "1",
+        "key": "new",
+        "label": "New",
+        "labelSw": "Mpya",
+        "tone": "ink"
+       }
+      ],
+      "swatches": [
+       {
+        "valueId": "34",
+        "label": "Blush floral",
+        "hex": "#F2D7DA",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "women",
+      "isBeauty": false,
+      "category": {
+       "id": "4af1ee99-6f9e-4cdf-b7be-74cba46322f0",
+       "slug": "women-mini-dresses",
+       "name": "Mini dresses"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "424b9bce-b37d-484e-9cd1-da1a02286454",
+   "media": {
+    "id": "e4ccf7ef-1615-47b7-9094-54b639009d7e",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1600.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=73bc31788a9a1ad845b11cf2ff2d0e786b14df011c7344fa3dd6b9c3a0dcb0c4",
+    "sources": {
+     "avif": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3c058924c2fe0e5de6235bad4403601fc72068db17ef0d802647d2e14d3a81a8"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3f886ec924cd06c3873735b2776a2a672574966548bdce612992b85d01963a21"
+      },
+      {
+       "width": 640,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e6af54ec4a774ad31ca4cfeb0c3c430a0f9104d4edc72b32b94aa8d82b3bf818"
+      },
+      {
+       "width": 853,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1622f096f8a6e3876d1b47158bee997732a350f350159b62e837d595970526b3"
+      },
+      {
+       "width": 1600,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1600.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=cbc7753bec27c351903c1a978063aeb18d3c7f0c8d431745700f2d3ccb3d1593"
+      }
+     ],
+     "webp": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4d8bebda04c383de2db0a3aa70c5bd4d3965af1317ba781b905e7d36b9fe4a0f"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=25a52fc949dbd321acb7164480563fcba851090537adc558c472b0d2fa979814"
+      },
+      {
+       "width": 640,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fdd3f04ea7d4186a99ccc5be4958bdb3453dc0b787dd2d33867f00f522f1a60c"
+      },
+      {
+       "width": 853,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f18a6bf0c0ffe177564f3e1024e81f75d693f0cb95c66a190ba0a61b96e6b11d"
+      },
+      {
+       "width": 1600,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1600.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1fd75f15ecfccd7c98e5de81245ce5a89a0c6a109a06fbd48aec6ef8b6e44a0c"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d0a9a264b9448dc8d10adfd0426d7879556d37c9a63b2ad1d7f5a0cb79f40e8a"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b45a9652b3b960fa0d376ce74fcac14f8d361ab09abcce9fe2a0ef83464bb555"
+      },
+      {
+       "width": 640,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ffbed7e04360ebc9c03ad911d9e9dda982fa28b4308f1ec36c5a21c73073bd55"
+      },
+      {
+       "width": 853,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9e87945b28157444804dfeeb055bd5eeb9ab447a49265a5c54a578258fb3d222"
+      },
+      {
+       "width": 1600,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/ee11b51c3ebfe4cc/w1600.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=73bc31788a9a1ad845b11cf2ff2d0e786b14df011c7344fa3dd6b9c3a0dcb0c4"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "doFF~pt7s+t8?wj]o#og%NaykEkCx^WBWAfRtRWBRjWB",
+    "thumbhash": "3/cRFQKIiH94mIeYd3h3aNdweA1n",
+    "dominantColor": "#797D7F",
+    "width": 1600,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Long rains, sharp lines.",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "caption": "Long rains, sharp lines.",
+   "credit": "Unsplash",
+   "likes": 0,
+   "saves": 0,
+   "liked": false,
+   "saved": false,
+   "tags": [
+    {
+     "x": 0.5,
+     "y": 0.45,
+     "product": {
+      "id": "a280a0e0-cf15-4131-937f-2d24425b118f",
+      "slug": "powder-blue-trench",
+      "title": "Powder blue trench",
+      "brand": {
+       "id": "71349a04-e442-4203-b794-2da32569217a",
+       "name": "Atelier Msasani",
+       "slug": "atelier-msasani"
+      },
+      "cover": {
+       "id": "b40ebb10-22b0-408d-a9f8-f1c02b868063",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=36316ecf377387ceb700ce797e8623a0b5d3d06284ad6b7d3c930ee36b8d803b",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c20eedd5399f0d301e6b501f0338774ba971e6690c475795aafb9503ba28d303"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a11566369f4409422a99af209622e63ce8004b7e51ed8f9cd0eac739d618c826"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8e6d17b5b55fd372cb7bc8bc9d41039dc0f3c6122dc5b02d9336db0dd5122b25"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4a907fac635f55ea2ba4002a537b101eaee4212503f177e365bcebbe7a22d71c"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1600.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=807e9583b4a674d5f0b34ebb00bfd533bc20dce75165b40b8acd54c189e94f3d"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=492fe6e636713144e012e27fce184156be1d99d15dac7454e8b2c16cbf027481"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fabd6d96be50a9443f2b399583b2ac2daa487fd1ab47ade5b81a21d325f79e81"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0a09890e5bc056e6680376422ba3bf224bedab63d5155939db35f9ee2e0b7c80"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3d15e4bd786836d6cac6575aa9e4edf9b027a4cf8218b21605b1625995456dd6"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1600.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9d7460b877eedaa9889c876bf2c80f9734744c2da07b3986b0b4e46dd4806019"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4c22a406b49992e8561a83efb23eeffb573704656e463cf49ae9fbae1bc4da41"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fd2985197862ebfbc6de70629c39f80081a2387ae6fefab55fb43a5e29b3e853"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8e46cdbf2763bf7ed0e07304936c6700d864e2ab1212dd712783be79012fce63"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=36316ecf377387ceb700ce797e8623a0b5d3d06284ad6b7d3c930ee36b8d803b"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/f65a64a48e29b40e/w1600.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5fdcb68d067c88065993423ef11f480168c7dfaa11db390297342f0005f01cc8"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dpG9aIt7s,t7_4fko#ofx^WBa~kCx]WBRiaxkCayWBWA",
+       "thumbhash": "ofcRFgKIiPeXd5h3eHl3h3d493J0Hzc=",
+       "dominantColor": "#80878C",
+       "width": 1600,
+       "height": 2000,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Woman in a powder blue trench coat",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 165000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 165000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [
+       {
+        "id": "1",
+        "key": "new",
+        "label": "New",
+        "labelSw": "Mpya",
+        "tone": "ink"
+       }
+      ],
+      "swatches": [
+       {
+        "valueId": "90",
+        "label": "Powder blue",
+        "hex": "#A9C4DD",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "women",
+      "isBeauty": false,
+      "category": {
+       "id": "a9243f3d-7818-4f4f-ab7c-9df7e5863d53",
+       "slug": "women-jackets-coats",
+       "name": "Jackets & Coats"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "f72f057a-78c3-4f62-aa56-7e3e5d870350",
+   "media": {
+    "id": "7dfb2bcb-a8c6-4aa1-b6b0-9554ec13081b",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2eea2dd65deb6f5bb3ac1c1481dbed44f1cab9478a8003b69c324b6d1f8e9598",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=324168064c6843ee063d9d8f22fae20f000fb0b27a11cf8f7bc5fe5a9cc63184"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=003c7d1676e3767c5a863a5bdd3af5f2ea45e47109351dd54b0e42eb1756aa3d"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a74c6b23a0c0641cb98cb94108425ecafbf8119048b504461a2a88391619c3ac"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6eea2d17ac10c96171071bde22ad6e315a38ae1e9aff298ed23ecedff9a05b50"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ee9aba20328f57d68258494ee9485c6236d05df581b300633c566c9320bbd814"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3c652cc22c33766fb5fbe953c08b9d59ba8f007685577c4dfdde8e24c526ec09"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7c71c30a5aba5235d8f81eb02c8790f262ae8b37756f5546fa219889feec411f"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5b2449fa24d7bb298c155fa73c518541b6c23490711f83d2d61085e4363b739f"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9506723666a653184d1b51befc4872738268f6e4a004c3eb8ea023dccf384100"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=426dbcbaf197ce7fa9632f51a69f116ef929a3e618f7bb5f28c108bc5128bcfb"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0dd30c768c3845d018a76e5da88a6f0233e37909cc942bcc2060fd50ebf74af3"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb39892889907dfb/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2eea2dd65deb6f5bb3ac1c1481dbed44f1cab9478a8003b69c324b6d1f8e9598"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dRJa.bxa?F-o?wt7s8WBxYj[Ioayv|jYbwofxtaxWYWB",
+    "thumbhash": "ZwgKFgTXafd4dpdXmISKeZeIqICKCqg=",
+    "dominantColor": "#A5A092",
+    "width": 1920,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Utility layers for the city.",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "caption": "Utility layers for the city.",
+   "credit": "Unsplash",
+   "likes": 0,
+   "saves": 0,
+   "liked": false,
+   "saved": false,
+   "tags": [
+    {
+     "x": 0.42,
+     "y": 0.35,
+     "product": {
+      "id": "b36179f9-28c0-4c2b-b59e-71183ac4e56d",
+      "slug": "washed-field-jacket",
+      "title": "Washed field jacket",
+      "brand": {
+       "id": "5ba6a5ba-b399-46b3-b7ef-f3dc4922b349",
+       "name": "Kilele Studio",
+       "slug": "kilele-studio"
+      },
+      "cover": {
+       "id": "f0b61bc7-1ddd-4320-87e2-c9895f3158dd",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0c42e605faf4e8c2bd870317dd1522502539df1b19ee4ab3d664cc9476d305a6",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9ce1576f82b346e04ec45f272d3367d089c84189cd49e33b66fe6f7108d086e6"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f59de954834feade15cfa7efd4205cc893418d06d8a32e72d089624cbd1a26d7"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8b7e18f346ce721365301a14cef530da7e955fe971464e5eca700e7ed00a0bf9"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a376d7a318e8de19715417eddcd8430b6fc458006215796bff8d9846a834b6e3"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6d8d3fbadb7afbd1f6d434fae8a586b7e27605f46259d6e91760859c8478af45"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b2a838b23e01c9067bf77c2caf7531d5ac359e99d80ec008e2652fc661b556ea"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0110098bea179f7e7b206c9f2b4aa9dca9d55d086cc4bd8e65ba62106eb4f74c"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3fde8b1833683f2fdd4fbe7de087ad1c0fc34f9bf77b61ff53dd15490bc49f11"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f571ea6ac1cb86ee19c822a747aeff78992f3ba175471c1480013cb461c5254c"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=46273700d6b78ba9df1c28187e6dcee95867d60b49cb6644a8305d79c3ff12ff"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f48f76e8b5693d7733738b9d3fcb1291222e83d065e19327da868c6efff8b5c9"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/eb3989288990f0b6/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0c42e605faf4e8c2bd870317dd1522502539df1b19ee4ab3d664cc9476d305a6"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dRJa.bxa?F-o?wt7s8WBxYj[Ioayv|jYbwofxtaxWYWB",
+       "thumbhash": "ZwgKFgTXafd4dpdXmISKeZeIqICKCqg=",
+       "dominantColor": "#A5A092",
+       "width": 1920,
+       "height": 2400,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Man in a black field jacket sitting in a circular window",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 128000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 128000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [],
+      "swatches": [
+       {
+        "valueId": "142",
+        "label": "Black",
+        "hex": "#1A1A1A",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "men",
+      "isBeauty": false,
+      "category": {
+       "id": "4ca2727a-264c-4a27-a2c3-19216ca0dd8c",
+       "slug": "men-jackets-coats",
+       "name": "Jackets & Coats"
+      }
+     }
+    },
+    {
+     "x": 0.45,
+     "y": 0.5,
+     "product": {
+      "id": "9edba0b0-a7e0-405e-a414-c5bd9a5e610e",
+      "slug": "essential-heavyweight-tee",
+      "title": "Essential heavyweight tee",
+      "brand": {
+       "id": "5ba6a5ba-b399-46b3-b7ef-f3dc4922b349",
+       "name": "Kilele Studio",
+       "slug": "kilele-studio"
+      },
+      "cover": {
+       "id": "c8db980f-3033-4a6e-97c0-3f472228a0cf",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=52d0f9a77110183eb13e13f3895ab1e73372a3d60dd888687e8c772507e890b3",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3ff1b1f7e40ee262984a5e5954d0cfd26dd7cef5863bdc8286f0b8b3daa492f8"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=227578f8d62fa01a1e3b1c499a16415ed477895121e95938fe333df9b5078d48"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9fbc13880d401086bb2759a9a5b5e958571f316b7f2f8527a5d5b359f33f44e6"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=29e83c28ae96c35948e9310af1ac0d2a57289b41b7b940ff0fca178befb5bbd9"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1600.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ac34a1eb59941020994117c549b55c0891421a006722557ac52940e69fbb682f"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e8d29035f49a2d9228768045d6a8b27854d327af25d1dacb16160320849adfcb"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c0617aa5760bb9d4b85ba5fb194c0fdde7c9163d15ce934050b4c119c718a7a6"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2ee788d1d78226a12c3e959a6f0cd7cbb460763d487c2fa5c7e0ca03bef5ec28"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5d7e25e7a8502d9bbf236a05a4f285116d413c7495ee8af74b220790d22bfdcc"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1600.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=dff570e84c3129ec07a1e84024574444a03f1c216607b89bc6ba46aa383085f8"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0c5847ab31db55184fae3ffecaa728875888d16b35f599a84adc4d5875fa6cee"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5ba5836965d3db814bc061535b9294beba7ee2b9ca8c371c9793572fce7605b0"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=798ad5c553277c85288cffefce99395094823c80820b6812fb45f790c281914c"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=52d0f9a77110183eb13e13f3895ab1e73372a3d60dd888687e8c772507e890b3"
+         },
+         {
+          "width": 1600,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/e96d9fa18381c8db/w1600.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2dceaabfb8d48e9d0cfd1dc52a2379861e0563d9959ed92b683c99d17a82321c"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dbLEHH?b4mj[_3xuxuxuIUWB-;t7oeWBWBWA9FRjxuay",
+       "thumbhash": "KQgODgIKeOioaEi3eHh3cYlH93hnX0c=",
+       "dominantColor": "#A9A4A6",
+       "width": 1600,
+       "height": 2000,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Man wearing a white heavyweight t-shirt",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 28000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 28000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [],
+      "swatches": [
+       {
+        "valueId": "122",
+        "label": "White",
+        "hex": "#FFFFFF",
+        "mediaUrl": null
+       },
+       {
+        "valueId": "123",
+        "label": "Black",
+        "hex": "#141414",
+        "mediaUrl": null
+       },
+       {
+        "valueId": "124",
+        "label": "Stone",
+        "hex": "#BDB4A6",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "men",
+      "isBeauty": false,
+      "category": {
+       "id": "6ba1b8e0-fd98-4b8c-9b7d-8d1c0de91fca",
+       "slug": "men-t-shirts",
+       "name": "T-shirts & Polos"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "d2811716-05cb-489e-8f04-2798ce5db5e6",
+   "media": {
+    "id": "7bf1c265-bb8c-41bc-a353-722b3d41d16b",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1596.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=795a5afe838c93f563bcd243fda29facb607cde19419a45f0fac3363398ae878",
+    "sources": {
+     "avif": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=38f370e630cdb1fd96bf066948073e1ab1d229ceb6d7ad7f64685951952931a6"
+      },
+      {
+       "width": 426,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f9a03d82fba3726c89a755fb79565bb940ca5ab7b7fdb9060e54b64224006d1b"
+      },
+      {
+       "width": 638,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9c6ea69c23892c3bb44f242b5c378ef822459a1fbdd3b02329a7d15a243a1e18"
+      },
+      {
+       "width": 851,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9ec6e461bb4878130d346eed36101d78825d52564d223851cc019be9390aea"
+      },
+      {
+       "width": 1596,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1596.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c072505a5e4ad942509c75c091c70c0c025f3340e2589652ad515ce2ec7f5689"
+      }
+     ],
+     "webp": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2d0841868f2c5a7cf75d04d778b5092364c8be13e86dcd074dcde277592a54b3"
+      },
+      {
+       "width": 426,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=36f8195239ce95eae5a9795092958fbc12f261fabc966af79a4c10afbfef09c3"
+      },
+      {
+       "width": 638,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=23df4afda3f548d70537a77807310da8082c93988109f3253669ec4b5258430d"
+      },
+      {
+       "width": 851,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3b6e3be732dea9de990fce992b55c088ffb47306e00d45f26bc5b7f3ed5d1d8f"
+      },
+      {
+       "width": 1596,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1596.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a77b421ed097829860ba56da45add146188e5d5dfb665980bd39e48d645252de"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=df2b6e32a080faf1b567d5942c7ca5749c1150bd3d8ddae9a07093385aad1be5"
+      },
+      {
+       "width": 426,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=68d075d2eeae6b5d49359dc9c31d0cc71668fbf9a634e8269ebe80732e8340de"
+      },
+      {
+       "width": 638,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=228235c97047df8266fe570309d75bca2e9bb225560e585e7c1f8435d31d5f88"
+      },
+      {
+       "width": 851,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1df960e28762fd4302245f39bb1591a1bd7327ecde25802bdc200d9f6ad9411e"
+      },
+      {
+       "width": 1596,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/9dee5e41d8387bf1/w1596.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=795a5afe838c93f563bcd243fda29facb607cde19419a45f0fac3363398ae878"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dWK1zTe.x^tS_NbHt7Rj-=t7%2s:.8xun$oJIUt7M{WB",
+    "thumbhash": "KAgKDQLFV39YyLnIeoKFxAlzh1CX",
+    "dominantColor": "#A5A29B",
+    "width": 1596,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Colour-block, cool evenings.",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "caption": "Colour-block, cool evenings.",
+   "credit": "Unsplash",
+   "likes": 0,
+   "saves": 0,
+   "liked": false,
+   "saved": false,
+   "tags": [
+    {
+     "x": 0.5,
+     "y": 0.35,
+     "product": {
+      "id": "1efa8515-cab7-47b1-b684-33976f57e77e",
+      "slug": "colour-block-knit-sweater",
+      "title": "Colour-block knit sweater",
+      "brand": {
+       "id": "5ba6a5ba-b399-46b3-b7ef-f3dc4922b349",
+       "name": "Kilele Studio",
+       "slug": "kilele-studio"
+      },
+      "cover": {
+       "id": "bfe29d89-75c3-4901-9913-5512e87d1b17",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9798236008a03f32851941ca19e7623e7b80e08e55f29f5d0ba5dbf0a1948e27",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=52c07f473c466642c4d38a95d0f7408076d4137ef59d964a01d22623802eca85"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=073418a1350d7c066cfb5883eac7890c2ef6c6c2105b980e1cab77d57b4a7923"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a0a7c137bb2790f0508fbe7402bdc05990137f9e1038709c1a85c72309cc0743"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e4b0debcff884a089933f326325686c439475ffb0523fed9f954a4d705ae7ef0"
+         },
+         {
+          "width": 1596,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1596.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d0e7c596abaa350fc88b25c398259c3462d4a78d0f41bc7931f0ee260e2099ee"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6560603d6890e6a6886f72c6f66b579ac9bceb80cbbe1d47b86975fd8a7c3535"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9c00cebe4d378f7eb372a87451be4ded75d235f0d06450e468b511496ce67a4d"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=210e2b6139a6ca6bfef1792d4d91f1021dd14f7aa853d81052306ba37fad8732"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4eeb08638df9aeaf5247403544c1289168efe25b72614a4d91ffe4dd7134b0e7"
+         },
+         {
+          "width": 1596,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1596.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ec71be586808bbef309a7616d7a19191c841ecd49d4e2855d52babab1d987700"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=48341b822cfceaa8ab69c336ec1e279428330b47b41097224f520f3002dccd8b"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7c65999556496c30832620634ebfb232c62d289b6024d60ebb0b894c4030cabb"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d70f671440eab9e59df3c014904d9c23a17221777238e16a0a41ed13df9d74dd"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9798236008a03f32851941ca19e7623e7b80e08e55f29f5d0ba5dbf0a1948e27"
+         },
+         {
+          "width": 1596,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/de1780eb50cbbfe2/w1596.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c962a6a9e83d004567e35ff1dfe20b286855eae42cc1e6bc920535c4d5f01b78"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dWKx0XV@x]g3_NbHxuRj?cxuxts:bbxuRPaeMxM{M{kC",
+       "thumbhash": "KQgKDgK1VfiYdfmqeJV1ReVlCXSFcHc=",
+       "dominantColor": "#A9A6A1",
+       "width": 1596,
+       "height": 1995,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Woman in a rust and ivory colour-block sweater",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 72000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 72000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [],
+      "swatches": [
+       {
+        "valueId": "78",
+        "label": "Rust & ivory",
+        "hex": "#B5683A",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "women",
+      "isBeauty": false,
+      "category": {
+       "id": "5a0dacdb-6c1d-4bfe-9b63-85eac8ec325a",
+       "slug": "women-knitwear",
+       "name": "Knitwear"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cccb1ea7-6ad8-40c4-b9f9-a5d51bb8cac1",
+   "media": {
+    "id": "0773cf77-4fed-43b6-b7a0-f8b38bc028ed",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1601.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9999c6240fb328b49271a7114bc7bc5142fd5dac0e4a508366c1398a7c6bb514",
+    "sources": {
+     "avif": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3ab98d14dbc9423f3d55ca748823762fe45c7e3da7752d4f27d11f05d079755b"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d1b61aab8ad454d1c2b6303ebcd9439f95c6ee6d673d99799614924d86094869"
+      },
+      {
+       "width": 640,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1bea6cd0d97b054cb45417d54b6c6c34ae788a34aafe0badbe293176f42c73a1"
+      },
+      {
+       "width": 854,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c486d9b98d9928c608a9b1bb5bdf6a57e2d4df25f772738c82d97823f63c040c"
+      },
+      {
+       "width": 1601,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1601.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b2a1d29228b75dacb930d537f183828e2bee196c0e880fc41fd3e4d887b53158"
+      }
+     ],
+     "webp": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=10804783c1f2dbae0fc710bb9f5421d4c0dd9cced6de69ff11cd4e450d102e53"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0afe5ced7bb9fc79d088602261c35b723d95eb50241e784e720eeeeb207b3f15"
+      },
+      {
+       "width": 640,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2d4a0324ffe3c7750aa8f91beacc8232ea8878d89ec9a73acf2cfb0a81aee5db"
+      },
+      {
+       "width": 854,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=02c2fa6ce55ed4fd43b2858daab3421f78313905953eee74a27360899f36473e"
+      },
+      {
+       "width": 1601,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1601.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=029137ec6c274f4680b077b85d763c16c449020aec8c5f5f643681248b62d132"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 213,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=976531473a50ff46ad463a66913a771da4735420687a99cf80b66d1082b09684"
+      },
+      {
+       "width": 427,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4eaed908bfea6076b5545509b1ca9dd861cc73d54b7e6256dd15ff4aa1ea6b3c"
+      },
+      {
+       "width": 640,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=855cebbd7ee06b0c945ec5e36f9ba25fc8308810f306a92b5b7b6599414d8b41"
+      },
+      {
+       "width": 854,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e83cdd1c52d6caa2ce478dec238dfab4d334b16ab4601ef5e403da6d4938fc66"
+      },
+      {
+       "width": 1601,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/d3868cbfb9c30773/w1601.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9999c6240fb328b49271a7114bc7bc5142fd5dac0e4a508366c1398a7c6bb514"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dFEo[K%N8_IT^*?bWYNGtlWAxv%N0LIUxExuRjR*WBxa",
+    "thumbhash": "3PcJDQAWhdp3lqcKhYh3qZHPYvkc",
+    "dominantColor": "#6F7274",
+    "width": 1601,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Soft pink, washed denim.",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "caption": "Soft pink, washed denim.",
+   "credit": "Unsplash",
+   "likes": 0,
+   "saves": 0,
+   "liked": false,
+   "saved": false,
+   "tags": [
+    {
+     "x": 0.5,
+     "y": 0.35,
+     "product": {
+      "id": "640fd1cf-b6b3-4210-973f-2c8e38dd437a",
+      "slug": "pink-crew-knit",
+      "title": "Pink crew knit",
+      "brand": {
+       "id": "5ba6a5ba-b399-46b3-b7ef-f3dc4922b349",
+       "name": "Kilele Studio",
+       "slug": "kilele-studio"
+      },
+      "cover": {
+       "id": "9392745b-0884-4c2e-868b-8cab7e269816",
+       "type": "IMAGE",
+       "status": "READY",
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=42c4e28c7b40efbd09fdf4de74d8386a937b20d3872658bd23f8f22a70c7b959",
+       "sources": {
+        "avif": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=baf0d2226c6c84308eaf8745fac0823e998da22369a257b2e59fd5eebbe898b5"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=00143959a48ee52efb4b1e0bfa4847c5504ed163aab2ccfed50de8f05e9e7d9b"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d0ccbebb32e0b846b762700900574a5946b6e3b9fedaac757a8854b1ba06a578"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f9acd55e0b1c4f3f5a62a4a7446001f5a4db6ec8b9188867c8e61a4f98974c8c"
+         },
+         {
+          "width": 1601,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1601.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b24d52aa8f436c46ddc30b961021fbce1a216e3a1fea76450909bbd9479b41a5"
+         }
+        ],
+        "webp": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=355398f65777cba48cbeeb66e52d69b543c4e0a5acf4ff4df72bfe58596ee3cf"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b478734d8e75346dc07f296d9793856ceb85ac7d6b61bd3c3a1609b1cfcd9c53"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3af45b5ed4587426d47b4765a1fb5ee07088eed3c80247c8fdd928867735265f"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0ad782222666e11c545150c15725a1997c2a9e40d6f48dde75acee26101f9d57"
+         },
+         {
+          "width": 1601,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1601.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=40cb074a1f98c83f656b07eb1d7eefb53ae84c6d5897fe8bf6da50e15bea4c6d"
+         }
+        ],
+        "jpeg": [
+         {
+          "width": 256,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=628d588efdd04aa8255cc43365ee14103194e170a52be202aba807bd90d39bd0"
+         },
+         {
+          "width": 512,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=39155bd67b0d0ef01987083438f93f252efb3c9099156339f3a272c47ee89f9f"
+         },
+         {
+          "width": 768,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8a08d0d6d5b429ec858d03ba26953fd09f1b7ca7e7e863894072bdb7910ae5b0"
+         },
+         {
+          "width": 1024,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=42c4e28c7b40efbd09fdf4de74d8386a937b20d3872658bd23f8f22a70c7b959"
+         },
+         {
+          "width": 1601,
+          "url": "http://localhost:9000/smartwear-media/media/2026/11/c46f45564bb59392/w1601.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093824Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=55fc4dd04b405b873f45435a53c163bfb3b96507fb2ee59bd21eb35012e7b019"
+         }
+        ]
+       },
+       "posterUrl": null,
+       "previewUrl": null,
+       "hlsUrl": null,
+       "blurhash": "dFEfQc-=4mD$~p?aX9W?57In%L%N9ZIon~xu-TtRNHWA",
+       "thumbhash": "3PcJDgIHhOmdWDaVmnOHmZdqlLtwuQo=",
+       "dominantColor": "#6C6F71",
+       "width": 1601,
+       "height": 2001,
+       "durationMs": null,
+       "waveform": null,
+       "alt": "Man in a dusty pink crew knit and light jeans",
+       "focalX": 0.5,
+       "focalY": 0.4,
+       "role": null
+      },
+      "hover": null,
+      "price": {
+       "retail": 66000,
+       "compareAt": null,
+       "currency": "TZS",
+       "fromBulk": null,
+       "tiers": [],
+       "moq": null,
+       "yourPrice": 66000,
+       "yourBasis": "retail",
+       "nextTier": null,
+       "showWholesale": false,
+       "isWholesaleAccount": false
+      },
+      "priceRange": null,
+      "badges": [],
+      "swatches": [
+       {
+        "valueId": "136",
+        "label": "Dusty pink",
+        "hex": "#E7C9C9",
+        "mediaUrl": null
+       }
+      ],
+      "moreSwatches": 0,
+      "rating": null,
+      "reviewCount": 0,
+      "isNew": true,
+      "inStock": true,
+      "wishlisted": false,
+      "department": "men",
+      "isBeauty": false,
+      "category": {
+       "id": "3ccaa699-f67d-484a-b601-d129127a5cf7",
+       "slug": "men-knitwear",
+       "name": "Knitwear"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "nextCursor": null
+}

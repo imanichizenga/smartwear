@@ -1,0 +1,72 @@
+[project]
+name = "smartwear-api"
+version = "0.1.0"
+description = "SmartWear API + workers — Django REST Framework, GeoDjango, Celery, Channels"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "django>=6.0,<6.1",
+  "djangorestframework>=3.18",
+  "drf-spectacular>=0.30",
+  "django-cors-headers>=4.9",
+  "django-filter>=26.2",
+  "psycopg[binary,pool]>=3.3",
+  "redis>=6.0",
+  "celery[redis]>=5.7",
+  "django-celery-beat>=2.9",
+  "channels[daphne]>=4.3",
+  "channels-redis>=4.3",
+  "pydantic>=2.14",
+  "argon2-cffi>=25.1",
+  "pyotp>=2.10",
+  "PyJWT>=2.15",
+  "cryptography>=50",
+  "boto3>=1.43",
+  "httpx>=0.28",
+  "google-auth>=2.62",
+  "pyvips>=3.2",
+  "blurhash-python>=1.2",
+  "phonenumbers>=9.0",
+  "python-slugify>=8.0",
+  "gunicorn>=27",
+  "uvicorn[standard]>=0.54",
+  "whitenoise>=6.9",
+  "pillow>=12",
+  "openpyxl>=3.1",
+  "h2>=4.1",
+  "reportlab>=4.2",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=9.2",
+  "pytest-django>=4.14",
+  "pytest-xdist>=3.6",
+  "factory-boy>=3.3",
+  "ruff>=0.17",
+  "mypy>=2.4",
+  "django-stubs>=6.1",
+  "djangorestframework-stubs>=3.18",
+  "respx>=0.22",
+  "freezegun>=1.5",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "smartwear.settings_test"
+python_files = ["test_*.py", "tests.py"]
+addopts = "-q --reuse-db -p no:cacheprovider"
+testpaths = ["."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["*/migrations/*"]
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "DJ", "S"]
+ignore = ["S101", "S105", "S106", "E501"]
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+python_version = "3.12"
+ignore_missing_imports = true
+[tool.django-stubs]
+django_settings_module = "smartwear.settings"

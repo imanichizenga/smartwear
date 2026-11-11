@@ -1,0 +1,865 @@
+{
+ "items": [
+  {
+   "id": "bd8e4dd7-3aeb-4b66-a0ae-3f4b996c18e2",
+   "slug": "asali-ruffle-dress",
+   "title": "Asali ruffle dress",
+   "brand": {
+    "id": "94ba7c3f-6651-4715-9609-b54ead549677",
+    "name": "Maison Pwani",
+    "slug": "maison-pwani"
+   },
+   "cover": {
+    "id": "94c62cb7-5e8f-4aed-98f5-fa56b3a68944",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c783cd460f41a8753a56686342a68fcf9c0d50ac80871fccbce8a586ea2976f2",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=dda0d8ec98591c3fecff07fac0499b1a3a8b3257dad1577f6a81e32412d8af65"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6c00bd4e098ac72a242c107414db02b44cfdccb97b78974ffe9bfac502651c56"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c807745e89eedb7c7b633d77a32cd37afae35a7b52790dd59cdf6a7affbfb0b7"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b67e1a107259a6df7f6d7ab6a9acbd6185855f3a2e155db9942cf54fc8bc635d"
+      },
+      {
+       "width": 1597,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1597.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5458fe8d388dcd00c716af86d6d627798d4f3c4633c768bc75d934dbd61ee1e5"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5b585a60e72953499f7122e13ddab8d0573b851a01b350e9a2c7cdaf83983354"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4779f07c95eff5b85f388fe8d2f9eb7d31029aea31cdfde07633d155a713cbc5"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3c2c69e4b8775c97eb257d2410e687d78ce1bf24ea22c823121c46ee14671f77"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6cbe60529893544ef36f868087aa5744dbc1ff87fff2df7309222835df0d1b44"
+      },
+      {
+       "width": 1597,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1597.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=08f526abd038a2fa1a28eaa2187612d4a80270d87ead3938d152abcbdcbc6111"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f77930555e0003123fc7f05ffe13025f67361ec002eb3605c4386e0e0f35f851"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c6b82d3df4f8d140525518c19f4cfe7859d0b45dd996e9a3b22957e429b70385"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9178a5cc3adca0bdf974e309182332470b49f95fd8269dc8c4cce6ac8fbfe427"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c783cd460f41a8753a56686342a68fcf9c0d50ac80871fccbce8a586ea2976f2"
+      },
+      {
+       "width": 1597,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/4b44742221db94c6/w1597.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c7a83191fa500fa0922563e1228b13f9f4d3d9304198f562d84f8b415383aeb1"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dhH-}s%NIUNHKQRjxuW=Kla}S4R+%%ozRkogT0WAa#WU",
+    "thumbhash": "IhgKJghLhXi2h6hnd4+XaJeIl5RwFwg=",
+    "dominantColor": "#928683",
+    "width": 1597,
+    "height": 1996,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Woman in a blush ruffled off-shoulder dress",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 69000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 69000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [
+    {
+     "id": "1",
+     "key": "new",
+     "label": "New",
+     "labelSw": "Mpya",
+     "tone": "ink"
+    }
+   ],
+   "swatches": [
+    {
+     "valueId": "34",
+     "label": "Blush floral",
+     "hex": "#F2D7DA",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "4af1ee99-6f9e-4cdf-b7be-74cba46322f0",
+    "slug": "women-mini-dresses",
+    "name": "Mini dresses"
+   }
+  },
+  {
+   "id": "b491a9c3-d7aa-4285-b87d-663cbfa7d4c2",
+   "slug": "zuri-linen-maxi-dress",
+   "title": "Zuri linen maxi dress",
+   "brand": {
+    "id": "94ba7c3f-6651-4715-9609-b54ead549677",
+    "name": "Maison Pwani",
+    "slug": "maison-pwani"
+   },
+   "cover": {
+    "id": "483b5e56-9a1e-4ff1-bdea-a7bf7c4d3134",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=97fda38e06c1bbab859e02497adee2149309bfafc3548485bba9437ee9140ae7",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=26705e62edcc53539e31445fc6c65e4965edd1e8e61dd1f490bc987eb33e6aff"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fccfd0bd29fc11891b37b65c4683d508d801b14bd03c31b80bb70e3eb09a7632"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=5e9fcaeb96ed8c933deb9186da957297aeb6bce2668e39a7b247a112e3dcdef2"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7593ae82bd1382d8504f2f466866402e470aad02f5fa3d0f9bd5d81baf87ca39"
+      },
+      {
+       "width": 1602,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1602.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=061ede2804dc2bd134da4107eafc8188a5d5ff87b5b58e3cad1d588d74e4e561"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=48a3b3d5a1a3a3f86587286e6abc11992f09d8ea926c046c462534d4fc16edcb"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=11065aacf4cfbc53dcae5dbe580800e010439325e706cc1620c1028863257acd"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=473edf6c7ae96be349ccd7b7dfa1fcdf1c45a701b40f6b3f73fb8d2c0b7b9671"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4be363a58f7307229b49c8ec44a7c2b372f6560042968a666bf29d5eade4e638"
+      },
+      {
+       "width": 1602,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1602.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=82cd31e25a193f8f9e2666d4138bf6be7d46847eedbf3a65ea9324062f8c36bb"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=10d1e9e2a818dd8ba3f38952168ede96bb7a0516b8c7385d4a014b541928caba"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b3197ba41ef39042983b8f9c88ac4222d6039fc167bc1586d836f008eb50855f"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=588b0b62fcbce34417455881eb964218fd7f2a1f56b1cac98054acb53c4cda2f"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=97fda38e06c1bbab859e02497adee2149309bfafc3548485bba9437ee9140ae7"
+      },
+      {
+       "width": 1602,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/a298e3dcfe84483b/w1602.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2fd29340ff1b989c40466b67a6e8470d1322743c5079f8734b5f080cec926d8f"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dkL4?2x]X8o}?^R+t6R*0KRkoLRjo}ofjFj@ozWBaeWC",
+    "thumbhash": "KfgRDgR5mPeXZgd3h4mHd2eIN2ByBDY=",
+    "dominantColor": "#A5AAA7",
+    "width": 1602,
+    "height": 2002,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Model in an ivory off-shoulder linen maxi dress",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 85000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 85000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [
+    {
+     "id": "1",
+     "key": "new",
+     "label": "New",
+     "labelSw": "Mpya",
+     "tone": "ink"
+    },
+    {
+     "id": "5",
+     "key": "made-in-tz",
+     "label": "Made in Tanzania",
+     "labelSw": "Imetengenezwa Tanzania",
+     "tone": "blush"
+    }
+   ],
+   "swatches": [
+    {
+     "valueId": "1",
+     "label": "Ivory",
+     "hex": "#F3EDE2",
+     "mediaUrl": null
+    },
+    {
+     "valueId": "2",
+     "label": "Sand",
+     "hex": "#D8C3A5",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "bbff356b-e784-4558-83ed-f4cf9b904d5b",
+    "slug": "women-maxi-dresses",
+    "name": "Maxi dresses"
+   }
+  },
+  {
+   "id": "7072ada1-73ac-47b4-a89d-ef13cf004798",
+   "slug": "pwani-floral-wrap-dress",
+   "title": "Pwani floral wrap dress",
+   "brand": {
+    "id": "94ba7c3f-6651-4715-9609-b54ead549677",
+    "name": "Maison Pwani",
+    "slug": "maison-pwani"
+   },
+   "cover": {
+    "id": "3ae78769-65e9-4f6f-a64f-5c37794d2408",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w1064.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6873551c4c6bd510e8f0e489db466cf66f0f1f2c8339441af658ec05fbb726fa",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c2683c28dab5fcc02d4cd055ee884f094f9f4e4c4a85f788d3b7ea7b49d6513b"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=12204ffb063780f169038a210003636efb0f7759a649be5fbdde879ff8ba051f"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3b0398677faa464b1fdbd3931f594699f64589b42cb1bf54a8888821f6bd1d9c"
+      },
+      {
+       "width": 1064,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w1064.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0ffb6da656e82219439923997184767bde106f135d4776636166e9812ec3f8ac"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7d20c3e4393cbf7e926c99d8ab38742445ee51d727fe2f53a20b0b71021b996f"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d2b538b7af800c5c3112f8d1f9844e85968fc93fdb3201bc61ecc40ccdb5abb6"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2803b3f2e52b128cd2378395e3562c4bfd5df589f9ec645fc5f3ddec475338c3"
+      },
+      {
+       "width": 1064,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w1064.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=21f514e7db19584469aefe667b777f478d2c8f09db194c729be9c99fa60f1c50"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7f07e991388ed2e498f94a8ec9abd11860543759b9ce65120cd51321eaae1947"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a90b0191cdd542d492f33aa811beb5eb1d61ffc29c5e9ff19446279e90756af5"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=168d4776a7d0782f88f678eb4ace4159fb79872971c40c3de84d6adbd4e8466b"
+      },
+      {
+       "width": 1064,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/893e0fec13cb3ae7/w1064.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6873551c4c6bd510e8f0e489db466cf66f0f1f2c8339441af658ec05fbb726fa"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dVLN=C[R?G?wpyxUa_g4w[Rjs:jFIWskRji{o#tQt7NH",
+    "thumbhash": "LPgFLgjkj8Z4iHWGd4N2mrloj4P6N6g=",
+    "dominantColor": "#B3B4B1",
+    "width": 1064,
+    "height": 1330,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Woman in a floral wrap dress by the sea",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 78000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 78000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [
+    {
+     "id": "3",
+     "key": "bestseller",
+     "label": "Bestseller",
+     "labelSw": "Inayopendwa",
+     "tone": "muted"
+    }
+   ],
+   "swatches": [
+    {
+     "valueId": "8",
+     "label": "Ocean floral",
+     "hex": "#E9E3DA",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "0e34bb17-fe2e-4341-8ea9-81956d15a44f",
+    "slug": "women-midi-dresses",
+    "name": "Midi dresses"
+   }
+  },
+  {
+   "id": "163a838f-9e54-47e8-af49-3554420805bb",
+   "slug": "kanga-swing-dress",
+   "title": "Kanga swing dress",
+   "brand": {
+    "id": "db07d4fa-6bdd-42cd-8dd8-e0abe0977e7d",
+    "name": "Kanga House",
+    "slug": "kanga-house"
+   },
+   "cover": {
+    "id": "04bea5cb-1fa7-4d5c-947e-0f5c2b1bedcb",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=487969b410b231e0b37f529237773e7cd43b099358211a97400f5d7279d12b03",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=83583d9e14280f1c930d6b298fa18f3fc5fa5591387f7e31c4050584c0ab0c89"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e67ee4bf507ed3dc95ee353dbb945f058c9d441039b8930c7479db19db2beab8"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b30739c498d57451d52c8eb105c3f897b060cc7906f8fcf86bb2d93a75f3b6c9"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c66bd6daeda7839c5eb1628d0ed7b8b84b371f6e3a25b8cdd72c3d2e1b403634"
+      },
+      {
+       "width": 1842,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1842.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e94013c2468c025f2ba98828021f432b70d3f3836c5e2ce97636029f1c72849a"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7105c2da4ad746743adf534586404149fdc28cb50b35be5580339bce4cb26cc4"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=06720f8e96006978d82512795c3e3235a845812dbe365c05cb54c1ec87c4d8a7"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2040ece5b49f4d11db95ec81c7f0817ea3bc88103bf1f45a21c3c252c1ed8a19"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=528fc90a0dbd49fa5cbed7c928a31a9ccf8280809add8a8ee96bb6d1c0f47565"
+      },
+      {
+       "width": 1842,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1842.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fec37df7adf4a66e465375b07beae4c3a3adb694d2a54248dac7c18bbe9fa7c0"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=c7daf78963b10ddb36bb139db03d293344a58a7b0c8ff59b2a98993c0ae4686a"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=755f14840670636a7bacf1152fc4493d484cc679986532b7c83087e352aa9372"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8ef48f8f3c32d2e637a5eb40a7b66951025b6e9c41e20a942a0566eb2c1ec508"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=487969b410b231e0b37f529237773e7cd43b099358211a97400f5d7279d12b03"
+      },
+      {
+       "width": 1842,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/04965804bd6804be/w1842.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=747c88cc618bae1ac80b82732e641045ca3a2ebd4312f56c2e1fc8f6d0a354e4"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dRNa%|-T_I%0.5kBrtn+R+oLRRWV=_oeS2jboxayNHj[",
+    "thumbhash": "oaoKHgr4V7h4Z3h4iIl3eHZ3+Ih3EIc=",
+    "dominantColor": "#C9774C",
+    "width": 1842,
+    "height": 2302,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Woman in a red floral swing dress",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 92000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 92000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [
+    {
+     "id": "3",
+     "key": "bestseller",
+     "label": "Bestseller",
+     "labelSw": "Inayopendwa",
+     "tone": "muted"
+    },
+    {
+     "id": "5",
+     "key": "made-in-tz",
+     "label": "Made in Tanzania",
+     "labelSw": "Imetengenezwa Tanzania",
+     "tone": "blush"
+    }
+   ],
+   "swatches": [
+    {
+     "valueId": "21",
+     "label": "Red bloom",
+     "hex": "#C2262E",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "0e34bb17-fe2e-4341-8ea9-81956d15a44f",
+    "slug": "women-midi-dresses",
+    "name": "Midi dresses"
+   }
+  },
+  {
+   "id": "e3f9fc7c-e65b-4c25-bd98-4b738705c290",
+   "slug": "rubi-flowing-maxi",
+   "title": "Rubi flowing maxi",
+   "brand": {
+    "id": "71349a04-e442-4203-b794-2da32569217a",
+    "name": "Atelier Msasani",
+    "slug": "atelier-msasani"
+   },
+   "cover": {
+    "id": "4fa76799-b290-4a9a-9548-f0945a6b244d",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a2becebd63b821b4b5caab4c22d010403c8472eb8c381271f3d2baff0c9cebf9",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f1358aeb5c76014c607d1743f3c4b2e0c185789ad18307158f3544eae95dc1ea"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=be93033757d031c59584749b46b1bf86cd2660ff05be1431dd5587f9e0982997"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3cd1c6b1704e24a0d59bbca9ceb343d5021b7174b3fbbabe9f0deddda4f15933"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7c83f34d414e2fd570219111e52283c9f62bb6fc3b5f6f7dfdf5392d4ad4d56b"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2eebc823d4d38ac6fdebe20b03ec0f9c2f645043d2c106a63867c3bb6029b81b"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4b06badb6c1fd96a4de652de068934a3f39b464e09d872e98fb320d92ee40775"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=d918b8f0d51bb7154df1315b5bc6a2136b8afddee955b322a228d20bfc124dfb"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6cf654231803b44fba051e84d8716187274c0f8e1d1e0b7a5e4c21590afa6b66"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=ab11dff80329cf7a18e4da084235b5118acb8f0999854177a16fdfd1c31eab77"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1579a244df1eb1365c5be5daf2a7955d0d27216657d228b5eb49c2df0bc577a1"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=62a4ff243ddf591882dfbb404291da6b78e4198486bb5d31cc1969ab81b94378"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/1634fdc270c24fa7/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a2becebd63b821b4b5caab4c22d010403c8472eb8c381271f3d2baff0c9cebf9"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dQJk1EwQuNa0uf?vVZNFXlo#VtR$vhROWZs:X-X7t7kD",
+    "thumbhash": "okgKFgz4VdhOZohoh1WYikiZICqYAmc=",
+    "dominantColor": "#A4827B",
+    "width": 1920,
+    "height": 2400,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Woman twirling in a red chiffon maxi",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 135000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 135000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [],
+   "swatches": [
+    {
+     "valueId": "27",
+     "label": "Rubi red",
+     "hex": "#B3122A",
+     "mediaUrl": null
+    },
+    {
+     "valueId": "28",
+     "label": "Emerald",
+     "hex": "#1F5E4A",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "bbff356b-e784-4558-83ed-f4cf9b904d5b",
+    "slug": "women-maxi-dresses",
+    "name": "Maxi dresses"
+   }
+  },
+  {
+   "id": "2d437e1f-40f4-448e-98cd-eb0c8be703a7",
+   "slug": "malkia-off-shoulder-gown",
+   "title": "Malkia off-shoulder gown",
+   "brand": {
+    "id": "71349a04-e442-4203-b794-2da32569217a",
+    "name": "Atelier Msasani",
+    "slug": "atelier-msasani"
+   },
+   "cover": {
+    "id": "88d9398e-473e-49c4-8556-a762f9649efb",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a419216465ce007c727bcb7ffb28a04265b21a2560a8619f3e60141c805792e8",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=bbcbc19c0b686c78c28e4e2eb0a0e346abfc875c288635e5b80dc28f1a63185c"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=18159492c70edad7b16f2f5f9ee52d072d2cf803dffd5270c4230fd78995a021"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=769b5fc2077470ea2bffcaaa4db81370f76ae0f6c0b5702a740b478046d78c45"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=662ef036777f4563adc354630b02fe4129229a8bad6e371467f6121c6b3cce78"
+      },
+      {
+       "width": 1685,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1685.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=19f2254dd77a743b5be8735a1a6e1e58aadd30c313ff1ea8932d491bd33def6f"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=70f21341ce3ce08f2373925522f6803a652cbe23bc3722202fc23d6fae40fbab"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0507d9481860e058f1110ac8c237220933559f6d7b65b93e1e790fcf8427418e"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a06b47e8eef1f33bb8823be0f049ca8d4562f8cec95738d1796a1f58fc4dc8c0"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=67925fa5e5c12a3153b1994b04138621d10cd0c7d517aa1ca10eb53248bd9bfc"
+      },
+      {
+       "width": 1685,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1685.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7692634357dbf7b36c43705fec679fec69224c4557e7f7f4a1b175de026040d0"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=41082e044023b4ddd388bf1fc637bcaeec1bae320e4f242f57b4b852fdae0d47"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2507f660f06f074bbda99623579cea8b52384909b5b6e4baef4a1e1ccaa9f5f3"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4adb1f583927e1d3a3dd2ff657fda599db9dface77e0fb5a207de6308caa3198"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a419216465ce007c727bcb7ffb28a04265b21a2560a8619f3e60141c805792e8"
+      },
+      {
+       "width": 1685,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1685.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8f20b41ff582d08425e72f1ed489bf95f0f3aabd4c6123a872c5b224ac447730"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dGE_^JxdEXM]tWNGImt80fxU?7R.%3a$R,kE-oM{IU%1",
+    "thumbhash": "3iYGHgK6oOhFagmYh3qXWmU6BIJ1AHc=",
+    "dominantColor": "#786497",
+    "width": 1685,
+    "height": 2106,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Model in a plum satin off-shoulder gown",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 245000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 245000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [
+    {
+     "id": "2",
+     "key": "limited",
+     "label": "Limited",
+     "labelSw": "Toleo maalum",
+     "tone": "accent"
+    }
+   ],
+   "swatches": [
+    {
+     "valueId": "14",
+     "label": "Plum",
+     "hex": "#5B1F45",
+     "mediaUrl": null
+    },
+    {
+     "valueId": "15",
+     "label": "Midnight",
+     "hex": "#1B1F3A",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "c5c80522-946c-47f2-9a6d-f58e4400ff78",
+    "slug": "women-evening-dresses",
+    "name": "Evening & occasion"
+   }
+  }
+ ],
+ "nextCursor": null,
+ "sort": "relevance",
+ "fuzzy": false
+}

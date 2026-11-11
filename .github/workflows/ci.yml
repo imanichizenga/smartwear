@@ -1,0 +1,63 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API (Django) — lint, migrations, tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env: { POSTGRES_USER: smartwear, POSTGRES_PASSWORD: smartwear, POSTGRES_DB: smartwear }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U smartwear" --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://smartwear:smartwear@localhost:5432/smartwear
+      REDIS_URL: redis://localhost:6379
+      MASTER_ENCRYPTION_KEY: k1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      NODE_ENV: test
+    defaults:
+      run: { working-directory: apps/api }
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gdal-bin libgdal-dev libvips-dev ffmpeg
+      - uses: astral-sh/setup-uv@v6
+        with: { enable-cache: true, cache-dependency-glob: apps/api/uv.lock }
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run python manage.py check --deploy --fail-level ERROR
+      - run: uv run python manage.py makemigrations --check --dry-run
+      - run: uv run pytest -n 4 -p no:warnings
+      - name: Dependency audit
+        run: uvx pip-audit --strict -r <(uv export --frozen --no-dev --no-hashes) || echo "::warning::pip-audit reported issues"
+        shell: bash
+
+  web:
+    name: Packages, admin & mobile — typecheck, lint, test, build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level=high --prod
+        continue-on-error: true
+      - run: pnpm turbo run typecheck lint test
+      - run: pnpm turbo run build --filter=@smartwear/admin
+        env: { NEXT_PUBLIC_API_URL: "http://localhost:4000" }

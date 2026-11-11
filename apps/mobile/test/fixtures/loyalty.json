@@ -1,0 +1,32 @@
+{
+ "points": 62,
+ "tier": "Atelier",
+ "perk": "Welcome to SmartWear",
+ "nextTier": "Maison",
+ "pointsToNext": 438,
+ "tiers": [
+  {
+   "name": "Atelier",
+   "minPoints": 0,
+   "perk": "Welcome to SmartWear"
+  },
+  {
+   "name": "Maison",
+   "minPoints": 500,
+   "perk": "Early access to drops"
+  },
+  {
+   "name": "Couture",
+   "minPoints": 2000,
+   "perk": "Free express delivery"
+  }
+ ],
+ "history": [
+  {
+   "delta": 62,
+   "reason": "order_delivered",
+   "orderNumber": "SW-2322-22",
+   "at": "2026-11-11T06:43:30.014135+00:00"
+  }
+ ]
+}

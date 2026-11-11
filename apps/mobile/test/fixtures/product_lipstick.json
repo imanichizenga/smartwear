@@ -1,0 +1,590 @@
+{
+ "id": "48f41bc7-3f01-4e8e-8893-f24613e55c01",
+ "slug": "velvet-matte-lipstick",
+ "title": "Velvet matte lipstick",
+ "brand": {
+  "id": "076249f9-7abb-46d7-b9fc-a0e01f5f70c3",
+  "name": "Nuru Beauty",
+  "slug": "nuru-beauty"
+ },
+ "cover": {
+  "id": "6f4228f5-6b11-4e7d-a276-be06d72ef777",
+  "type": "IMAGE",
+  "status": "READY",
+  "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f504c65323c234c397ccdd3502e075813f84e0a8579c2d0ff408c885736bb0fe",
+  "sources": {
+   "avif": [
+    {
+     "width": 256,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b05ec2a691ea5faae8495135f8f3a6b3e0974248ec56b955759139a3bf617974"
+    },
+    {
+     "width": 512,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=11313111dabb9d30b81bb7d5400989ad0cec846662aa48d3e7b82a05086fb9d1"
+    },
+    {
+     "width": 768,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fe12e7239725731b10213fe548dfbe2de8c125db848eb8d988a1d17c0e894355"
+    },
+    {
+     "width": 1045,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0ad18a92d4f1c46effccddbe83bf9113e7cfa4cbc5bec50ef97fcf69912ab92e"
+    }
+   ],
+   "webp": [
+    {
+     "width": 256,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fddb4eb3c8c65802e1a317c06e39888982804fbebf32f120741cf0b168b5668f"
+    },
+    {
+     "width": 512,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=30f89b0cf4b99c5d6a4735030b03cb8479bd99e697da85fa9099191414bc12f0"
+    },
+    {
+     "width": 768,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0f2662f77844bcd07de4e31fc91e9a621428cdf0c192d3493ddad563a4d270a5"
+    },
+    {
+     "width": 1045,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=11d9a8ea1d61cc993d2d728c4d80824e64daff19a9605185c1e03a235302efd5"
+    }
+   ],
+   "jpeg": [
+    {
+     "width": 256,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2af3d16ebb892644dc6c1cc743bc82ddb9eaf6e1938af66b1a762e5dd7610014"
+    },
+    {
+     "width": 512,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=20b5f45940c384693401daee35eacd63d3c3c64ff1fea84e6f2fa6b15d3cd88d"
+    },
+    {
+     "width": 768,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6cc3c34920b9195593126cc3a6c32be24b2f48901a069176325bb0a53bd92229"
+    },
+    {
+     "width": 1045,
+     "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f504c65323c234c397ccdd3502e075813f84e0a8579c2d0ff408c885736bb0fe"
+    }
+   ]
+  },
+  "posterUrl": null,
+  "previewUrl": null,
+  "hlsUrl": null,
+  "blurhash": "dnQ0R1%MR*Rj?bof%MtR~qM{WA%MIoj[DiM{WVxuxaRP",
+  "thumbhash": "MwgOBgJohbioePd2eYNzl5lnR4eAhAg=",
+  "dominantColor": "#D4CFCE",
+  "width": 1045,
+  "height": 1306,
+  "durationMs": null,
+  "waveform": null,
+  "alt": "Rose lipstick on a white surface",
+  "focalX": 0.5,
+  "focalY": 0.4,
+  "role": null
+ },
+ "hover": null,
+ "price": {
+  "retail": 32000,
+  "compareAt": null,
+  "currency": "TZS",
+  "fromBulk": null,
+  "tiers": [],
+  "moq": null,
+  "yourPrice": 32000,
+  "yourBasis": "retail",
+  "nextTier": null,
+  "showWholesale": false,
+  "isWholesaleAccount": false
+ },
+ "priceRange": null,
+ "badges": [
+  {
+   "id": "6",
+   "key": "clean-beauty",
+   "label": "Clean beauty",
+   "labelSw": "Urembo safi",
+   "tone": "blush"
+  }
+ ],
+ "swatches": [
+  {
+   "valueId": "217",
+   "label": "Mahogany",
+   "hex": "#6B2A2A",
+   "mediaUrl": null
+  },
+  {
+   "valueId": "218",
+   "label": "Rose petal",
+   "hex": "#B5606A",
+   "mediaUrl": null
+  },
+  {
+   "valueId": "219",
+   "label": "Cinnamon",
+   "hex": "#8B4A34",
+   "mediaUrl": null
+  },
+  {
+   "valueId": "220",
+   "label": "Ruby",
+   "hex": "#9E1B32",
+   "mediaUrl": null
+  }
+ ],
+ "moreSwatches": 0,
+ "rating": null,
+ "reviewCount": 0,
+ "isNew": true,
+ "inStock": true,
+ "wishlisted": false,
+ "department": null,
+ "isBeauty": true,
+ "category": {
+  "id": "02f2b043-648d-4a51-ac54-02abeca75d8b",
+  "slug": "makeup-lips",
+  "name": "Lips"
+ },
+ "tagline": "Twelve-hour colour that feels like nothing",
+ "descriptionHtml": "<p>A creamy matte with shea and vitamin E, formulated and shade-tested on deep skin tones.</p>",
+ "story": null,
+ "care": "Store below 30°C.",
+ "materials": "Ingredients: Ricinus communis seed oil, Butyrospermum parkii butter, Tocopherol, …",
+ "countryOfOrigin": "Tanzania",
+ "season": "Resort 2026",
+ "tags": [],
+ "attributes": {
+  "Finish": "Matte"
+ },
+ "rawAttributes": {
+  "finish": "matte"
+ },
+ "beauty": {
+  "vegan": true,
+  "finish": "matte",
+  "volume": "3.5 g",
+  "paoMonths": 18,
+  "skinTypes": [],
+  "crueltyFree": true,
+  "ingredients": "Ricinus Communis (Castor) Seed Oil, Butyrospermum Parkii (Shea) Butter, Candelilla Cera, Tocopherol, Iron Oxides (CI 77491, CI 77492, CI 77499)."
+ },
+ "media": [
+  {
+   "id": "6f4228f5-6b11-4e7d-a276-be06d72ef777",
+   "type": "IMAGE",
+   "status": "READY",
+   "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f504c65323c234c397ccdd3502e075813f84e0a8579c2d0ff408c885736bb0fe",
+   "sources": {
+    "avif": [
+     {
+      "width": 256,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b05ec2a691ea5faae8495135f8f3a6b3e0974248ec56b955759139a3bf617974"
+     },
+     {
+      "width": 512,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=11313111dabb9d30b81bb7d5400989ad0cec846662aa48d3e7b82a05086fb9d1"
+     },
+     {
+      "width": 768,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fe12e7239725731b10213fe548dfbe2de8c125db848eb8d988a1d17c0e894355"
+     },
+     {
+      "width": 1045,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0ad18a92d4f1c46effccddbe83bf9113e7cfa4cbc5bec50ef97fcf69912ab92e"
+     }
+    ],
+    "webp": [
+     {
+      "width": 256,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fddb4eb3c8c65802e1a317c06e39888982804fbebf32f120741cf0b168b5668f"
+     },
+     {
+      "width": 512,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=30f89b0cf4b99c5d6a4735030b03cb8479bd99e697da85fa9099191414bc12f0"
+     },
+     {
+      "width": 768,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0f2662f77844bcd07de4e31fc91e9a621428cdf0c192d3493ddad563a4d270a5"
+     },
+     {
+      "width": 1045,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=11d9a8ea1d61cc993d2d728c4d80824e64daff19a9605185c1e03a235302efd5"
+     }
+    ],
+    "jpeg": [
+     {
+      "width": 256,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2af3d16ebb892644dc6c1cc743bc82ddb9eaf6e1938af66b1a762e5dd7610014"
+     },
+     {
+      "width": 512,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=20b5f45940c384693401daee35eacd63d3c3c64ff1fea84e6f2fa6b15d3cd88d"
+     },
+     {
+      "width": 768,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6cc3c34920b9195593126cc3a6c32be24b2f48901a069176325bb0a53bd92229"
+     },
+     {
+      "width": 1045,
+      "url": "http://localhost:9000/smartwear-media/media/2026/11/609204a7a81f6f42/w1045.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=f504c65323c234c397ccdd3502e075813f84e0a8579c2d0ff408c885736bb0fe"
+     }
+    ]
+   },
+   "posterUrl": null,
+   "previewUrl": null,
+   "hlsUrl": null,
+   "blurhash": "dnQ0R1%MR*Rj?bof%MtR~qM{WA%MIoj[DiM{WVxuxaRP",
+   "thumbhash": "MwgOBgJohbioePd2eYNzl5lnR4eAhAg=",
+   "dominantColor": "#D4CFCE",
+   "width": 1045,
+   "height": 1306,
+   "durationMs": null,
+   "waveform": null,
+   "alt": "Rose lipstick on a white surface",
+   "focalX": 0.5,
+   "focalY": 0.4,
+   "role": "gallery",
+   "optionValueId": "217"
+  }
+ ],
+ "audioNote": null,
+ "optionTypes": [
+  {
+   "id": "87",
+   "name": "Shade",
+   "kind": "shade",
+   "values": [
+    {
+     "id": "217",
+     "value": "Mahogany",
+     "label": "Mahogany",
+     "swatchHex": "#6B2A2A",
+     "swatchMedia": null,
+     "sortOrder": 0
+    },
+    {
+     "id": "218",
+     "value": "Rose petal",
+     "label": "Rose petal",
+     "swatchHex": "#B5606A",
+     "swatchMedia": null,
+     "sortOrder": 1
+    },
+    {
+     "id": "219",
+     "value": "Cinnamon",
+     "label": "Cinnamon",
+     "swatchHex": "#8B4A34",
+     "swatchMedia": null,
+     "sortOrder": 2
+    },
+    {
+     "id": "220",
+     "value": "Ruby",
+     "label": "Ruby",
+     "swatchHex": "#9E1B32",
+     "swatchMedia": null,
+     "sortOrder": 3
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "id": "e9c1b3d9-8b70-49d3-a4ce-2439899d48a3",
+   "sku": "VELVETMATT-MAHOGA",
+   "barcode": null,
+   "optionValueIds": [
+    "217"
+   ],
+   "price": {
+    "retail": 32000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 32000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "inStock": true,
+   "stockLevel": null,
+   "lowStock": false,
+   "weightGrams": null,
+   "mediaIds": [],
+   "shadeHex": null
+  },
+  {
+   "id": "42457522-d29b-427c-a792-68c0bc08efa1",
+   "sku": "VELVETMATT-ROSEPE",
+   "barcode": null,
+   "optionValueIds": [
+    "218"
+   ],
+   "price": {
+    "retail": 32000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 32000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "inStock": true,
+   "stockLevel": null,
+   "lowStock": false,
+   "weightGrams": null,
+   "mediaIds": [],
+   "shadeHex": null
+  },
+  {
+   "id": "2399581a-98ae-48a3-8247-edb2a8f3bd09",
+   "sku": "VELVETMATT-CINNAM",
+   "barcode": null,
+   "optionValueIds": [
+    "219"
+   ],
+   "price": {
+    "retail": 32000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 32000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "inStock": true,
+   "stockLevel": null,
+   "lowStock": false,
+   "weightGrams": null,
+   "mediaIds": [],
+   "shadeHex": null
+  },
+  {
+   "id": "43504d66-ed97-4e5d-a7f8-5b62e146c404",
+   "sku": "VELVETMATT-RUBY",
+   "barcode": null,
+   "optionValueIds": [
+    "220"
+   ],
+   "price": {
+    "retail": 32000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 32000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "inStock": true,
+   "stockLevel": null,
+   "lowStock": false,
+   "weightGrams": null,
+   "mediaIds": [],
+   "shadeHex": null
+  }
+ ],
+ "sizeChart": null,
+ "fitNote": null,
+ "reviews": {
+  "average": 0.0,
+  "count": 0,
+  "distribution": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "completeTheLook": [],
+ "pairsWellWith": [
+  {
+   "id": "2d437e1f-40f4-448e-98cd-eb0c8be703a7",
+   "slug": "malkia-off-shoulder-gown",
+   "title": "Malkia off-shoulder gown",
+   "brand": {
+    "id": "71349a04-e442-4203-b794-2da32569217a",
+    "name": "Atelier Msasani",
+    "slug": "atelier-msasani"
+   },
+   "cover": {
+    "id": "88d9398e-473e-49c4-8556-a762f9649efb",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a419216465ce007c727bcb7ffb28a04265b21a2560a8619f3e60141c805792e8",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=bbcbc19c0b686c78c28e4e2eb0a0e346abfc875c288635e5b80dc28f1a63185c"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=18159492c70edad7b16f2f5f9ee52d072d2cf803dffd5270c4230fd78995a021"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=769b5fc2077470ea2bffcaaa4db81370f76ae0f6c0b5702a740b478046d78c45"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=662ef036777f4563adc354630b02fe4129229a8bad6e371467f6121c6b3cce78"
+      },
+      {
+       "width": 1685,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1685.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=19f2254dd77a743b5be8735a1a6e1e58aadd30c313ff1ea8932d491bd33def6f"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=70f21341ce3ce08f2373925522f6803a652cbe23bc3722202fc23d6fae40fbab"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0507d9481860e058f1110ac8c237220933559f6d7b65b93e1e790fcf8427418e"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a06b47e8eef1f33bb8823be0f049ca8d4562f8cec95738d1796a1f58fc4dc8c0"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=67925fa5e5c12a3153b1994b04138621d10cd0c7d517aa1ca10eb53248bd9bfc"
+      },
+      {
+       "width": 1685,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1685.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=7692634357dbf7b36c43705fec679fec69224c4557e7f7f4a1b175de026040d0"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=41082e044023b4ddd388bf1fc637bcaeec1bae320e4f242f57b4b852fdae0d47"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2507f660f06f074bbda99623579cea8b52384909b5b6e4baef4a1e1ccaa9f5f3"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4adb1f583927e1d3a3dd2ff657fda599db9dface77e0fb5a207de6308caa3198"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a419216465ce007c727bcb7ffb28a04265b21a2560a8619f3e60141c805792e8"
+      },
+      {
+       "width": 1685,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/8c491a1c70b388d9/w1685.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261111%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261111T093823Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8f20b41ff582d08425e72f1ed489bf95f0f3aabd4c6123a872c5b224ac447730"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dGE_^JxdEXM]tWNGImt80fxU?7R.%3a$R,kE-oM{IU%1",
+    "thumbhash": "3iYGHgK6oOhFagmYh3qXWmU6BIJ1AHc=",
+    "dominantColor": "#786497",
+    "width": 1685,
+    "height": 2106,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Model in a plum satin off-shoulder gown",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "hover": null,
+   "price": {
+    "retail": 245000,
+    "compareAt": null,
+    "currency": "TZS",
+    "fromBulk": null,
+    "tiers": [],
+    "moq": null,
+    "yourPrice": 245000,
+    "yourBasis": "retail",
+    "nextTier": null,
+    "showWholesale": false,
+    "isWholesaleAccount": false
+   },
+   "priceRange": null,
+   "badges": [
+    {
+     "id": "2",
+     "key": "limited",
+     "label": "Limited",
+     "labelSw": "Toleo maalum",
+     "tone": "accent"
+    }
+   ],
+   "swatches": [
+    {
+     "valueId": "14",
+     "label": "Plum",
+     "hex": "#5B1F45",
+     "mediaUrl": null
+    },
+    {
+     "valueId": "15",
+     "label": "Midnight",
+     "hex": "#1B1F3A",
+     "mediaUrl": null
+    }
+   ],
+   "moreSwatches": 0,
+   "rating": null,
+   "reviewCount": 0,
+   "isNew": true,
+   "inStock": true,
+   "wishlisted": false,
+   "department": "women",
+   "isBeauty": false,
+   "category": {
+    "id": "c5c80522-946c-47f2-9a6d-f58e4400ff78",
+    "slug": "women-evening-dresses",
+    "name": "Evening & occasion"
+   }
+  }
+ ],
+ "categoryPath": [
+  {
+   "id": "1cf88582-647e-41b6-bcd3-236f768a0282",
+   "slug": "beauty",
+   "name": "Beauty"
+  },
+  {
+   "id": "75def0e8-80b7-42ee-b544-2433c11fa1eb",
+   "slug": "beauty-makeup",
+   "name": "Makeup"
+  },
+  {
+   "id": "02f2b043-648d-4a51-ac54-02abeca75d8b",
+   "slug": "makeup-lips",
+   "name": "Lips"
+  }
+ ],
+ "publishedAt": "2026-11-11T06:37:27.229104+00:00",
+ "seo": {
+  "title": "Velvet matte lipstick — SmartWear",
+  "description": "Twelve-hour colour that feels like nothing"
+ }
+}

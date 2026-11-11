@@ -1,0 +1,174 @@
+{
+ "branding": {
+  "storeName": "SmartWear",
+  "tagline": "Fashion & beauty, delivered.",
+  "taglineSw": "Mitindo na urembo, hadi mlangoni.",
+  "supportPhone": "",
+  "supportEmail": "",
+  "supportWhatsApp": "",
+  "accentLight": "#B8955A",
+  "accentDark": "#D1B07A",
+  "logoMediaId": null,
+  "welcomeVideoMediaId": null,
+  "welcomeImageMediaId": null,
+  "appDownloadLink": ""
+ },
+ "features": {
+  "guestBrowsing": true,
+  "looksFeed": true,
+  "stories": true,
+  "wishlistBoards": true,
+  "loyalty": true,
+  "reviews": true,
+  "returns": true,
+  "chatSupport": true,
+  "wholesaleApplications": true,
+  "styleQuiz": true,
+  "shareTracking": true,
+  "minAppVersionIos": "1.0.0",
+  "minAppVersionAndroid": "1.0.0",
+  "maintenanceMode": false,
+  "maintenanceMessage": ""
+ },
+ "checkout": {
+  "extraFields": [],
+  "slideToConfirm": false,
+  "allowGuestCheckout": false,
+  "minOrderAmount": 0,
+  "showDeliveryEstimateOnPdp": true
+ },
+ "localization": {
+  "defaultLocale": "en",
+  "enabledLocales": [
+   "en",
+   "sw"
+  ],
+  "currency": "TZS",
+  "enabledCurrencies": [
+   "TZS"
+  ],
+  "timezone": "Africa/Dar_es_Salaam"
+ },
+ "auth": {
+  "googleWebClientId": "",
+  "googleIosClientId": "",
+  "googleAndroidClientId": "",
+  "otpLength": 6,
+  "otpResendCooldownSeconds": 30,
+  "requirePhoneForCheckout": true,
+  "defaultCountry": "TZ",
+  "defaultDialCode": "+255"
+ },
+ "maps_google": {
+  "mapStyleLight": [],
+  "mapStyleDark": [],
+  "regionCode": "tz"
+ },
+ "pricing_wholesale": {
+  "visibility": "approved_only",
+  "autoTiersForRetail": true,
+  "currency": "TZS",
+  "taxInclusive": true
+ },
+ "delivery_pricing": {
+  "options": [
+   {
+    "id": "express",
+    "name": "Express",
+    "nameSw": "Haraka",
+    "description": null,
+    "kind": "express",
+    "enabled": true,
+    "feeMultiplier": 1.5,
+    "surcharge": 0,
+    "etaMinMinutes": 25,
+    "etaMaxMinutes": 45,
+    "sortOrder": 0
+   },
+   {
+    "id": "standard",
+    "name": "Standard",
+    "nameSw": "Kawaida",
+    "description": null,
+    "kind": "standard",
+    "enabled": true,
+    "feeMultiplier": 1.0,
+    "surcharge": 0,
+    "etaMinMinutes": 60,
+    "etaMaxMinutes": 120,
+    "sortOrder": 1
+   },
+   {
+    "id": "pickup",
+    "name": "Store pickup",
+    "nameSw": "Chukua dukani",
+    "description": null,
+    "kind": "pickup",
+    "enabled": true,
+    "feeMultiplier": 0.0,
+    "surcharge": 0,
+    "etaMinMinutes": 30,
+    "etaMaxMinutes": 90,
+    "sortOrder": 2
+   }
+  ],
+  "currency": "TZS",
+  "freeDeliveryThreshold": null
+ },
+ "delivery_dispatch": {
+  "deliveryPinEnabled": true,
+  "offerTimeoutSeconds": 20
+ },
+ "payments": {
+  "cashOnDeliveryEnabled": true,
+  "cashOnDeliveryMaxAmount": null,
+  "mobileMoneyProvider": "none",
+  "cardProvider": "none"
+ },
+ "loyalty": {
+  "enabled": true,
+  "pointsPerCurrencyUnit": 0.001,
+  "tiers": [
+   {
+    "name": "Atelier",
+    "minPoints": 0,
+    "perk": "Welcome to SmartWear"
+   },
+   {
+    "name": "Maison",
+    "minPoints": 500,
+    "perk": "Early access to drops"
+   },
+   {
+    "name": "Couture",
+    "minPoints": 2000,
+    "perk": "Free express delivery"
+   }
+  ],
+  "redeemRate": 10.0
+ },
+ "search": {
+  "trending": [
+   "linen dress",
+   "gold hoops",
+   "loafers",
+   "vitamin C serum",
+   "oud perfume"
+  ]
+ },
+ "versions": {
+  "branding": 0,
+  "features": 0,
+  "checkout": 0,
+  "localization": 0,
+  "auth": 2,
+  "maps.google": 0,
+  "pricing.wholesale": 0,
+  "delivery.pricing": 0,
+  "delivery.dispatch": 0,
+  "payments": 0,
+  "loyalty": 0,
+  "search": 0
+ },
+ "catalogVersion": 52
+}
