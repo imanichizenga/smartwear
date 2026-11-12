@@ -21,12 +21,24 @@ export interface FieldMeta {
   suffix?: string;
 }
 
+export interface LayoutSection {
+  title: string;
+  description?: string;
+  fields: string[];
+  /** Only shown while `field` holds one of `equals` (e.g. provider-specific credentials). */
+  showWhen?: { field: string; equals: string[] };
+  /** Numbered setup checklist shown above the fields. */
+  steps?: string[];
+  /** A read-only value to copy into the provider console; `{field}` placeholders are filled from the form. */
+  copy?: { label: string; template: string; help?: string; missing?: string };
+}
+
 export interface GroupMeta {
   title: string;
   description: string;
   section: 'Integrations' | 'Store' | 'Delivery' | 'Content';
   /** Ordered field groups; fields not listed land in "More". */
-  layout?: { title: string; description?: string; fields: string[] }[];
+  layout?: LayoutSection[];
   fields?: Record<string, FieldMeta>;
   test?: { label: string; inputs?: { key: string; label: string; placeholder?: string; help?: string }[] };
 }
@@ -158,23 +170,56 @@ export const SETTINGS_META: Record<string, GroupMeta> = {
   payments: {
     title: 'Payments',
     section: 'Integrations',
-    description: 'Cash on delivery and mobile money through Beem Checkout.',
+    description: 'Cash on delivery and mobile money — M-Pesa, Airtel Money, Mixx by Yas and Halotel — collected by USSD push through Snippe.',
     layout: [
       { title: 'Cash on delivery', fields: ['cashOnDeliveryEnabled', 'cashOnDeliveryMaxAmount'] },
-      { title: 'Mobile money', fields: ['mobileMoneyProvider', 'beemCheckoutApiKey', 'beemCheckoutSecretKey', 'beemCheckoutCallbackSecret', 'beemCheckoutReferencePrefix', 'publicApiBaseUrl'] },
+      { title: 'Mobile money', description: 'The shopper approves a USSD prompt on their phone; the order confirms itself the moment the provider reports the payment.', fields: ['mobileMoneyProvider', 'publicApiBaseUrl'] },
+      {
+        title: 'Snippe',
+        description: 'Collections in TZS from 500 upwards. Payments expire after 4 hours if not approved.',
+        showWhen: { field: 'mobileMoneyProvider', equals: ['snippe'] },
+        steps: [
+          'In the Snippe dashboard open Settings → API Keys → Create API Key with the collection:read and collection:create scopes. The key starts with snp_ and is shown once.',
+          'Copy Settings → Webhook Secret from the same dashboard. Every payment result is signed with it (HMAC-SHA256); unsigned or forged results are rejected.',
+          'Paste both below, save, then press Test connection — it reads your Snippe balance.',
+        ],
+        copy: { label: 'Webhook URL', template: '{publicApiBaseUrl}/v1/webhooks/snippe', help: 'Sent with every payment request, so Snippe needs no extra setup. It must be public HTTPS.', missing: 'Set the public API URL above first.' },
+        fields: ['snippeApiKey', 'snippeWebhookSecret', 'snippeBaseUrl'],
+      },
+      {
+        title: 'Rider payouts',
+        description: 'Pay riders their delivery earnings from Admin → Rider payouts. With Snippe, money goes straight to the rider\'s M-Pesa, Airtel Money, Mixx by Yas or HaloPesa wallet; otherwise you record cash or bank payments by hand.',
+        steps: [
+          'For Snippe payouts, edit the same API key in the Snippe dashboard and add the disbursement:read and disbursement:create scopes.',
+          'Keep enough balance in your Snippe wallet — payouts are taken from collections. Failed payouts are refunded to it automatically.',
+        ],
+        fields: ['riderPayoutsProvider', 'riderPayoutMinimum', 'riderPayoutNarration'],
+      },
+      {
+        title: 'Beem Checkout',
+        showWhen: { field: 'mobileMoneyProvider', equals: ['beem_checkout'] },
+        copy: { label: 'Callback URL', template: '{publicApiBaseUrl}/v1/webhooks/beem/checkout', missing: 'Set the public API URL above first.' },
+        fields: ['beemCheckoutApiKey', 'beemCheckoutSecretKey', 'beemCheckoutCallbackSecret', 'beemCheckoutReferencePrefix'],
+      },
     ],
     fields: {
       cashOnDeliveryEnabled: { label: 'Accept cash on delivery' },
       cashOnDeliveryMaxAmount: { label: 'Cash limit per order', money: true, help: 'Leave empty for no limit.' },
-      mobileMoneyProvider: { label: 'Mobile money', options: { none: 'Off', beem_checkout: 'Beem Checkout (M-Pesa, Tigo Pesa, Airtel Money…)' } },
+      mobileMoneyProvider: { label: 'Mobile money provider', options: { none: 'Off', snippe: 'Snippe — M-Pesa, Airtel Money, Mixx by Yas, Halotel', beem_checkout: 'Beem Checkout (legacy)' } },
+      snippeApiKey: { label: 'API key', placeholder: 'snp_…', help: 'Needs the collection:read and collection:create scopes.' },
+      snippeWebhookSecret: { label: 'Webhook secret', help: 'Snippe → Settings → Webhook Secret. Rotating it there stops the old one immediately — paste the new one here straight away.' },
+      snippeBaseUrl: { label: 'API base URL', help: 'Leave as https://api.snippe.sh unless Snippe support gives you another.' },
       beemCheckoutApiKey: { label: 'Checkout API key' },
       beemCheckoutSecretKey: { label: 'Checkout secret key' },
       beemCheckoutCallbackSecret: { label: 'Callback secure token', help: 'Beem sends it in the beem-secure-token header; callbacks without it are rejected.' },
       beemCheckoutReferencePrefix: { label: 'Reference prefix' },
-      publicApiBaseUrl: { label: 'Public API URL', help: 'Where Beem sends payment callbacks.', placeholder: 'https://api.smartwear.co.tz' },
+      publicApiBaseUrl: { label: 'Public API URL', help: 'The internet address of this API. Payment providers post results to it.', placeholder: 'https://api.smartwear.co.tz' },
       cardProvider: { hidden: true },
+      riderPayoutsProvider: { label: 'Pay riders by', options: { manual: 'Recording them by hand', snippe: 'Snippe mobile-money payouts' } },
+      riderPayoutMinimum: { label: 'Smallest payout', money: true, help: 'Snippe payouts below this are refused, to keep fees in proportion.' },
+      riderPayoutNarration: { label: 'Payout description', help: 'Shown on the rider\'s mobile-money statement.' },
     },
-    test: { label: 'Pings the payment provider in sandbox mode.' },
+    test: { label: 'Checks the API key against your Snippe balance, the webhook secret, the public webhook URL and (if on) the payout scope.' },
   },
   'delivery.pricing': {
     title: 'Delivery fees',

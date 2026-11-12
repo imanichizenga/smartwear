@@ -23,8 +23,8 @@ from core.pagination import keyset, page_params
 from inventory.models import InventoryLevel, StockMovement, StockTransfer, Store
 
 from . import state
-from .models import DeliveryJob, DeliveryOffer, DeliveryZone, Rider, RiderDocument, RiderLocationPing, Vehicle
-from .services import dispatch
+from .models import DeliveryJob, DeliveryOffer, DeliveryZone, Rider, RiderDocument, RiderLocationPing, RiderPayout, Vehicle
+from .services import dispatch, payouts
 
 
 def _rider(request) -> Rider:
@@ -161,6 +161,8 @@ class RiderHistoryView(APIView):
             "items": [{"id": str(j.id), "orderNumber": j.order.number, "status": j.status, "store": j.store.name, "area": j.order.destination_area or None, "earning": j.earning if j.status == "COMPLETED" else 0, "distanceMeters": j.distance_m, "completedAt": j.completed_at.isoformat() if j.completed_at else None, "rating": getattr(getattr(j, "rating", None), "rating", None)} for j in rows],
             "nextCursor": nxt, "week": [{"date": str(x["d"]), "earnings": x["e"], "deliveries": x["n"]} for x in days],
             "totals": DeliveryJob.objects.filter(rider=r, status="COMPLETED").aggregate(earnings=Sum("earning"), deliveries=Count("id")),
+            "balance": payouts.owed(r),
+            "payouts": [payouts.payout_out(p) for p in r.payouts.select_related("rider__user", "created_by")[:10]],
         })
 
 
@@ -170,6 +172,64 @@ class RiderDocumentsView(APIView):
     def get(self, request):
         r = _rider(request)
         return Response({"items": [{"id": d.id, "kind": d.kind, "number": d.number[-4:] if d.number else None, "expiresAt": d.expires_at.isoformat() if d.expires_at else None, "verified": d.verified_at is not None, "media": media_out(d.media)} for d in r.documents.select_related("media")]})
+
+
+# ================================================================ admin: rider payouts
+class AdminPayoutsView(APIView):
+    """GET: what every rider is owed + recent payouts. POST: pay a rider (Snippe or recorded manually)."""
+
+    def get_permissions(self):
+        return [AdminPerm("riders.view")()] if self.request.method == "GET" else [AdminPerm("payouts.manage")()]
+
+    def get(self, request):
+        qs = RiderPayout.objects.select_related("rider__user", "created_by")
+        if rid := request.query_params.get("riderId"):
+            qs = qs.filter(rider_id=rid)
+        if st := request.query_params.get("status"):
+            qs = qs.filter(status=st.upper())
+        cfg = settings_service.get("payments")
+        return Response({
+            "balances": payouts.balances(),
+            "items": [payouts.payout_out(p) for p in qs[:100]],
+            "config": {"provider": cfg.riderPayoutsProvider, "snippeReady": bool(cfg.snippeApiKey) and cfg.riderPayoutsProvider == "snippe", "minimum": cfg.riderPayoutMinimum, "currency": "TZS"},
+        })
+
+    def post(self, request):
+        d = request.data or {}
+        r = Rider.objects.select_related("user").filter(id=d.get("riderId")).first()
+        if r is None:
+            raise ApiError.not_found("Rider")
+        amount = d.get("amount")
+        p = payouts.create(r, amount=int(amount) if amount not in (None, "") else None, method=str(d.get("method") or "snippe"), admin=request.user.admin, note=str(d.get("note") or ""), request=request)
+        return Response(payouts.payout_out(p), status=201)
+
+
+class AdminPayoutSyncView(APIView):
+    permission_classes = [AdminPerm("payouts.manage")]
+
+    def post(self, request, pid):
+        p = RiderPayout.objects.select_related("rider__user", "created_by").filter(id=pid).first()
+        if p is None:
+            raise ApiError.not_found("Payout")
+        if p.method != "snippe":
+            raise ApiError.bad_request("Only Snippe payouts can be re-checked")
+        return Response(payouts.payout_out(payouts.sync(p)))
+
+
+class AdminPayoutFeeView(APIView):
+    permission_classes = [AdminPerm("riders.view")]
+
+    def get(self, request):
+        from commerce.services import snippe
+
+        try:
+            amount = int(request.query_params.get("amount") or 0)
+        except ValueError as e:
+            raise ApiError.bad_request("amount must be a number") from e
+        if amount <= 0 or not snippe.payouts_configured():
+            return Response({"amount": amount, "fee": None, "total": None})
+        d = snippe.payout_fee(amount)
+        return Response({"amount": amount, "fee": d.get("fee_amount"), "total": d.get("total_amount")})
 
 
 # ================================================================ admin: riders
@@ -192,6 +252,7 @@ def rider_admin_out(r: Rider, *, full: bool = False) -> dict:
             "payout": _decrypt_json(r.payout_details, key), "notes": r.notes, "suspendedReason": r.suspended_reason or None,
             "documents": [{"id": d.id, "kind": d.kind, "number": d.number, "expiresAt": d.expires_at.isoformat() if d.expires_at else None, "verified": d.verified_at is not None, "media": media_out(d.media)} for d in docs],
             "earnings": DeliveryJob.objects.filter(rider=r, status="COMPLETED").aggregate(total=Sum("earning"), n=Count("id")),
+            "balance": payouts.owed(r),
             "recentJobs": [{"id": str(j.id), "orderNumber": j.order.number, "status": j.status, "completedAt": j.completed_at.isoformat() if j.completed_at else None, "earning": j.earning} for j in DeliveryJob.objects.filter(rider=r).select_related("order").order_by("-created_at")[:15]],
         })
     return out

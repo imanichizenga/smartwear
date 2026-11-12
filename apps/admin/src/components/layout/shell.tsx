@@ -197,6 +197,7 @@ export function Shell({ admin, theme, sidebarCollapsed, children }: { admin: Adm
   const [collapsed, setCollapsed] = useState(sidebarCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cmd, setCmd] = useState(false);
+  const bleed = usePathname().startsWith('/dispatch');
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -242,7 +243,7 @@ export function Shell({ admin, theme, sidebarCollapsed, children }: { admin: Adm
               <UserMenu admin={admin} />
             </div>
           </header>
-          <main id="main" className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+          <main id="main" className={cn('mx-auto w-full flex-1', bleed ? 'flex flex-col' : 'max-w-[1400px] px-4 py-6 sm:px-6 lg:px-10 lg:py-8')}>
             {children}
           </main>
         </div>

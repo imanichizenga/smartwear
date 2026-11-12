@@ -401,6 +401,8 @@ class AdminProductsView(APIView):
             qs = qs.filter(Q(title__icontains=term) | Q(variants__sku__icontains=term) | Q(brand__name__icontains=term) | Q(variants__barcode=term)).distinct()
         if q.get("status"):
             qs = qs.filter(status__in=q["status"].split(","))
+        if q.get("ids"):
+            qs = qs.filter(id__in=[i for i in q["ids"].split(",") if len(i) == 36][:200])
         if q.get("categoryId"):
             c = _get(Category, q["categoryId"], "Category")
             qs = qs.filter(Q(category_links__category__path=c.path) | Q(category_links__category__path__startswith=c.path + "/")).distinct()

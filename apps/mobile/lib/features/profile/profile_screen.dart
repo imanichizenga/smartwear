@@ -9,6 +9,7 @@ import '../../core/providers.dart';
 import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
+import '../../ui/motion.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -33,24 +34,24 @@ class ProfileScreen extends ConsumerWidget {
           ),
         const SizedBox(height: SwSpace.s6),
         if (u != null) ...[
-          _Group(children: [
+          Reveal(index: 1, child: _Group(children: [
             _Row(icon: Ic.receipt, label: s('profile.orders'), onTap: () => context.push('/orders')),
             _Row(icon: Ic.heart, label: s('profile.wishlist'), onTap: () => context.push('/wishlist')),
             _Row(icon: Ic.shirt, label: s('profile.styleProfile'), onTap: () => context.push('/auth/quiz')),
             _Row(icon: Ic.mapPin, label: s('profile.savedPlaces'), onTap: () => context.push('/places')),
             _Row(icon: Ic.wallet, label: s('profile.payments'), onTap: () => context.push('/payments')),
             _Row(icon: Ic.briefcase, label: s('profile.wholesale'), trailing: _wholesale(ref, u), onTap: () => context.push('/wholesale')),
-          ]),
+          ])),
           const SizedBox(height: SwSpace.s6),
         ],
-        _Group(children: [
+        Reveal(index: 2, child: _Group(children: [
           _Row(icon: Ic.bell, label: s('profile.notifications'), onTap: () => context.push('/notifications')),
           _Row(icon: Ic.globe, label: s('profile.language'), trailing: Text(ref.watch(localeProvider) == 'sw' ? 'Kiswahili' : 'English', style: context.type.bodyS.copyWith(color: c.muted)), onTap: () => _language(context, ref)),
           _Row(icon: Ic.sunMoon, label: s('profile.theme'), trailing: Text(s('profile.theme.${ref.watch(themeModeProvider).name}'), style: context.type.bodyS.copyWith(color: c.muted)), onTap: () => _theme(context, ref)),
           _Row(icon: Ic.messageCircle, label: s('profile.help'), onTap: () => context.push('/support')),
           if (u != null) _Row(icon: Ic.shield, label: s('profile.privacy'), onTap: () => context.push('/privacy')),
           if (session.isRider) _Row(icon: Ic.bike, label: s('profile.riderMode'), onTap: () => context.go('/rider')),
-        ]),
+        ])),
         if (u != null) ...[
           const SizedBox(height: SwSpace.s6),
           _Group(children: [_Row(icon: Ic.logOut, label: s('auth.signOut'), onTap: () => ref.read(sessionProvider.notifier).signOut(), chevron: false)]),
@@ -165,7 +166,9 @@ class _Loyalty extends ConsumerWidget {
     final progress = next == null ? 1.0 : (points / next.integer('minPoints', 1)).clamp(0.0, 1.0);
     return Padding(
       padding: const EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s6, SwSpace.s5, 0),
-      child: Container(
+      child: Sheen(
+        borderRadius: SwRadius.md,
+        child: Container(
         padding: const EdgeInsets.all(SwSpace.s5),
         decoration: BoxDecoration(color: SwColors.dark.canvas, borderRadius: BorderRadius.circular(SwRadius.md)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -175,15 +178,24 @@ class _Loyalty extends ConsumerWidget {
             Text(caps(ref.s('profile.tier', {'tier': tier?.str('name') ?? 'Atelier'})), style: context.type.labelS.copyWith(color: SwColors.dark.accent)),
           ]),
           const SizedBox(height: SwSpace.s3),
-          Text(ref.s('profile.points', {'points': points}), style: context.type.displayM.copyWith(color: SwColors.dark.ink)),
-          const SizedBox(height: SwSpace.s4),
-          ClipRRect(borderRadius: BorderRadius.circular(2), child: LinearProgressIndicator(value: progress, minHeight: 3, color: SwColors.dark.accent, backgroundColor: SwColors.dark.hairline)),
+          // Points count up and the tier bar fills once when the profile opens.
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: context.reduceMotion ? 1 : 0, end: 1),
+            duration: const Duration(milliseconds: 1100),
+            curve: SwMotion.atelier,
+            builder: (context, t, _) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(ref.s('profile.points', {'points': (points * t).round()}), style: context.type.displayM.copyWith(color: SwColors.dark.ink), semanticsLabel: ref.s('profile.points', {'points': points})),
+              const SizedBox(height: SwSpace.s4),
+              ClipRRect(borderRadius: BorderRadius.circular(2), child: LinearProgressIndicator(value: progress * t, minHeight: 3, color: SwColors.dark.accent, backgroundColor: SwColors.dark.hairline)),
+            ]),
+          ),
           if (next != null)
             Padding(
               padding: const EdgeInsets.only(top: SwSpace.s2),
               child: Text(ref.s('profile.toNextTier', {'points': next.integer('minPoints') - points, 'tier': next.str('name')}), style: context.type.caption.copyWith(color: SwColors.dark.muted)),
             ),
         ]),
+      ),
       ),
     );
   }

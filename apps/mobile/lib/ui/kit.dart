@@ -9,11 +9,13 @@ import '../core/money.dart';
 import '../design/theme.dart';
 import '../l10n/strings.dart';
 import 'icons.dart';
+import 'motion.dart';
 import 'pressable.dart';
 import 'sw_image.dart';
 
 export 'icons.dart';
 export 'pressable.dart';
+export 'motion.dart';
 export 'sw_image.dart';
 
 /* ================================================================ basics */
@@ -255,7 +257,8 @@ class PriceTag extends ConsumerWidget {
     final max = range?.intN('max');
     final varies = min != null && max != null && min != max;
     final line = Wrap(crossAxisAlignment: WrapCrossAlignment.center, spacing: SwSpace.s2, runSpacing: 2, children: [
-        Text(varies ? '${ref.s('common.from')} ${formatMoney(min, cur)}' : formatMoney(your, cur), style: style),
+        // Rolls when the price changes in place (variant, quantity tier, wholesale switch).
+        RollingText(varies ? '${ref.s('common.from')} ${formatMoney(min, cur)}' : formatMoney(your, cur), style: style),
         if (compare != null && compare > your)
           Text(formatMoney(compare, cur), style: context.type.bodyS.copyWith(color: context.sw.muted, decoration: TextDecoration.lineThrough)),
         if (wholesale) SwChip(ref.s('product.wholesale'), tone: ChipTone.accent),
@@ -324,9 +327,11 @@ class TierTable extends ConsumerWidget {
           child: Row(children: [
             Icon(Ic.sparkles, size: 14, color: c.accent),
             const SizedBox(width: SwSpace.s1_5),
-            Text(
-              ref.s('product.tierNudge', {'count': nextTier.integer('minQty') - qty, 'price': formatAmount(nextTier.integer('unitPrice'), cur)}),
-              style: context.type.caption.copyWith(color: c.ink),
+            Flexible(
+              child: RollingText(
+                ref.s('product.tierNudge', {'count': nextTier.integer('minQty') - qty, 'price': formatAmount(nextTier.integer('unitPrice'), cur)}),
+                style: context.type.caption.copyWith(color: c.ink),
+              ),
             ),
           ]),
         ),
@@ -439,7 +444,7 @@ class ProductCard extends ConsumerWidget {
             const SizedBox(height: SwSpace.s2),
             Row(children: [
               Expanded(child: SwatchDots(swatches: product.list('swatches'), more: product.integer('moreSwatches'))),
-              if (badges.isNotEmpty) Flexible(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: SwChip(badges.first.str('label'), tone: _tone(badges.first.str('tone'))))),
+              if (badges.isNotEmpty) Flexible(child: Align(alignment: Alignment.centerRight, child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: SwChip(badges.first.str('label'), tone: _tone(badges.first.str('tone')))))),
             ]),
           ]),
         ),
@@ -472,7 +477,7 @@ class _WishButton extends StatefulWidget {
 }
 
 class _WishButtonState extends State<_WishButton> with SingleTickerProviderStateMixin {
-  late final AnimationController _burst = AnimationController(vsync: this, duration: const Duration(milliseconds: 420));
+  late final AnimationController _burst = AnimationController(vsync: this, duration: const Duration(milliseconds: 560));
   @override
   void dispose() {
     _burst.dispose();
@@ -494,8 +499,9 @@ class _WishButtonState extends State<_WishButton> with SingleTickerProviderState
         },
         child: SizedBox.square(
           dimension: 44,
-          child: Center(
-            child: AnimatedBuilder(
+          child: Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [
+            OverflowBox(maxWidth: 60, maxHeight: 60, child: ParticleBurst(progress: _burst, color: context.sw.accent, radius: 24)),
+            AnimatedBuilder(
               animation: _burst,
               builder: (context, child) => Transform.scale(scale: 1 + 0.28 * Curves.easeOut.transform(1 - (2 * _burst.value - 1).abs()), child: child),
               child: Container(
@@ -503,10 +509,14 @@ class _WishButtonState extends State<_WishButton> with SingleTickerProviderState
                 height: 32,
                 decoration: BoxDecoration(color: context.sw.scrim, shape: BoxShape.circle),
                 alignment: Alignment.center,
-                child: HeartIcon(filled: widget.active, size: 17, color: context.sw.ink),
+                child: AnimatedSwitcher(
+                  duration: SwMotion.fast,
+                  transitionBuilder: (c, a) => ScaleTransition(scale: a, child: c),
+                  child: HeartIcon(key: ValueKey(widget.active), filled: widget.active, size: 17, color: context.sw.ink),
+                ),
               ),
             ),
-          ),
+          ]),
         ),
       ),
     );

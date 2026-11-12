@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PUBLIC = ['/login', '/setup', '/invite'];
+const PUBLIC = ['/login', '/setup', '/invite', '/accept-invite'];
 
 /** Cheap gate: no admin cookie → login. The API re-checks the session (and 2FA) on every call. */
 export function proxy(req: NextRequest) {

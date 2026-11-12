@@ -86,13 +86,19 @@ class Push(BaseModel):
 class Payments(BaseModel):
     cashOnDeliveryEnabled: bool = True
     cashOnDeliveryMaxAmount: int | None = None
-    mobileMoneyProvider: Literal["none", "beem_checkout"] = "none"
+    mobileMoneyProvider: Literal["none", "snippe", "beem_checkout"] = "none"
+    snippeApiKey: str = ""
+    snippeWebhookSecret: str = ""
+    snippeBaseUrl: str = "https://api.snippe.sh"
     beemCheckoutApiKey: str = ""
     beemCheckoutSecretKey: str = ""
     beemCheckoutReferencePrefix: str = "SW"
     beemCheckoutCallbackSecret: str = ""
     cardProvider: Literal["none"] = "none"
     publicApiBaseUrl: str = ""
+    riderPayoutsProvider: Literal["manual", "snippe"] = "manual"
+    riderPayoutMinimum: int = Field(5000, ge=500)
+    riderPayoutNarration: str = "SmartWear delivery earnings"
 
 
 class DeliveryOption(BaseModel):
@@ -293,6 +299,8 @@ DEFAULT_TEMPLATES = [
     NotificationTemplate(key="drop.live", channel="push", title="{{dropName}} is live", body="The drop you were waiting for just launched."),
     NotificationTemplate(key="wishlist.price_drop", channel="push", title="Price drop", body="{{productTitle}} is now {{price}}."),
     NotificationTemplate(key="rider.new_job", channel="push", title="New delivery request", body="Pickup at {{storeName}} · {{distance}} · {{earning}}"),
+    NotificationTemplate(key="rider.payout_sent", channel="push", title="Earnings paid", body="{{amount}} is on its way to {{phone}}.", bodySw="{{amount}} zinatumwa kwa {{phone}}."),
+    NotificationTemplate(key="rider.payout_failed", channel="push", title="Payout didn't go through", body="{{amount}} couldn't be sent. Support will retry.", bodySw="{{amount}} hazikuweza kutumwa. Tutajaribu tena."),
     NotificationTemplate(key="wholesale.approved", channel="push", title="Wholesale approved", body="Your wholesale account is active. Bulk prices are now shown."),
 ]
 
@@ -354,7 +362,7 @@ SECRET_FIELDS: dict[str, list[str]] = {
     "auth": ["jwtSecret"],
     "maps.google": ["serverApiKey"],
     "push": ["expoAccessToken", "fcmServiceAccountJson", "apnsKeyP8"],
-    "payments": ["beemCheckoutApiKey", "beemCheckoutSecretKey", "beemCheckoutCallbackSecret"],
+    "payments": ["snippeApiKey", "snippeWebhookSecret", "beemCheckoutApiKey", "beemCheckoutSecretKey", "beemCheckoutCallbackSecret"],
     "media": ["backgroundCleanup.apiKey"],
 }
 
@@ -390,5 +398,5 @@ INTEGRATIONS = [
     IntegrationMeta(group="auth", title="Google Sign-In", description="Client IDs used to verify Google ID tokens from the mobile app.", consoleUrl="https://console.cloud.google.com/apis/credentials", docsUrl="https://developers.google.com/identity", requiredFields=["googleWebClientId"]),
     IntegrationMeta(group="maps.google", title="Google Maps Platform", description="Places Autocomplete (New), Geocoding and Routes — all proxied by the API.", consoleUrl="https://console.cloud.google.com/google/maps-apis", docsUrl="https://developers.google.com/maps/documentation", requiredFields=["serverApiKey"]),
     IntegrationMeta(group="push", title="Push notifications", description="Expo Push or FCM/APNs credentials.", consoleUrl="https://expo.dev/accounts", docsUrl="https://docs.expo.dev/push-notifications/overview/", requiredFields=["provider"]),
-    IntegrationMeta(group="payments", title="Payments", description="Cash on delivery and mobile money via Beem Checkout.", consoleUrl="https://login.beem.africa/", docsUrl="https://docs.beem.africa/guides/payments-checkout/index.md", requiredFields=[]),
+    IntegrationMeta(group="payments", title="Payments", description="Cash on delivery and mobile money (M-Pesa, Airtel Money, Mixx by Yas, Halotel) via Snippe.", consoleUrl="https://snippe.sh/dashboard/payments/transactions", docsUrl="https://docs.snippe.sh/docs/2026-01-25/payments", requiredFields=[]),
 ]

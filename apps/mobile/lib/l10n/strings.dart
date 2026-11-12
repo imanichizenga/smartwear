@@ -18,7 +18,9 @@ class S {
   final String locale;
 
   String call(String key, [Map<String, Object?> vars = const {}]) {
-    final raw = (locale == 'sw' ? messagesSw[key] : null) ?? messagesEn[key] ?? key;
+    // `key.one` is the singular form when count == 1 (English needs it; Swahili rarely does).
+    final k = (vars['count'] == 1 && (messagesEn.containsKey('$key.one') || messagesSw.containsKey('$key.one'))) ? '$key.one' : key;
+    final raw = (locale == 'sw' ? (messagesSw[k] ?? messagesSw[key]) : null) ?? messagesEn[k] ?? key;
     if (vars.isEmpty) return raw;
     return raw.replaceAllMapped(RegExp(r'\{\{(\w+)\}\}'), (m) => '${vars[m[1]] ?? ''}');
   }

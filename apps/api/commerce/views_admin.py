@@ -561,3 +561,64 @@ def _acceptance(rider, frm, to) -> float | None:
     qs = DeliveryOffer.objects.filter(rider=rider, offered_at__date__gte=frm, offered_at__date__lte=to).exclude(status="WITHDRAWN")
     n = qs.count()
     return round(qs.filter(status="ACCEPTED").count() / n * 100, 1) if n else None
+
+
+# ================================================================ payments (transactions ledger)
+def _payment_row(p) -> dict:
+    o = p.order
+    return {
+        "id": str(p.id), "reference": p.reference, "providerRef": p.provider_ref or None, "provider": p.provider, "method": p.method, "status": p.status,
+        "amount": p.amount, "currency": p.currency, "refunded": p.refunded_amount, "msisdn": (p.msisdn[:6] + "•••" + p.msisdn[-3:]) if p.msisdn else None,
+        "createdAt": p.created_at.isoformat(), "paidAt": p.paid_at.isoformat() if p.paid_at else None,
+        "order": {"id": str(o.id), "number": o.number, "status": o.status}, "customer": {"id": str(o.user_id), "name": o.user.display_name},
+        "failure": next((str(v) for k, v in ((p.raw.get("webhook") or {}).get("data") or p.raw.get("status") or {}).items() if k in ("failure_reason", "message")), None) if p.status == "FAILED" else None,
+    }
+
+
+class AdminPaymentsView(APIView):
+    """Every collection attempt (cash, Snippe, Beem) with filters and today's totals — mirrors the provider dashboard."""
+
+    permission_classes = [AdminPerm("orders.view")]
+
+    def get(self, request):
+        from .models import Payment
+
+        q = request.query_params
+        cursor, limit = page_params(request, 50, 200)
+        qs = Payment.objects.select_related("order__user")
+        if q.get("status"):
+            qs = qs.filter(status__in=q["status"].split(","))
+        if q.get("provider"):
+            qs = qs.filter(provider=q["provider"])
+        if q.get("q"):
+            t = q["q"].strip()
+            qs = qs.filter(Q(reference__icontains=t) | Q(provider_ref__icontains=t) | Q(order__number__icontains=t) | Q(msisdn__icontains=t) | Q(order__user__name__icontains=t))
+        rows, nxt = keyset(qs, ["-created_at", "-id"], cursor, limit)
+        today = timezone.localtime().replace(hour=0, minute=0, second=0, microsecond=0)
+        base = Payment.objects.filter(created_at__gte=today)
+        summary = {
+            "collectedToday": base.filter(status__in=["PAID", "REFUNDED"]).aggregate(s=Sum("amount"))["s"] or 0,
+            "paidCount": base.filter(status="PAID").count(), "pendingCount": Payment.objects.filter(status="PENDING", method="MOBILE_MONEY", created_at__gte=timezone.now() - timedelta(hours=4)).count(),
+            "cashToCollect": Payment.objects.filter(status="PENDING", method="CASH_ON_DELIVERY").aggregate(s=Sum("amount"))["s"] or 0,
+            "failedToday": base.filter(status="FAILED").count(), "refundedToday": base.aggregate(s=Sum("refunded_amount"))["s"] or 0,
+            "byProvider": dict(base.filter(status="PAID").values("provider").annotate(s=Sum("amount")).values_list("provider", "s")),
+        }
+        return Response({"items": [_payment_row(p) for p in rows], "nextCursor": nxt, "summary": summary})
+
+
+class AdminPaymentSyncView(APIView):
+    """Re-check a pending mobile-money payment with the provider (when a webhook went missing)."""
+
+    permission_classes = [AdminPerm("orders.manage")]
+
+    def post(self, request, pid):
+        from .models import Payment
+
+        p = Payment.objects.select_related("order__user").filter(id=pid).first()
+        if p is None:
+            raise ApiError.not_found("Payment")
+        if p.provider != "snippe":
+            raise ApiError.bad_request("Only Snippe payments can be re-checked")
+        p = pay_svc.sync_snippe(p)
+        audit("payment.sync", "payment", p.id, request=request, meta={"status": p.status})
+        return Response(_payment_row(Payment.objects.select_related("order__user").get(id=p.id)))

@@ -226,7 +226,7 @@ class PlacesView(APIView):
         with transaction.atomic():
             if kind in ("home", "work"):
                 SavedPlace.objects.filter(user=user, kind=kind).update(kind="other")
-            p = SavedPlace.objects.create(user=user, kind=kind, label=(d.get("label") or "")[:60], address=(d.get("address") or "Pinned location")[:240], area=(d.get("area") or "")[:80], landmark_note=(d.get("landmarkNote") or "")[:120], location=Point(lng, lat, srid=4326), place_id=(d.get("placeId") or "")[:300], plus_code=(d.get("plusCode") or "")[:32])
+            p = SavedPlace.objects.create(user=user, kind=kind, label=(d.get("label") or "")[:60], address=(d.get("address") or google_maps.offline_place(lat, lng)["address"])[:240], area=(d.get("area") or "")[:80], landmark_note=(d.get("landmarkNote") or "")[:120], location=Point(lng, lat, srid=4326), place_id=(d.get("placeId") or "")[:300], plus_code=(d.get("plusCode") or "")[:32])
         return Response(place_out(p), status=201)
 
 
@@ -293,7 +293,12 @@ class ReverseGeocodeView(APIView):
     def get(self, request):
         _maps_rate(request)
         lat, lng = checkout_svc._validate_point(request.query_params.get("lat"), request.query_params.get("lng"))
-        return Response(google_maps.reverse_geocode(lat, lng, locale_of(request)))
+        if not google_maps.configured():
+            return Response({**google_maps.offline_place(lat, lng), "offline": True})
+        try:
+            return Response(google_maps.reverse_geocode(lat, lng, locale_of(request)))
+        except ApiError:
+            return Response({**google_maps.offline_place(lat, lng), "offline": True})
 
 
 # ================================================================ payment methods
@@ -644,6 +649,40 @@ class LoyaltyView(APIView):
 
 
 # ================================================================ webhooks
+class SnippeWebhookView(APIView):
+    """Snippe payment results. Signature checked on the raw body; 2xx quickly so Snippe stops retrying."""
+
+    permission_classes = [AllowAny]
+    authentication_classes: list = []
+
+    def post(self, request):
+        return Response(pay_svc.handle_snippe_webhook(request.body, request.headers))
+
+
+class OrderPaymentStatusView(APIView):
+    """The app polls this while the shopper approves the USSD prompt; reconciles with Snippe if needed."""
+
+    permission_classes = [IsAppUser]
+
+    def get(self, request, oid):
+        o = _my_order(request, oid)
+        p = o.payments.order_by("-created_at").first()
+        # The app polls every few seconds; ask Snippe at most every 8s per payment (webhooks are the fast path).
+        if p and p.provider == "snippe" and p.status == "PENDING" and settings_service.redis_client().set(f"sw:snippe:sync:{p.id}", 1, nx=True, ex=8):
+            try:
+                p = pay_svc.sync_snippe(p)
+            except ApiError:
+                pass
+        o.refresh_from_db()
+        return Response({"orderStatus": o.status, "paymentStatus": o.payment_status, "payment": {"status": p.status, "provider": p.provider, "method": p.method} if p else None})
+
+    def post(self, request, oid):
+        """Resend the USSD prompt."""
+        o = _my_order(request, oid)
+        pay_svc.resend_push(o)
+        return Response({"ok": True})
+
+
 class BeemCheckoutCallbackView(APIView):
     permission_classes = [AllowAny]
     authentication_classes: list = []

@@ -5,6 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'core/providers.dart';
 import 'features/auth/auth_screens.dart';
 import 'features/bag/bag_screen.dart';
+import 'features/chat/chat_screen.dart';
+import 'features/checkout/checkout_screen.dart';
+import 'features/checkout/payment_wait_screen.dart';
+import 'features/orders/orders_screen.dart';
+import 'features/orders/tracking_screen.dart';
+import 'features/rider/rider_screens.dart';
 import 'features/discover/discover_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/product/product_list_screen.dart';
@@ -57,6 +63,22 @@ final routerProvider = Provider<GoRouter>((ref) {
           transitionsBuilder: (c, a, _, child) => FadeTransition(opacity: CurvedAnimation(parent: a, curve: const Cubic(0.22, 0.61, 0.36, 1)), child: child),
         ),
       ),
+      GoRoute(path: '/checkout', parentNavigatorKey: _rootKey, builder: (c, s) => const CheckoutScreen()),
+      GoRoute(path: '/orders', parentNavigatorKey: _rootKey, builder: (c, s) => const OrdersScreen()),
+      GoRoute(
+        path: '/orders/:id/track',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (c, s) => CustomTransitionPage(
+          key: s.pageKey,
+          child: TrackingScreen(orderId: s.pathParameters['id']!),
+          transitionDuration: const Duration(milliseconds: 420),
+          transitionsBuilder: (c, a, _, child) => FadeTransition(opacity: CurvedAnimation(parent: a, curve: const Cubic(0.22, 0.61, 0.36, 1)), child: child),
+        ),
+      ),
+      GoRoute(path: '/orders/:id/pay', parentNavigatorKey: _rootKey, builder: (c, s) => PaymentWaitScreen(orderId: s.pathParameters['id']!)),
+      GoRoute(path: '/chat/:id', parentNavigatorKey: _rootKey, builder: (c, s) => ChatScreen(threadId: s.pathParameters['id']!, title: s.uri.queryParameters['title'])),
+      GoRoute(path: '/rider', parentNavigatorKey: _rootKey, builder: (c, s) => const RiderHomeScreen()),
+      GoRoute(path: '/rider/earnings', parentNavigatorKey: _rootKey, builder: (c, s) => const RiderEarningsScreen()),
       GoRoute(
         path: '/c/:slug',
         parentNavigatorKey: _rootKey,

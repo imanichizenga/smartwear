@@ -9,6 +9,7 @@ import '../../core/providers.dart';
 import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
+import '../../ui/motion.dart';
 
 /// The bag shows exactly what the server priced: unit price applied, tier, savings, totals.
 class BagScreen extends ConsumerWidget {
@@ -31,7 +32,7 @@ class BagScreen extends ConsumerWidget {
           final cur = c.str('currency', 'TZS');
           return Stack(children: [
             ListView(padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s2, SwSpace.s5, 260 + context.safe.bottom), children: [
-              for (final i in items) _Line(item: i, currency: cur),
+              for (final (k, i) in items.indexed) Reveal(key: ValueKey(i['id']), index: k, child: _Line(item: i, currency: cur)),
               if (c.list('problems').isNotEmpty)
                 for (final p in c.list('problems')) Padding(padding: const EdgeInsets.only(top: SwSpace.s3), child: Text(p.str('message'), style: context.type.caption.copyWith(color: context.sw.warning))),
               const SizedBox(height: SwSpace.s6),
@@ -82,7 +83,7 @@ class _Line extends ConsumerWidget {
               Text(item.str('options'), style: context.type.caption.copyWith(color: c.muted)),
               const SizedBox(height: SwSpace.s2),
               Wrap(spacing: SwSpace.s2, crossAxisAlignment: WrapCrossAlignment.center, children: [
-                Text(formatMoney(item.integer('lineTotal'), currency), style: context.type.priceS),
+                CountUpMoney(item.integer('lineTotal'), currency: currency, style: context.type.priceS),
                 if (qty > 1) Text('${formatMoney(item.integer('unitPrice'), currency)} ${s('product.tierEach', {'price': ''}).trim()}', style: context.type.caption.copyWith(color: c.muted)),
                 if (item.strN('tier') != null) SwChip(s('bag.tier', {'label': item.str('tier')}), tone: ChipTone.accent),
                 if (item.integer('savings') > 0) Text(s('bag.savings', {'amount': formatMoney(item.integer('savings'), currency)}), style: context.type.caption.copyWith(color: c.success)),
@@ -177,20 +178,27 @@ class _Summary extends ConsumerWidget {
     final s = ref.s;
     final c = context.sw;
     final cur = cart.str('currency', 'TZS');
-    Widget row(String k, String v, {bool strong = false, Color? color}) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3),
-          child: Row(children: [Expanded(child: Text(k, style: strong ? context.type.titleM : context.type.bodyS.copyWith(color: c.muted))), Text(v, style: strong ? context.type.priceM : context.type.bodyS.copyWith(color: color ?? c.ink))]),
-        );
+    Widget row(String k, String v, {bool strong = false, Color? color, int? amount}) {
+      final style = strong ? context.type.priceM : context.type.bodyS.copyWith(color: color ?? c.ink);
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: Row(children: [
+          Expanded(child: Text(k, style: strong ? context.type.titleM : context.type.bodyS.copyWith(color: c.muted))),
+          // Totals count to their new value when a quantity or promo changes.
+          if (amount != null) CountUpMoney(amount, currency: cur, style: style) else Text(v, style: style),
+        ]),
+      );
+    }
     return Container(
       padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s4, SwSpace.s5, SwSpace.s4 + 84 + context.safe.bottom),
       decoration: BoxDecoration(color: c.surface, border: Border(top: BorderSide(color: c.hairline))),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        row(s('bag.subtotal'), formatMoney(cart.integer('subtotal'), cur)),
+        row(s('bag.subtotal'), '', amount: cart.integer('subtotal')),
         if (cart.integer('discount') > 0) row(s('bag.discount'), '−${formatMoney(cart.integer('discount'), cur)}', color: c.success),
         if (cart.integer('savings') > 0) row(s('bag.savings', {'amount': ''}).trim(), formatMoney(cart.integer('savings'), cur), color: c.success),
         if (cart.integer('tax') > 0) row(s('bag.tax'), formatMoney(cart.integer('tax'), cur)),
         const SizedBox(height: SwSpace.s2),
-        row(s('bag.total'), formatMoney(cart.integer('total'), cur), strong: true),
+        row(s('bag.total'), '', strong: true, amount: cart.integer('total')),
         const SizedBox(height: SwSpace.s4),
         SwButton(label: s('bag.checkout'), icon: Ic.arrowRight, large: true, expand: true, onPressed: cart.list('items').isEmpty ? null : () => context.push('/checkout')),
       ]),

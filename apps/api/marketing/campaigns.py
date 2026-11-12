@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 
 from accounts.models import User
@@ -11,9 +11,13 @@ from accounts.models import User
 def audience_queryset(aud: dict, channel: str):
     qs = User.objects.filter(deleted_at__isnull=True, is_blocked=False, rider__isnull=True)
     if channel == "sms":
-        qs = qs.filter(phone__isnull=False).exclude(notification_prefs__sms=False)
+        # exclude(prefs__key=False) alone would also drop users who never set the key (NULL in SQL), so match the opt-out explicitly.
+        qs = qs.filter(phone__isnull=False).exclude(Q(notification_prefs__has_key="sms") & Q(notification_prefs__sms=False))
     else:
-        qs = qs.filter(push_tokens__disabled_at__isnull=True).exclude(notification_prefs__marketing=False).distinct()
+        from notifications.models import PushToken
+
+        # Only people with a live device token (a bare LEFT JOIN would also match users with no token at all).
+        qs = qs.filter(Exists(PushToken.objects.filter(user=OuterRef("pk"), disabled_at__isnull=True))).exclude(Q(notification_prefs__has_key="marketing") & Q(notification_prefs__marketing=False)).distinct()
     if aud.get("customerTypes"):
         qs = qs.filter(customer_type__in=aud["customerTypes"])
     if aud.get("departments"):

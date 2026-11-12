@@ -155,3 +155,33 @@ class RiderRating(models.Model):
     tags = models.JSONField(default=list, blank=True)
     comment = models.CharField(max_length=500, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class RiderPayout(UUIDModel):
+    """Money sent to a rider for completed deliveries — by Snippe mobile-money payout, or recorded
+    manually (cash, bank transfer). Unpaid balance = completed job earnings − non-failed payouts."""
+
+    STATUSES = [(s, s.title()) for s in ("PENDING", "COMPLETED", "FAILED", "REVERSED")]
+    METHODS = [("snippe", "Snippe mobile money"), ("manual", "Recorded manually")]
+    rider = models.ForeignKey(Rider, on_delete=models.PROTECT, related_name="payouts")
+    method = models.CharField(max_length=10, choices=METHODS)
+    status = models.CharField(max_length=10, choices=STATUSES, default="PENDING", db_index=True)
+    amount = models.BigIntegerField(validators=[MinValueValidator(1)])
+    fee = models.BigIntegerField(default=0)
+    currency = models.CharField(max_length=3, default="TZS")
+    reference = models.CharField(max_length=40, unique=True, help_text="Ours; also the Idempotency-Key")
+    provider_ref = models.CharField(max_length=80, blank=True, default="", db_index=True)
+    external_ref = models.CharField(max_length=80, blank=True, default="", help_text="Network transaction id")
+    network = models.CharField(max_length=20, blank=True, default="")
+    recipient_phone = models.CharField(max_length=20, blank=True, default="")
+    recipient_name = models.CharField(max_length=120, blank=True, default="")
+    note = models.CharField(max_length=240, blank=True, default="")
+    failure_reason = models.CharField(max_length=240, blank=True, default="")
+    jobs_count = models.PositiveIntegerField(default=0)
+    created_by = models.ForeignKey("accounts.AdminUser", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    completed_at = models.DateTimeField(null=True, blank=True)
+    raw = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["rider", "status"])]

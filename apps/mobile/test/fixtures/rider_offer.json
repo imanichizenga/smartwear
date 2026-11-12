@@ -1,0 +1,26 @@
+{
+ "id": 4242,
+ "jobId": "168573e4-4e20-42e8-ba53-78240c169a8d",
+ "expiresAt": "2026-11-12T05:13:08.082852+00:00",
+ "timeoutSeconds": 17,
+ "earning": 2907,
+ "currency": "TZS",
+ "distanceToStoreMeters": 1200,
+ "tripDistanceMeters": 3518,
+ "store": {
+  "name": "SmartWear Mlimani City",
+  "address": "Mlimani City Mall, Sam Nujoma Rd",
+  "location": {
+   "lat": -6.7722,
+   "lng": 39.2213
+  }
+ },
+ "dropoffArea": {
+  "label": "Mwenge",
+  "approx": {
+   "lat": -6.792,
+   "lng": 39.208
+  }
+ },
+ "items": 1
+}

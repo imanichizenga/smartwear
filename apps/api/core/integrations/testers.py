@@ -171,17 +171,41 @@ def test_push(params: dict, admin=None) -> dict:
 def test_payments(params: dict) -> dict:
     cfg = settings_service.get("payments")
     checks = [_check("Cash on delivery", True, "Enabled" if cfg.cashOnDeliveryEnabled else "Disabled", optional=True)]
-    if cfg.mobileMoneyProvider == "beem_checkout":
+    if cfg.mobileMoneyProvider == "snippe":
+        from commerce.services import snippe
+
+        if not cfg.snippeApiKey:
+            checks.append(_check("Snippe API key", False, "Not configured — create a key (collection:read, collection:create) in Snippe → Settings → API Keys"))
+            return _result(checks)
+        ok, msg, _bal = snippe.ping()
+        checks.append(_check("Snippe API (balance)", ok, msg))
+        checks.append(_check("Webhook secret", bool(cfg.snippeWebhookSecret), "Set — payment results are verified" if cfg.snippeWebhookSecret else "Copy Settings → Webhook Secret from the Snippe dashboard; unsigned results are rejected"))
+        base = (cfg.publicApiBaseUrl or "").rstrip("/")
+        checks.append(_check("Webhook URL", base.startswith("https://"), f"{base}/v1/webhooks/snippe" if base else "Set the public API URL (HTTPS) so Snippe can reach /v1/webhooks/snippe"))
+    elif cfg.mobileMoneyProvider == "beem_checkout":
         if not (cfg.beemCheckoutApiKey and cfg.beemCheckoutSecretKey):
             checks.append(_check("Beem Checkout credentials", False, "Not configured — enter the Bpay API key and secret"))
             return _result(checks)
-        from commerce.payments import beem_checkout_ping
+        from commerce.services.payments import beem_checkout_ping
 
         ok, msg = beem_checkout_ping()
         checks.append(_check("Beem Checkout", ok, msg))
         checks.append(_check("Callback secret", bool(cfg.beemCheckoutCallbackSecret), "Set" if cfg.beemCheckoutCallbackSecret else "Set the callback secure token so payment callbacks can be verified"))
     else:
         checks.append(_check("Mobile money", True, "No mobile-money provider selected", optional=True))
+    if cfg.riderPayoutsProvider == "snippe":
+        from commerce.services import snippe
+
+        if not cfg.snippeApiKey:
+            checks.append(_check("Rider payouts (Snippe)", False, "Enter the Snippe API key above — payouts use the same key"))
+        else:
+            try:
+                fee = snippe.payout_fee(max(cfg.riderPayoutMinimum, 5000))
+                checks.append(_check("Rider payouts (Snippe)", True, f"disbursement scope OK — fee on {max(cfg.riderPayoutMinimum, 5000):,} TZS is {int(fee.get('fee_amount') or 0):,} TZS"))
+            except ApiError as e:
+                checks.append(_check("Rider payouts (Snippe)", False, f"{e.message} — the key needs the disbursement:read and disbursement:create scopes"))
+    else:
+        checks.append(_check("Rider payouts", True, "Recorded manually (cash or bank) from Admin → Rider payouts", optional=True))
     return _result(checks)
 
 

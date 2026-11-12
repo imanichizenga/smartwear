@@ -4,6 +4,7 @@
  */
 import { chromium, type Page } from '@playwright/test';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { totp } from './totp';
 
@@ -40,7 +41,7 @@ async function signIn(page: Page) {
     if (!existsSync(SECRET_FILE)) throw new Error('2FA already enrolled but no TOTP secret file');
     await typeCode(page, totp(readFileSync(SECRET_FILE, 'utf8').trim()));
   }
-  await page.waitForURL((u) => !u.pathname.startsWith('/login'), { timeout: 20000 });
+  await page.waitForURL((u) => !u.pathname.startsWith('/login'), { timeout: 120_000 });
 }
 
 const slug = (p: string) => (p === '/' ? 'dashboard' : p.replace(/^\//, '').replace(/[/?=&]+/g, '-'));
@@ -48,17 +49,24 @@ const slug = (p: string) => (p === '/' ? 'dashboard' : p.replace(/^\//, '').repl
 async function main() {
   mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch();
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 960 }, deviceScaleFactor: 1 });
+  // Reuse the last session (MFA verification is rate-limited; signing in on every run trips it).
+  const STATE = process.env.SHOT_STATE ?? join(tmpdir(), 'smartwear-shoot-session.json');
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 960 }, deviceScaleFactor: 1, storageState: existsSync(STATE) ? STATE : undefined });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.error('pageerror', e.message));
-  await signIn(page);
+  await page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 120_000 });
+  if (new URL(page.url()).pathname.startsWith('/login')) {
+    await signIn(page);
+    await ctx.storageState({ path: STATE });
+  }
   for (const p of PAGES) {
     for (const theme of ['light', 'dark'] as const) {
       await ctx.addCookies([{ name: 'sw_theme', value: theme, url: BASE }]);
       for (const [w, h] of [[1440, 960], [390, 844]] as const) {
         await page.setViewportSize({ width: w, height: h });
-        await page.goto(`${BASE}${p}`, { waitUntil: 'networkidle' });
-        await page.waitForTimeout(700);
+        await page.goto(`${BASE}${p}`, { waitUntil: 'load', timeout: 120_000 });
+        await page.waitForLoadState('networkidle', { timeout: 4000 }).catch(() => undefined);
+        await page.waitForTimeout(1200);
         const file = join(OUT, `${slug(p)}-${w}-${theme}.png`);
         await page.screenshot({ path: file, fullPage: w === 1440 });
         console.log('shot', file);

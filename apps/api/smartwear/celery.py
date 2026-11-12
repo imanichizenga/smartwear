@@ -18,4 +18,6 @@ app.conf.beat_schedule = {
     "category-counts": {"task": "catalog.tasks.refresh_category_counts", "schedule": crontab(minute="*/15")},
     "prune-pings": {"task": "delivery.tasks.prune_location_pings", "schedule": crontab(minute=5, hour=3)},
     "abandoned-payments": {"task": "commerce.tasks.expire_unpaid_orders", "schedule": 300.0},
+    "reconcile-snippe": {"task": "commerce.tasks.reconcile_snippe_payments", "schedule": 120.0},
+    "reconcile-snippe-payouts": {"task": "commerce.tasks.reconcile_snippe_payouts", "schedule": 300.0},
 }

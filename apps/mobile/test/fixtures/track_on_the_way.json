@@ -1,0 +1,188 @@
+{
+ "id": "8d8c66a8-36c1-4e04-af56-0939f5a07585",
+ "number": "SW-2322-28",
+ "status": "ON_THE_WAY",
+ "statusLabel": "On the way",
+ "placedAt": "2026-11-11T12:02:33.103014+00:00",
+ "currency": "TZS",
+ "subtotal": 29000,
+ "discount": 0,
+ "deliveryFee": 4800,
+ "tax": 0,
+ "total": 33800,
+ "savings": 0,
+ "promoCode": null,
+ "fulfilment": "delivery",
+ "deliveryOption": {
+  "id": "express",
+  "kind": "express",
+  "name": "Express",
+  "etaMaxMinutes": 45,
+  "etaMinMinutes": 27
+ },
+ "store": {
+  "id": "a4292db2-9e9a-472d-8ab9-12f46f38157c",
+  "name": "SmartWear Mlimani City",
+  "address": "Mlimani City Mall, Sam Nujoma Rd",
+  "location": {
+   "lat": -6.7722,
+   "lng": 39.2213
+  },
+  "phone": "+255754100002"
+ },
+ "destination": {
+  "location": {
+   "lat": -6.7712,
+   "lng": 39.2399
+  },
+  "label": "Mikocheni, Dar es Salaam",
+  "area": "Mikocheni",
+  "landmark": "Gate near Mikocheni junction"
+ },
+ "eta": {
+  "minMinutes": 27,
+  "maxMinutes": 45,
+  "promisedBy": "2026-11-11T12:47:33.102591+00:00",
+  "liveSeconds": 208
+ },
+ "payment": {
+  "method": "CASH_ON_DELIVERY",
+  "status": "PENDING",
+  "checkoutUrl": null
+ },
+ "items": [
+  {
+   "id": 10,
+   "productId": "45b112c8-0ff1-467f-a3b4-764e9907b0cd",
+   "variantId": "e48b3fd9-e1a0-47b0-a076-6f29d8c3f3b6",
+   "title": "Lift & define mascara",
+   "brand": "Nuru Beauty",
+   "options": "Brown black",
+   "sku": "LIFTDEFINE-BROWNB",
+   "image": {
+    "id": "3b50a518-3163-4f7d-8313-c12cc035545b",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w1200.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9d11939d8632f7aa89b3bb4430bb06970736fd914fc850a0f202f1ebf489f9ca",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=6db6859a4a5b783f01df630ebc9eadd1c2356c5664023418543da12c228dbd4a"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=3b8c111e7830c78f2de4fac2ae5af2358d1d4430dd39c9841ab5f29520c3bd4b"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1d486ecde5666f33faf08d30d4a36110a5ec4d02d2294a19114ab7796f5403d6"
+      },
+      {
+       "width": 1200,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w1200.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9e1f18855116127aad40fc61aa8aa84d575b50564a20aadac4c60d28260ec9d9"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=aba8eb0e4989598fce9a8dee54b60b994ebf53cddeef8d69c2470e3d5036444e"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=479fa9010c90ff6070d5500187817a6ba6d67351c4f5e99c70ebed2607a6d762"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8104914bfe5f5aaf601ec52eb7ad748f66d80658095402339cf6ebbaea76463b"
+      },
+      {
+       "width": 1200,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w1200.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=a4ef15bfcbb47a8cd804aacfee247c11a41f46bd8da13e9d4e8dffc2f24264f8"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=bd74695da5d1a1ce0ad9ac98d73116da8bb77d0db35b54dbb8f519d12975e584"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=529fe69d23ff3b7795af5f45ee362f7e21e66b96bbc434675a33e3529ed81f16"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=e9ee15cf65c86bf0295464499081d479a82488e96ba6bb469681b7a673eb9a0f"
+      },
+      {
+       "width": 1200,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/f9c841bc1fdb3b50/w1200.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=9d11939d8632f7aa89b3bb4430bb06970736fd914fc850a0f202f1ebf489f9ca"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dKQH@s-q-p^+?bRixbof~Ds:E1NG-pxbIoWBR+NFxuoM",
+    "thumbhash": "MVgGBgC4u6SWZ/lIVZeGZmp4wMFXPfg=",
+    "dominantColor": "#DEB3C4",
+    "width": 1200,
+    "height": 1500,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Mascara wand on a pink background",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "qty": 1,
+   "unitPrice": 29000,
+   "retailUnitPrice": 29000,
+   "basis": "retail",
+   "tier": null,
+   "lineTotal": 29000,
+   "savings": 0,
+   "reviewed": false
+  }
+ ],
+ "delivery": {
+  "status": "EN_ROUTE",
+  "rider": {
+   "id": "53bb99ef-cc00-4cc2-a93f-d8433e34cc5e",
+   "name": "Juma Mwinyi",
+   "firstName": "Juma",
+   "photo": null,
+   "rating": 4.8,
+   "deliveries": 1,
+   "vehicle": {
+    "type": "MOTORBIKE",
+    "plate": "MC 482 DKT",
+    "color": "Red",
+    "make": "TVS HLX 150"
+   }
+  },
+  "riderLocation": {
+   "lat": -6.7717,
+   "lng": 39.230599999999995,
+   "heading": 86.90206366853948,
+   "at": "2026-11-11T12:02:33.463145+00:00"
+  },
+  "route": null,
+  "routeLeg": "to_client",
+  "distanceMeters": 2714,
+  "searchingSince": "2026-11-11T12:02:33.135065+00:00",
+  "timeline": {
+   "accepted": "2026-11-11T12:02:33.209239+00:00",
+   "at_store": "2026-11-11T12:02:33.367660+00:00",
+   "picked_up": "2026-11-11T12:02:33.386325+00:00",
+   "en_route": "2026-11-11T12:02:33.428019+00:00",
+   "arrived": null,
+   "completed": null
+  }
+ },
+ "pin": "3611",
+ "canCancel": false,
+ "canRate": false,
+ "canReturn": false,
+ "shareToken": "J-47fsF-PWbMAv3_3BAflw"
+}

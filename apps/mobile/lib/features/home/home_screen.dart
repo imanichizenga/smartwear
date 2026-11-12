@@ -10,6 +10,7 @@ import '../../core/providers.dart';
 import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
+import '../../ui/motion.dart';
 import '../shared/nav.dart';
 
 /// Home is whatever the admin's Home Layout builder says, in order.
@@ -28,7 +29,11 @@ class HomeScreen extends ConsumerWidget {
           slivers: [
             const _HomeHeader(),
             ...home.when(
-              data: (h) => [for (final s in h.list('sections')) SliverToBoxAdapter(child: HomeSection(section: s))],
+              // Sections rise in, top to bottom, the first time Home builds (and as later ones scroll into view).
+              data: (h) => [
+                for (final (i, s) in h.list('sections').indexed)
+                  SliverToBoxAdapter(child: Reveal(key: ValueKey(s.str('id')), index: i.clamp(0, 4), offset: 18, child: HomeSection(section: s))),
+              ],
               loading: () => [const SliverToBoxAdapter(child: _HomeSkeleton())],
               error: (e, _) => [
                 SliverFillRemaining(
@@ -399,8 +404,9 @@ class _DropCountdownState extends ConsumerState<_DropCountdown> {
     final parts = [(left.inDays, 'D'), (left.inHours % 24, 'H'), (left.inMinutes % 60, 'M'), (left.inSeconds % 60, 'S')];
     return Padding(
       padding: const EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s10, SwSpace.s5, 0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(SwRadius.md),
+      child: Sheen(
+        borderRadius: SwRadius.md,
+        delay: const Duration(milliseconds: 900),
         child: ColoredBox(
           color: on.canvas,
           child: SizedBox(height: 232, child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -415,7 +421,8 @@ class _DropCountdownState extends ConsumerState<_DropCountdown> {
                   const SizedBox(height: SwSpace.s4),
                   Row(children: [
                     for (final (v, u) in parts) ...[
-                      Text(v.toString().padLeft(2, '0'), style: context.type.priceM.copyWith(color: on.ink, fontFeatures: const [FontFeature.tabularFigures()])),
+                      // Each unit rolls to its next value like a departures board.
+                      ClipRect(child: RollingText(v.toString().padLeft(2, '0'), style: context.type.priceM.copyWith(color: on.ink, fontFeatures: const [FontFeature.tabularFigures()]))),
                       Padding(padding: const EdgeInsets.only(left: 2, right: SwSpace.s3, top: 4), child: Text(u, style: context.type.caption.copyWith(color: on.muted))),
                     ],
                   ]),

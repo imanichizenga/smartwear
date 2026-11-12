@@ -7,7 +7,9 @@ export const messages: Record<Locale, Record<MessageKey, string>> = { en, sw: { 
 
 /** Tiny interpolation: "Hello {{name}}" */
 export function t(locale: Locale, key: MessageKey, vars?: Record<string, string | number>): string {
-  const raw = messages[locale]?.[key] ?? en[key] ?? key;
+  // `key.one` is the singular form when count === 1.
+  const one = vars?.count === 1 ? (`${key}.one` as MessageKey) : null;
+  const raw = (one && (messages[locale]?.[one] ?? en[one])) || (messages[locale]?.[key] ?? en[key] ?? key);
   if (!vars) return raw;
   return raw.replace(/\{\{(\w+)\}\}/g, (_, k: string) => String(vars[k] ?? ''));
 }

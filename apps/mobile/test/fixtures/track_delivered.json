@@ -1,0 +1,195 @@
+{
+ "id": "a0900983-b389-4416-87ea-7aedc07199c1",
+ "number": "SW-2322-22",
+ "status": "DELIVERED",
+ "statusLabel": "Delivered",
+ "placedAt": "2026-11-11T06:42:43.401842+00:00",
+ "currency": "TZS",
+ "subtotal": 62000,
+ "discount": 0,
+ "deliveryFee": 4200,
+ "tax": 0,
+ "total": 66200,
+ "savings": 0,
+ "promoCode": null,
+ "fulfilment": "delivery",
+ "deliveryOption": {
+  "id": "standard",
+  "kind": "standard",
+  "name": "Standard",
+  "etaMaxMinutes": 120,
+  "etaMinMinutes": 60
+ },
+ "store": {
+  "id": "89171354-6a1d-4eb7-8b89-cb39c8de72ba",
+  "name": "SmartWear Masaki",
+  "address": "Haile Selassie Rd, Masaki",
+  "location": {
+   "lat": -6.7486,
+   "lng": 39.2789
+  },
+  "phone": "+255754100001"
+ },
+ "destination": {
+  "location": {
+   "lat": -6.7665999999999995,
+   "lng": 39.2569
+  },
+  "label": "Mikocheni, Dar es Salaam",
+  "area": "Mikocheni",
+  "landmark": "Simulator drop-off"
+ },
+ "eta": {
+  "minMinutes": 60,
+  "maxMinutes": 120,
+  "promisedBy": "2026-11-11T08:42:43.400802+00:00",
+  "liveSeconds": 30
+ },
+ "payment": {
+  "method": "CASH_ON_DELIVERY",
+  "status": "PAID",
+  "checkoutUrl": null
+ },
+ "items": [
+  {
+   "id": 1,
+   "productId": "6068020d-22b5-42ff-8f37-69700ee99cff",
+   "variantId": "8f6ac0b6-65e9-4eb1-83eb-7cb069c36120",
+   "title": "Cork footbed sandals",
+   "brand": "Savanna Leather Co.",
+   "options": "Taupe · 38",
+   "sku": "CORKFOOTBE-TAUPE-38",
+   "image": {
+    "id": "5610925a-1e12-4671-8991-a14e34a506b6",
+    "type": "IMAGE",
+    "status": "READY",
+    "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=185c9f505d359d76ac9a1a7457e3eb801790abc53242b3872f0c4b5dda9ef192",
+    "sources": {
+     "avif": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w320.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=bfb92cefe8836d5fc2cb9637f23db15c8b4d26a070bb12b8655b9ff343dbe8d6"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w640.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=0da72e0ed504c4402770b12965240619c3568d5bc67df0b635ed537bb66ce5bc"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w960.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b035dcc3b8d5ea56c8d45b7ede4fb574e9a1048edfd901dc7d4e9dc325784e1e"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=69cfb4b31149b4f789856b7ca2ce23ac7f52daebcd838ca226d223aee9429940"
+      },
+      {
+       "width": 1600,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1600.avif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=fcf7151eff953e01e762a46cbe68cadade85ddc0e0babb7df769eabef45a16d9"
+      }
+     ],
+     "webp": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w320.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=b4492329f8ed955036f9fa21f0462decda4f42a55758ddc92b79e50625f97183"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w640.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4b67dfa742706503090ca145a0d8a87f9ac9ee941f04f7dfcd37f7de0f78097a"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w960.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=1462b7dda59b1c490526b8fb4e46587df1daab508e46d2fb02cdb0bb44c9bfee"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=2f2845e6a7f3f28e20921babbbdd95ad37d54d577af717ed44e4ce92ba092bb7"
+      },
+      {
+       "width": 1600,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1600.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=cc80c3e7954d96878237bdafd8c57af32f5632f29cabccb9b68ae047d008d911"
+      }
+     ],
+     "jpeg": [
+      {
+       "width": 256,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w320.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=8ed12da541f18ade350478d70f033544deaab481ddad36dadfa503c8f68444b1"
+      },
+      {
+       "width": 512,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w640.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=64147e9e50e85a13ca237dc70c48749237f2e8e124454a0c8d4abda381f6eb26"
+      },
+      {
+       "width": 768,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w960.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=4d79ea3c455b20f3aebe5fe5871656de5bf9630f9c2d424cae8fa18e82c41a25"
+      },
+      {
+       "width": 1024,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1280.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=185c9f505d359d76ac9a1a7457e3eb801790abc53242b3872f0c4b5dda9ef192"
+      },
+      {
+       "width": 1600,
+       "url": "http://localhost:9000/smartwear-media/media/2026/11/cb5b995594fc5610/w1600.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=smartwear%2F20261112%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261112T051249Z&X-Amz-Expires=21600&X-Amz-SignedHeaders=host&X-Amz-Signature=329b0c97cd30384749b026e2fdba99a190715f82647ba4dbd2589d6727fa4c28"
+      }
+     ]
+    },
+    "posterUrl": null,
+    "previewUrl": null,
+    "hlsUrl": null,
+    "blurhash": "dHJHgVtR?axt~pj]D%t6~p%ME1M{IUj[t7RjM|Rjj@ax",
+    "thumbhash": "5BgGBgDXl+g3aPhKdnF5dniIwIA4CVk=",
+    "dominantColor": "#A2957E",
+    "width": 1600,
+    "height": 2000,
+    "durationMs": null,
+    "waveform": null,
+    "alt": "Taupe two-strap cork sandals on a fur rug",
+    "focalX": 0.5,
+    "focalY": 0.4,
+    "role": null
+   },
+   "qty": 1,
+   "unitPrice": 62000,
+   "retailUnitPrice": 62000,
+   "basis": "retail",
+   "tier": null,
+   "lineTotal": 62000,
+   "savings": 0,
+   "reviewed": false
+  }
+ ],
+ "delivery": {
+  "status": "COMPLETED",
+  "rider": {
+   "id": "53bb99ef-cc00-4cc2-a93f-d8433e34cc5e",
+   "name": "Juma Mwinyi",
+   "firstName": "Juma",
+   "photo": null,
+   "rating": 4.8,
+   "deliveries": 1,
+   "vehicle": {
+    "type": "MOTORBIKE",
+    "plate": "MC 482 DKT",
+    "color": "Red",
+    "make": "TVS HLX 150"
+   }
+  },
+  "riderLocation": null,
+  "route": null,
+  "routeLeg": "to_client",
+  "distanceMeters": 4154,
+  "searchingSince": "2026-11-11T06:42:43.478315+00:00",
+  "timeline": {
+   "accepted": "2026-11-11T06:42:43.803237+00:00",
+   "at_store": "2026-11-11T06:42:53.036067+00:00",
+   "picked_up": "2026-11-11T06:42:53.238539+00:00",
+   "en_route": "2026-11-11T06:42:53.264041+00:00",
+   "arrived": "2026-11-11T06:43:29.716656+00:00",
+   "completed": "2026-11-11T06:43:30.002463+00:00"
+  }
+ },
+ "pin": null,
+ "canCancel": false,
+ "canRate": true,
+ "canReturn": true,
+ "shareToken": "_pQ6wcZ55HT_nK8OT2fR8g"
+}

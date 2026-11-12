@@ -15,24 +15,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartwear/app.dart';
 import 'package:smartwear/core/api.dart';
+import 'package:smartwear/core/geo.dart';
+import 'package:smartwear/core/location.dart';
 import 'package:smartwear/core/providers.dart';
 import 'package:smartwear/l10n/strings.dart';
 import 'package:smartwear/router.dart';
 import 'package:smartwear/ui/sw_image.dart';
 
 final _root = Directory.current.path; // apps/mobile
+final _only = (Platform.environment['SHOTS'] ?? '').split(',').where((e) => e.isNotEmpty).toList();
 final _out = Directory('$_root/../../docs/screenshots/mobile')..createSync(recursive: true);
 Json _fx(String name) => Map<String, dynamic>.from(jsonDecode(File('$_root/test/fixtures/$name.json').readAsStringSync()) as Map);
 final Map<String, String> _mediaIndex = Map<String, String>.from(jsonDecode(File('$_root/test/fixtures/media_index.json').readAsStringSync()) as Map);
 
 /// Serves captured responses by path — the same JSON the live API returned.
 class FixtureApi extends Api {
-  FixtureApi(TokenStore t) : super(t, dio: Dio());
+  FixtureApi(TokenStore t, {this.overrides = const {}}) : super(t, dio: Dio());
+  final Map<String, Object Function()> overrides;
+
+  static final _orders = {for (final n in ['track_searching', 'track_on_the_way', 'track_delivered', 'order_detail']) _fx(n)['id']: n};
 
   @override
   Future<T> get<T>(String path, {Map<String, dynamic>? query}) async {
     final q = query ?? const {};
+    final o = overrides[path];
+    if (o != null) return o() as T;
+    final orderId = RegExp(r'^/me/orders/([0-9a-f-]{36})$').firstMatch(path)?.group(1);
     final Object body = switch (path) {
+      _ when orderId != null && _orders[orderId] != null => _fx(_orders[orderId]!),
+      '/rider/me' => _fx('rider_me_idle'),
+      '/rider/history' || '/rider/earnings' => _fx('rider_history'),
       '/config/public' => _fx('config'),
       '/home' => _fx('home'),
       '/categories' => _fx('categories'),
@@ -53,7 +65,21 @@ class FixtureApi extends Api {
   }
 
   @override
-  Future<T> post<T>(String path, [Object? body, Map<String, String>? headers]) async => <String, dynamic>{} as T;
+  Future<T> post<T>(String path, [Object? body, Map<String, String>? headers]) async {
+    final o = overrides['POST $path'];
+    if (o != null) return o() as T;
+    if (path == '/checkout/quote') return _fx('checkout_quote') as T;
+    return <String, dynamic>{} as T;
+  }
+}
+
+class _FixedLoc extends LocationService {
+  _FixedLoc(this.fix);
+  final LocFix fix;
+  @override
+  Stream<LocFix> fixes() => Stream.value(fix);
+  @override
+  Stream<LocFix> track({required String notificationTitle, required String notificationText}) => Stream.value(fix);
 }
 
 class _SignedIn extends SessionNotifier {
@@ -87,7 +113,10 @@ Future<void> _loadFonts() async {
 }
 
 class Shot {
-  const Shot(this.name, this.path, {this.signedIn = true, this.height = 844, this.scroll = 0, this.locale = 'en', this.after});
+  const Shot(this.name, this.path, {this.signedIn = true, this.height = 844, this.scroll = 0, this.locale = 'en', this.after, this.overrides = const {}, this.rounds = 8, this.fix});
+  final LocFix? fix;
+  final Map<String, Object Function()> overrides;
+  final int rounds;
   final String name, path;
   final bool signedIn;
   final double height;
@@ -113,7 +142,23 @@ final shots = <Shot>[
   const Shot('60-bag', '/bag'),
   const Shot('70-profile', '/profile', height: 1300),
   const Shot('71-profile-guest', '/profile', signedIn: false),
+  const Shot('80-checkout', '/checkout'),
+  const Shot('81-checkout-full', '/checkout', height: 1500),
+  const Shot('82-place-search', '/checkout', after: _openPlaces),
+  const Shot('85-orders', '/orders'),
+  const Shot('90-track-searching', '/orders/0ba88df8-8e15-4efc-8dab-2004964a992c/track'),
+  const Shot('91-track-on-the-way', '/orders/8d8c66a8-36c1-4e04-af56-0939f5a07585/track'),
+  const Shot('92-track-delivered', '/orders/a0900983-b389-4416-87ea-7aedc07199c1/track'),
+  const Shot('95-rider-offline', '/rider'),
+  Shot('96-rider-offer', '/rider', overrides: {'/rider/me': () => {..._fx('rider_me_idle'), 'rider': {...?_fx('rider_me_idle').obj('rider'), 'presence': 'ONLINE'}, 'pendingOffer': _fx('rider_offer')}}),
+  Shot('97-rider-job', '/rider', overrides: {'/rider/me': () => _fx('rider_me_job')}, fix: const LocFix(LatLngD(-6.7738, 39.2302), heading: 75, precise: true)),
+  const Shot('98-rider-earnings', '/rider/earnings'),
 ];
+
+Future<void> _openPlaces(WidgetTester t) async {
+  final f = find.bySemanticsLabel(RegExp('Deliver to|Change delivery', caseSensitive: false));
+  if (f.evaluate().isNotEmpty) await t.tap(f.first, warnIfMissed: false);
+}
 
 Future<void> _settle(WidgetTester t, {int rounds = 8}) async {
   for (var i = 0; i < rounds; i++) {
@@ -130,7 +175,7 @@ void main() {
   tearDownAll(() => Future<void>.delayed(const Duration(milliseconds: 100), () => exit(0)));
 
   for (final theme in [ThemeMode.light, ThemeMode.dark]) {
-    for (final s in shots) {
+    for (final s in shots.where((s) => _only.isEmpty || _only.any(s.name.startsWith))) {
       testWidgets('${s.name} ${theme.name}', (t) async {
         t.view.physicalSize = Size(390 * 3, s.height * 3);
         t.view.devicePixelRatio = 3;
@@ -144,10 +189,10 @@ void main() {
         final key = GlobalKey();
         final container = ProviderContainer(overrides: [
           prefsProvider.overrideWithValue(prefs),
-          apiProvider.overrideWithValue(FixtureApi(tokens)),
+          apiProvider.overrideWithValue(FixtureApi(tokens, overrides: s.overrides)),
+          if (s.fix != null) locationServiceProvider.overrideWithValue(_FixedLoc(s.fix!)),
           sessionProvider.overrideWith(() => _SignedIn(s.signedIn ? (me.obj('user') ?? me) : null)),
         ]);
-        addTearDown(container.dispose);
         container.read(localeProvider.notifier).set(s.locale);
         await t.pumpWidget(UncontrolledProviderScope(container: container, child: RepaintBoundary(key: key, child: const SmartWearApp())));
         await t.pump();
@@ -163,6 +208,7 @@ void main() {
         });
         // Tear the tree down so repeating animations and timers stop before the test ends.
         await t.pumpWidget(const SizedBox());
+        container.dispose();
         await t.pump(const Duration(seconds: 1));
       });
     }

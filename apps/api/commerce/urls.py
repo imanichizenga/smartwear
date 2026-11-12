@@ -37,6 +37,8 @@ urlpatterns = [
     path("products/<uuid:pid>/reviews", v.ProductReviewsView.as_view()),
     path("reviews/<uuid:rid>/helpful", v.ReviewHelpfulView.as_view()),
     path("webhooks/beem/checkout", v.BeemCheckoutCallbackView.as_view()),
+    path("webhooks/snippe", v.SnippeWebhookView.as_view()),
+    path("me/orders/<uuid:oid>/payment", v.OrderPaymentStatusView.as_view()),
     # admin
     path("admin/dashboard", a.AdminDashboardView.as_view()),
     path("admin/reports/<str:report>", a.AdminReportsView.as_view()),
@@ -53,6 +55,8 @@ urlpatterns = [
     path("admin/reviews/<uuid:rid>", a.AdminReviewView.as_view()),
     path("admin/returns", a.AdminReturnsView.as_view()),
     path("admin/returns/<uuid:rid>", a.AdminReturnView.as_view()),
+    path("admin/payments", a.AdminPaymentsView.as_view()),
+    path("admin/payments/<uuid:pid>/sync", a.AdminPaymentSyncView.as_view()),
     path("admin/promos", a.AdminPromosView.as_view()),
     path("admin/promos/<uuid:pid>", a.AdminPromoView.as_view()),
 ]

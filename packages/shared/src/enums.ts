@@ -71,7 +71,7 @@ export const PERMISSIONS = [
   'dashboard.view',
   'orders.view', 'orders.manage', 'orders.refund',
   'dispatch.view', 'dispatch.assign',
-  'riders.view', 'riders.manage',
+  'riders.view', 'riders.manage', 'payouts.manage',
   'products.view', 'products.manage', 'products.publish',
   'catalog.manage',
   'inventory.view', 'inventory.manage',
@@ -91,7 +91,7 @@ export const ROLE_PERMISSIONS: Record<AdminRole, readonly Permission[]> = {
   CATALOG_EDITOR: ['dashboard.view', 'products.view', 'products.manage', 'products.publish', 'catalog.manage', 'inventory.view', 'inventory.manage', 'marketing.manage'],
   DISPATCHER: ['dashboard.view', 'orders.view', 'orders.manage', 'dispatch.view', 'dispatch.assign', 'riders.view', 'riders.manage', 'stores.manage'],
   SUPPORT: ['dashboard.view', 'orders.view', 'customers.view', 'support.chat', 'reviews.moderate', 'returns.manage'],
-  FINANCE: ['dashboard.view', 'orders.view', 'orders.refund', 'customers.view', 'wholesale.approve', 'reports.view'],
+  FINANCE: ['dashboard.view', 'orders.view', 'orders.refund', 'riders.view', 'payouts.manage', 'customers.view', 'wholesale.approve', 'reports.view'],
 };
 
 export const DISPATCH_MODES = ['auto', 'manual', 'hybrid'] as const;

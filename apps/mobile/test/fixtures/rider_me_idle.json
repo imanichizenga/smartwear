@@ -1,0 +1,74 @@
+{
+ "rider": {
+  "id": "2514326f-ee17-433a-8f6b-7f8cfbf3be6a",
+  "status": "ACTIVE",
+  "presence": "IDLE",
+  "name": "Baraka Mollel",
+  "phone": "+255754000103",
+  "photo": null,
+  "rating": 4.8,
+  "ratingCount": 0,
+  "deliveries": 0,
+  "vehicle": {
+   "type": "BICYCLE",
+   "plate": "",
+   "color": "Blue",
+   "make": "Phoenix"
+  },
+  "today": {
+   "earnings": 0,
+   "deliveries": 0,
+   "onlineMinutes": 1030
+  },
+  "homeStore": {
+   "id": "bd7e27cc-a99b-4fe6-ae4c-b54eb488f0e6",
+   "name": "SmartWear Kariakoo"
+  },
+  "currency": "TZS",
+  "offerTimeoutSeconds": 20
+ },
+ "stores": [
+  {
+   "id": "89171354-6a1d-4eb7-8b89-cb39c8de72ba",
+   "name": "SmartWear Masaki",
+   "location": {
+    "lat": -6.7486,
+    "lng": 39.2789
+   }
+  },
+  {
+   "id": "a4292db2-9e9a-472d-8ab9-12f46f38157c",
+   "name": "SmartWear Mlimani City",
+   "location": {
+    "lat": -6.7722,
+    "lng": 39.2213
+   }
+  },
+  {
+   "id": "bd7e27cc-a99b-4fe6-ae4c-b54eb488f0e6",
+   "name": "SmartWear Kariakoo",
+   "location": {
+    "lat": -6.8183,
+    "lng": 39.2733
+   }
+  },
+  {
+   "id": "286b3e3e-b903-4ec7-9592-4ea27c8b6f66",
+   "name": "SmartWear Mbezi Beach",
+   "location": {
+    "lat": -6.7262,
+    "lng": 39.2135
+   }
+  },
+  {
+   "id": "c9db83ff-8caa-4d0e-98e8-88f012bc2eed",
+   "name": "Kurasini Warehouse",
+   "location": {
+    "lat": -6.855,
+    "lng": 39.29
+   }
+  }
+ ],
+ "activeJob": null,
+ "pendingOffer": null
+}

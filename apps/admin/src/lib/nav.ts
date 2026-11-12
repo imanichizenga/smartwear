@@ -1,6 +1,6 @@
 import {
   BarChart3, Boxes, ClipboardList, FolderTree, Gauge, Home, Image as ImageIcon, LayoutGrid, Map, MapPin, Megaphone, MessageCircle, Package,
-  RotateCcw, Ruler, ScrollText, Settings, Star, Store, Tag, Ticket, Users, UsersRound, Bike, type LucideIcon,
+  RotateCcw, Ruler, ScrollText, Settings, Star, Store, Tag, Ticket, Users, UsersRound, Bike, HandCoins, Wallet, type LucideIcon,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -22,6 +22,7 @@ export const NAV: NavGroup[] = [
     items: [
       { href: '/orders', label: 'Orders', icon: ClipboardList, perm: 'orders.view', keywords: 'sales kanban invoice' },
       { href: '/dispatch', label: 'Dispatch', icon: Map, perm: 'dispatch.view', keywords: 'live map control room riders' },
+      { href: '/payments', label: 'Payments', icon: Wallet, perm: 'orders.view', keywords: 'transactions snippe mobile money mpesa refunds' },
       { href: '/customers', label: 'Customers', icon: Users, perm: 'customers.view', keywords: 'wholesale clients' },
       { href: '/returns', label: 'Returns', icon: RotateCcw, perm: 'returns.manage', keywords: 'exchanges refunds' },
       { href: '/reviews', label: 'Reviews', icon: Star, perm: 'reviews.moderate' },
@@ -43,6 +44,7 @@ export const NAV: NavGroup[] = [
     label: 'Delivery',
     items: [
       { href: '/riders', label: 'Riders', icon: Bike, perm: 'riders.view', keywords: 'drivers couriers' },
+      { href: '/payouts', label: 'Rider payouts', icon: HandCoins, perm: 'riders.view', keywords: 'earnings pay riders snippe disbursement' },
       { href: '/stores', label: 'Stores & offices', icon: Store, perm: 'stores.manage', keywords: 'locations warehouse' },
       { href: '/zones', label: 'Delivery zones', icon: MapPin, perm: 'settings.manage', keywords: 'polygons fees' },
     ],

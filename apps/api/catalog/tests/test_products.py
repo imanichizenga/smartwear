@@ -217,3 +217,32 @@ def test_admin_product_endpoints(admin_user):
     bulk = c.post("/v1/admin/products/bulk-price", {"productIds": [pid], "percent": 10, "rounding": "nearest_1000"}, format="json").json()
     assert bulk["variantsUpdated"] == 4
     assert Product.objects.get(id=pid).min_price == 94000
+
+
+def test_editor_roundtrip_with_placeholder_option_ids(admin_user):
+    """The admin editor sends new option values with client ids ("new:…") that variants and media reference."""
+    p = upsert_product(dress_payload(), admin=admin_user)
+    from catalog.services.products import admin_product_out
+
+    data = admin_product_out(p)
+    colour = next(o for o in data["optionTypes"] if o["kind"] == "color")
+    colour["values"].append({"id": "new:k1", "value": "Sage", "swatchHex": "#9CAF88"})
+    size_ids = [v["id"] for v in next(o for o in data["optionTypes"] if o["kind"] == "size")["values"]]
+    data["variants"].append({"sku": "ZURI-SAG-S", "optionValueIds": ["new:k1", size_ids[0]], "retailPrice": 85000, "wholesaleTiers": [], "stock": []})
+    data["media"][0]["optionValueId"] = "new:k1"
+    p = upsert_product(data, admin=admin_user, product=p)
+    sage = p.option_types.get(kind="color").values.get(value="Sage")
+    assert p.variants.get(sku="ZURI-SAG-S").option_values.filter(id=sage.id).exists()
+    assert p.media_links.get().option_value_id == sage.id
+    # Saving the same payload again (autosave keeps the placeholder ids) must not duplicate anything.
+    p = upsert_product(data, admin=admin_user, product=Product.objects.get(id=p.id))
+    assert p.option_types.get(kind="color").values.filter(value="Sage").count() == 1 and p.variants.count() == 5
+
+
+def test_admin_products_filter_by_ids(admin_user):
+    a = upsert_product(dress_payload(), admin=admin_user)
+    b = upsert_product(dress_payload(title="Second dress", variants=[{"sku": "SECOND-1", "retailPrice": 50000, "stock": []}], optionTypes=[], media=[{"mediaId": str(ready_image().id), "role": "gallery", "alt": "x"}]), admin=admin_user)
+    c = admin_client(admin_user)
+    r = c.get("/v1/admin/products", {"ids": f"{b.id}"})
+    assert r.status_code == 200 and [i["id"] for i in r.json()["items"]] == [str(b.id)]
+    assert {i["id"] for i in c.get("/v1/admin/products", {"ids": f"{a.id},{b.id}"}).json()["items"]} == {str(a.id), str(b.id)}

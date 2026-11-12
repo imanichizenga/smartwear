@@ -128,7 +128,13 @@ class CompleteUploadView(APIView):
             Media.objects.filter(id=m.id).update(status="FAILED", error="File is larger than allowed" if size > limit else "File contents don't match its type")
             raise ApiError.bad_request("That file isn't a supported " + m.type.lower() if not ok_type else "File is too large")
         m.bytes, m.status, m.multipart_upload_id = size, "UPLOADED", ""
-        m.save(update_fields=["bytes", "status", "multipart_upload_id", "updated_at"])
+        opts = (request.data or {}).get("options")
+        if isinstance(opts, dict):
+            # In-browser recordings send their trim with the upload so the first pass already cuts it.
+            trim = opts.get("trim")
+            if isinstance(trim, dict) and all(isinstance(trim.get(k, 0), (int, float)) and trim.get(k, 0) >= 0 for k in ("startMs", "endMs")):
+                m.options = {**(m.options or {}), "trim": {k: int(trim[k]) for k in ("startMs", "endMs") if trim.get(k)}}
+        m.save(update_fields=["bytes", "status", "multipart_upload_id", "options", "updated_at"])
         from .tasks import process_media
 
         process_media.delay(str(m.id))

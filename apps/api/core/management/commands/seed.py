@@ -32,6 +32,16 @@ LOCAL_S3 = {
 }
 
 
+# (name, lat, lng, radius km) — approximate neighbourhood centres.
+DAR_ZONES = [
+    ("Masaki", -6.7480, 39.2830, 1.2), ("Oyster Bay", -6.7720, 39.2880, 1.1), ("Msasani", -6.7400, 39.2690, 1.1),
+    ("Mikocheni", -6.7690, 39.2430, 1.3), ("Mwenge", -6.7570, 39.2270, 1.2), ("Sinza", -6.7860, 39.2220, 1.2),
+    ("Kinondoni", -6.7920, 39.2590, 1.3), ("Upanga", -6.8070, 39.2850, 1.0), ("City Centre", -6.8160, 39.2920, 0.9),
+    ("Kariakoo", -6.8210, 39.2740, 0.9), ("Ubungo", -6.7890, 39.2030, 1.4), ("Mbezi Beach", -6.7230, 39.2260, 1.6),
+    ("Kurasini", -6.8460, 39.2860, 1.2), ("Mlimani", -6.7770, 39.2150, 0.7),
+]
+
+
 def _round500(v: float) -> int:
     return int(round(v / 500.0) * 500)
 
@@ -67,6 +77,7 @@ class Command(BaseCommand):
         products = self._products(admin, brands, stores)
         self._collections(admin, products)
         self._riders(admin, stores)
+        self._zones()
         if self.media_on:
             self._marketing(products, brands)
         self._credits()
@@ -123,6 +134,22 @@ class Command(BaseCommand):
                 "phone": s["phone"], "hours": hours, "allows_pickup": s.get("allows_pickup", True), "fulfils_delivery": True, "sort_order": i, "is_active": True})
             out[s["code"]] = obj
         return out
+
+    def _zones(self):
+        """Dar es Salaam neighbourhoods as editable octagons (~1.3 km). No fee overrides — they name
+        dropped pins and give admins a starting point for zone pricing in Admin → Delivery zones."""
+        import math
+
+        from django.contrib.gis.geos import Polygon
+
+        from delivery.models import DeliveryZone
+
+        swatches = ["#B8955A", "#6E8B74", "#5F7F9A", "#A86F5C", "#7C6FA8", "#9A8A5F"]
+        for i, (name, lat, lng, r) in enumerate(DAR_ZONES):
+            k = 1 / math.cos(math.radians(lat))
+            ring = [(lng + r / 111.32 * k * math.cos(a * math.pi / 4 + math.pi / 8), lat + r / 110.57 * math.sin(a * math.pi / 4 + math.pi / 8)) for a in range(8)]
+            ring.append(ring[0])
+            DeliveryZone.objects.update_or_create(name=name, defaults={"polygon": Polygon(ring, srid=4326), "serviceable": True, "is_active": True, "color": swatches[i % len(swatches)]})
 
     def _brands(self):
         from catalog.models import Brand

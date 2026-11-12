@@ -1,0 +1,130 @@
+{
+ "rider": {
+  "id": "53bb99ef-cc00-4cc2-a93f-d8433e34cc5e",
+  "status": "ACTIVE",
+  "presence": "EN_ROUTE",
+  "name": "Juma Mwinyi",
+  "phone": "+255754000101",
+  "photo": null,
+  "rating": 4.8,
+  "ratingCount": 0,
+  "deliveries": 1,
+  "vehicle": {
+   "type": "MOTORBIKE",
+   "plate": "MC 482 DKT",
+   "color": "Red",
+   "make": "TVS HLX 150"
+  },
+  "today": {
+   "earnings": 0,
+   "deliveries": 0,
+   "onlineMinutes": 1030
+  },
+  "homeStore": {
+   "id": "89171354-6a1d-4eb7-8b89-cb39c8de72ba",
+   "name": "SmartWear Masaki"
+  },
+  "currency": "TZS",
+  "offerTimeoutSeconds": 20
+ },
+ "stores": [
+  {
+   "id": "89171354-6a1d-4eb7-8b89-cb39c8de72ba",
+   "name": "SmartWear Masaki",
+   "location": {
+    "lat": -6.7486,
+    "lng": 39.2789
+   }
+  },
+  {
+   "id": "a4292db2-9e9a-472d-8ab9-12f46f38157c",
+   "name": "SmartWear Mlimani City",
+   "location": {
+    "lat": -6.7722,
+    "lng": 39.2213
+   }
+  },
+  {
+   "id": "bd7e27cc-a99b-4fe6-ae4c-b54eb488f0e6",
+   "name": "SmartWear Kariakoo",
+   "location": {
+    "lat": -6.8183,
+    "lng": 39.2733
+   }
+  },
+  {
+   "id": "286b3e3e-b903-4ec7-9592-4ea27c8b6f66",
+   "name": "SmartWear Mbezi Beach",
+   "location": {
+    "lat": -6.7262,
+    "lng": 39.2135
+   }
+  },
+  {
+   "id": "c9db83ff-8caa-4d0e-98e8-88f012bc2eed",
+   "name": "Kurasini Warehouse",
+   "location": {
+    "lat": -6.855,
+    "lng": 39.29
+   }
+  }
+ ],
+ "activeJob": {
+  "id": "33628214-76d9-4a11-8dd4-06131d2a3ef1",
+  "status": "EN_ROUTE",
+  "orderId": "8d8c66a8-36c1-4e04-af56-0939f5a07585",
+  "orderNumber": "SW-2322-28",
+  "earning": 2586,
+  "currency": "TZS",
+  "distanceMeters": 2714,
+  "store": {
+   "id": "a4292db2-9e9a-472d-8ab9-12f46f38157c",
+   "name": "SmartWear Mlimani City",
+   "address": "Mlimani City Mall, Sam Nujoma Rd",
+   "phone": "+255754100002",
+   "location": {
+    "lat": -6.7722,
+    "lng": 39.2213
+   }
+  },
+  "dropoff": {
+   "location": {
+    "lat": -6.7712,
+    "lng": 39.2399
+   },
+   "label": "Mikocheni, Dar es Salaam",
+   "area": "Mikocheni",
+   "landmark": "Gate near Mikocheni junction"
+  },
+  "customer": {
+   "firstName": "Demo",
+   "phone": "+255713000999"
+  },
+  "payment": {
+   "method": "CASH_ON_DELIVERY",
+   "collect": 33800
+  },
+  "items": [
+   {
+    "title": "Lift & define mascara",
+    "options": "Brown black",
+    "qty": 1
+   }
+  ],
+  "route": null,
+  "routeLeg": "to_client",
+  "etaSeconds": 208,
+  "pinRequired": true,
+  "nextStep": "ARRIVED",
+  "timeline": {
+   "accepted": "2026-11-11T12:02:33.209239+00:00",
+   "at_store": "2026-11-11T12:02:33.367660+00:00",
+   "picked_up": "2026-11-11T12:02:33.386325+00:00",
+   "en_route": "2026-11-11T12:02:33.428019+00:00",
+   "arrived": null,
+   "completed": null
+  },
+  "navigationUrl": "https://www.google.com/maps/dir/?api=1&destination=-6.7712,39.2399&travelmode=driving"
+ },
+ "pendingOffer": null
+}

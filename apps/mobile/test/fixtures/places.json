@@ -2,18 +2,93 @@
  "saved": [],
  "recent": [
   {
+   "id": "5170c282-8c4c-4982-a71a-e75a568d8f29",
+   "kind": "recent",
+   "label": "",
+   "address": "Mikocheni, 66HQ+GX",
+   "area": "Mikocheni",
+   "landmarkNote": "Gate near Mikocheni junction",
+   "location": {
+    "lat": -6.7712,
+    "lng": 39.2399
+   },
+   "placeId": null,
+   "plusCode": "6G5X66HQ+GX",
+   "lastUsedAt": "2026-11-11T12:02:33.118915+00:00"
+  },
+  {
+   "id": "e325a472-6732-4f17-92d6-a422ad5ad02a",
+   "kind": "recent",
+   "label": "",
+   "address": "Mwenge, 762H+J2",
+   "area": "Mwenge",
+   "landmarkNote": "Gate near Mwenge junction",
+   "location": {
+    "lat": -6.7484,
+    "lng": 39.2276
+   },
+   "placeId": null,
+   "plusCode": "6G5X762H+J2",
+   "lastUsedAt": "2026-11-11T12:02:23.004561+00:00"
+  },
+  {
+   "id": "e234e3cc-d8b7-4bc3-9774-0b1d4eb38558",
+   "kind": "recent",
+   "label": "",
+   "address": "Ubungo, 6655+28",
+   "area": "Ubungo",
+   "landmarkNote": "Gate near Sinza junction",
+   "location": {
+    "lat": -6.7924,
+    "lng": 39.2083
+   },
+   "placeId": null,
+   "plusCode": "6G5X6655+28",
+   "lastUsedAt": "2026-11-11T12:02:22.696736+00:00"
+  },
+  {
+   "id": "1a49602c-e696-45ea-bd70-544e9a588629",
+   "kind": "recent",
+   "label": "",
+   "address": "Near Kariakoo, 57MJ+H4",
+   "area": "Kariakoo",
+   "landmarkNote": "Gate near Upanga junction",
+   "location": {
+    "lat": -6.816,
+    "lng": 39.2803
+   },
+   "placeId": null,
+   "plusCode": "6G5X57MJ+H4",
+   "lastUsedAt": "2026-11-11T12:02:22.262337+00:00"
+  },
+  {
+   "id": "0cc014ba-312f-4e03-a18f-28a4cfcb7ef6",
+   "kind": "recent",
+   "label": "",
+   "address": "Near Masaki, 67V9+V3",
+   "area": "Masaki",
+   "landmarkNote": "Gate near Mbezi Beach junction",
+   "location": {
+    "lat": -6.7553,
+    "lng": 39.2677
+   },
+   "placeId": null,
+   "plusCode": "6G5X67V9+V3",
+   "lastUsedAt": "2026-11-11T12:02:21.943711+00:00"
+  },
+  {
    "id": "00b0244e-17d4-44d6-b39a-5234867e80d0",
    "kind": "recent",
    "label": "",
-   "address": "Pinned location",
-   "area": null,
+   "address": "67M4+9Q",
+   "area": "Masaki",
    "landmarkNote": "Simulator drop-off",
    "location": {
     "lat": -6.7665999999999995,
     "lng": 39.2569
    },
    "placeId": null,
-   "plusCode": null,
+   "plusCode": "6G5X67M4+9Q",
    "lastUsedAt": "2026-11-11T06:42:43.442741+00:00"
   }
  ]

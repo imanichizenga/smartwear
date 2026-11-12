@@ -375,7 +375,7 @@ def upsert_product(data: dict[str, Any], *, admin, product: Product | None = Non
         kind = ot_in.get("kind") or "other"
         if kind == "shade" and not is_beauty:
             raise ApiError.bad_request("Shades are for beauty products — use Colour for fashion", details={"field": "optionTypes"})
-        ot = OptionType.objects.filter(product=p, id=ot_in["id"]).first() if ot_in.get("id") else None
+        ot = OptionType.objects.filter(product=p, id=ot_in["id"]).first() if str(ot_in.get("id") or "").isdigit() else None
         ot = ot or OptionType.objects.filter(product=p, kind=kind, name__iexact=ot_in["name"]).first() or OptionType(product=p)
         ot.name, ot.kind, ot.sort_order = ot_in["name"].strip(), kind, ti
         ot.save()
@@ -385,7 +385,7 @@ def upsert_product(data: dict[str, Any], *, admin, product: Product | None = Non
             hexv = v_in.get("swatchHex") or ""
             if hexv and not HEX_RE.match(hexv):
                 raise ApiError.bad_request(f"Swatch colour {hexv} must look like #A1B2C3", details={"field": "optionTypes.values.swatchHex"})
-            ov = OptionValue.objects.filter(option_type=ot, id=v_in["id"]).first() if v_in.get("id") else None
+            ov = OptionValue.objects.filter(option_type=ot, id=v_in["id"]).first() if str(v_in.get("id") or "").isdigit() else None  # "new:…" ids are client placeholders
             ov = ov or OptionValue.objects.filter(option_type=ot, value__iexact=str(v_in["value"]).strip()).first() or OptionValue(option_type=ot)
             ov.value = str(v_in["value"]).strip()
             ov.label = (v_in.get("label") or "").strip()

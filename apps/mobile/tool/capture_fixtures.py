@@ -93,6 +93,7 @@ def main():
         save("order_detail", me.get(f"/v1/me/orders/{orders['items'][0]['id']}").json())
     save("loyalty", me.get("/v1/me/loyalty").json())
     save("places", me.get("/v1/me/places").json())
+    capture_delivery(me, Req, start_session)
 
     index = {}
     with httpx.Client(timeout=30) as http:
@@ -107,6 +108,46 @@ def main():
     (OUT / "media_index.json").write_text(json.dumps(index, indent=1))
     total = sum(f.stat().st_size for f in MEDIA.iterdir())
     print(f"{len(index)} media files, {total // 1024} KB")
+
+
+def capture_delivery(me, Req, start_session):
+    """Checkout quote, orders in each tracking phase, and Rider Mode (run `manage.py demo_ops` first)."""
+    from commerce.models import Order
+    from delivery.models import DeliveryJob, DeliveryOffer, Rider
+    from delivery.services.dispatch import offer_out
+
+    save("checkout_quote", me.post("/v1/checkout/quote", {"lat": -6.7712, "lng": 39.2399}, format="json").json())
+    u = me.get("/v1/me").json()
+    uid = (u.get("user") or u)["id"]
+    for name, q in (("track_on_the_way", {"status": "ON_THE_WAY"}), ("track_searching", {"delivery__status__in": ["SEARCHING", "OFFERED"]}), ("track_delivered", {"status": "DELIVERED"})):
+        o = Order.objects.filter(user_id=uid, **q).order_by("-placed_at").first()
+        if o:
+            save(name, me.get(f"/v1/me/orders/{o.id}").json())
+
+    def rider_client(r):
+        tok = start_session(r.user, Req(), device_id="fixtures-rider")
+        c = APIClient()
+        c.credentials(HTTP_AUTHORIZATION=f"Bearer {tok['accessToken']}", HTTP_X_DEVICE_ID="fixtures-rider")
+        return c
+
+    busy = Rider.objects.filter(jobs__status__in=["ACCEPTED", "AT_STORE", "PICKED_UP", "EN_ROUTE", "ARRIVED"]).first()
+    idle = Rider.objects.exclude(id=getattr(busy, "id", None)).filter(status="ACTIVE").first()
+    if busy:
+        c = rider_client(busy)
+        save("rider_me_job", c.get("/v1/rider/me").json())
+        save("rider_history", c.get("/v1/rider/history").json())
+    if idle:
+        c = rider_client(idle)
+        save("rider_me_idle", c.get("/v1/rider/me").json())
+        job = DeliveryJob.objects.filter(status__in=["SEARCHING", "OFFERED"]).select_related("order", "store").first()
+        if job:
+            from datetime import timedelta
+
+            from django.utils import timezone
+
+            # Built in memory only — nothing is written, so the live dispatcher is unaffected.
+            offer = DeliveryOffer(id=4242, job=job, rider=idle, earning=job.earning or 3500, distance_to_store_m=1200, expires_at=timezone.now() + timedelta(seconds=18))
+            save("rider_offer", offer_out(offer))
 
 
 main()

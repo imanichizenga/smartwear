@@ -8,6 +8,7 @@ import '../../core/providers.dart';
 import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
+import '../../ui/motion.dart';
 import '../shared/nav.dart';
 
 /// 2-column 4:5 grid with infinite scroll; used for categories, collections, brands and search.
@@ -60,12 +61,17 @@ class ProductGridView extends ConsumerWidget {
                   mainAxisExtent: productCardExtent(context, (MediaQuery.sizeOf(context).width - SwSpace.s5 * 2 - SwSpace.s4) / 2),
                 ),
                 itemCount: pg.items.length,
-                itemBuilder: (context, i) => ProductCard(
-                  product: pg.items[i],
-                  hero: true,
-                  wishlisted: wish.contains(pg.items[i].str('id')),
-                  onTap: () => openProduct(context, ref, pg.items[i]),
-                  onWishlist: () => toggleWishlist(context, ref, pg.items[i].str('id')),
+                // Cards rise in as they scroll into view, in pairs (left then right) so rows feel composed.
+                itemBuilder: (context, i) => Reveal(
+                  key: ValueKey(pg.items[i].str('id')),
+                  index: i < 6 ? i : i % 2,
+                  child: ProductCard(
+                    product: pg.items[i],
+                    hero: true,
+                    wishlisted: wish.contains(pg.items[i].str('id')),
+                    onTap: () => openProduct(context, ref, pg.items[i]),
+                    onWishlist: () => toggleWishlist(context, ref, pg.items[i].str('id')),
+                  ),
                 ),
               ),
             ),

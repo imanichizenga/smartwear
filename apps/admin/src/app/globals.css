@@ -79,3 +79,18 @@
 
 @keyframes sw-fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes sw-slide-in { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Map pins & routes */
+@keyframes sw-halo { 0% { transform: scale(0.55); opacity: 0.9; } 100% { transform: scale(1.6); opacity: 0; } }
+.sw-halo { animation: sw-halo 2.2s var(--sw-ease-atelier) infinite; }
+@keyframes sw-route-draw { from { stroke-dashoffset: 1600; } to { stroke-dashoffset: 0; } }
+.sw-route-draw { stroke-dasharray: 1600; animation: sw-route-draw 1.4s var(--sw-ease-atelier) both; }
+@keyframes sw-rings { 0% { transform: scale(0.2); opacity: 0.55; } 100% { transform: scale(1); opacity: 0; } }
+.sw-rings > span { animation: sw-rings 2.4s var(--sw-ease-atelier) infinite; }
+.sw-rings > span:nth-child(2) { animation-delay: 0.8s; }
+.sw-rings > span:nth-child(3) { animation-delay: 1.6s; }
+@keyframes sw-live { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--sw-success) 55%, transparent); } 50% { box-shadow: 0 0 0 5px transparent; } }
+.sw-live-dot { animation: sw-live 1.8s ease-out infinite; }
+@keyframes sw-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.sw-rise { animation: sw-rise 420ms var(--sw-ease-atelier) both; }
+@media (prefers-reduced-motion: reduce) { .sw-halo, .sw-route-draw, .sw-rings > span, .sw-live-dot, .sw-rise { animation: none; } .sw-route-draw { stroke-dasharray: none; } }

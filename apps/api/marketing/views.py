@@ -204,7 +204,7 @@ class AdminHomePreviewView(APIView):
 
 
 def _story_admin_out(s: Story) -> dict:
-    return story_out(s) | {"isActive": s.is_active, "sortOrder": s.sort_order, "startsAt": s.starts_at.isoformat() if s.starts_at else None, "endsAt": s.ends_at.isoformat() if s.ends_at else None, "views": s.views.count()}
+    return story_out(s) | {"brandId": str(s.brand_id) if s.brand_id else None, "isActive": s.is_active, "sortOrder": s.sort_order, "startsAt": s.starts_at.isoformat() if s.starts_at else None, "endsAt": s.ends_at.isoformat() if s.ends_at else None, "views": s.views.count()}
 
 
 class AdminStoriesView(APIView):
@@ -375,6 +375,19 @@ class AdminCampaignsView(APIView):
         c.stats = {"audience": audience_queryset(c.audience, c.channel).count()}
         c.save(update_fields=["stats"])
         return Response(campaign_out(c), status=201)
+
+
+class AdminCampaignEstimateView(APIView):
+    """Live reach for the composer: how many people the audience matches right now (opt-outs excluded)."""
+
+    permission_classes = [AdminPerm("marketing.manage")]
+
+    def post(self, request):
+        from .campaigns import audience_queryset
+
+        d = request.data or {}
+        channel = d.get("channel") if d.get("channel") in ("push", "sms") else "push"
+        return Response({"audience": audience_queryset(d.get("audience") or {}, channel).count()})
 
 
 class AdminCampaignView(APIView):

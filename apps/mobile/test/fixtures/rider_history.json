@@ -1,0 +1,58 @@
+{
+ "items": [
+  {
+   "id": "87359460-c931-4fce-8e6b-155a885de926",
+   "orderNumber": "SW-2322-22",
+   "status": "COMPLETED",
+   "store": "SmartWear Masaki",
+   "area": "Mikocheni",
+   "earning": 3162,
+   "distanceMeters": 4154,
+   "completedAt": "2026-11-11T06:43:30.002463+00:00",
+   "rating": null
+  }
+ ],
+ "nextCursor": null,
+ "week": [
+  {
+   "date": "2026-11-11",
+   "earnings": 3162,
+   "deliveries": 1
+  }
+ ],
+ "totals": {
+  "earnings": 3162,
+  "deliveries": 1
+ },
+ "balance": {
+  "earned": 3162,
+  "jobs": 1,
+  "paid": 2000,
+  "pending": 0,
+  "unpaid": 1162
+ },
+ "payouts": [
+  {
+   "id": "85fd8fa7-0705-49a4-a5db-a513cd5d9df1",
+   "riderId": "53bb99ef-cc00-4cc2-a93f-d8433e34cc5e",
+   "riderName": "Juma Mwinyi",
+   "method": "manual",
+   "status": "COMPLETED",
+   "amount": 2000,
+   "fee": 0,
+   "currency": "TZS",
+   "reference": "PO26111253FC70AC01",
+   "providerRef": null,
+   "externalRef": null,
+   "network": null,
+   "recipient": "•••• 0101",
+   "recipientName": "Juma Mwinyi",
+   "note": "Paid in cash at Masaki",
+   "failureReason": null,
+   "jobs": 1,
+   "createdAt": "2026-11-12T05:12:47.323362+00:00",
+   "completedAt": "2026-11-12T05:12:47.323038+00:00",
+   "createdBy": "Store Owner"
+  }
+ ]
+}

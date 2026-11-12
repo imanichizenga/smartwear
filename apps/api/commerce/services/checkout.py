@@ -43,7 +43,9 @@ def payment_methods(user) -> dict[str, Any]:
     available = []
     if cfg.cashOnDeliveryEnabled:
         available.append({"method": "CASH_ON_DELIVERY", "label": "Cash on delivery", "labelSw": "Lipa unapopokea", "maxAmount": cfg.cashOnDeliveryMaxAmount})
-    if cfg.mobileMoneyProvider == "beem_checkout" and cfg.beemCheckoutApiKey:
+    if cfg.mobileMoneyProvider == "snippe" and cfg.snippeApiKey:
+        available.append({"method": "MOBILE_MONEY", "label": "Mobile money", "labelSw": "Pesa kwa simu", "providers": ["mpesa", "airtel", "mixx", "halotel"], "flow": "ussd_push"})
+    elif cfg.mobileMoneyProvider == "beem_checkout" and cfg.beemCheckoutApiKey:
         available.append({"method": "MOBILE_MONEY", "label": "Mobile money", "labelSw": "Pesa kwa simu", "providers": ["mpesa", "tigopesa", "airtelmoney", "halopesa"]})
     saved = [{"id": str(m.id), "method": m.method, "provider": m.provider or None, "label": m.label or None, "msisdn": m.msisdn[:6] + "•••" + m.msisdn[-3:] if m.msisdn else None, "isDefault": m.is_default} for m in SavedPaymentMethod.objects.filter(user=user)]
     allowed = {a["method"] for a in available}
@@ -136,12 +138,12 @@ def place(user, data: dict[str, Any], *, request=None, locale: str = "en") -> Or
     store = Store.objects.get(id=(selected["store"]["id"] if pickup else q["store"]["id"]))
     place_label = (data.get("label") or "").strip()[:240]
     area = (data.get("area") or "").strip()[:80]
-    if not place_label and google_maps.configured():
+    if not place_label:
         try:
-            rev = google_maps.reverse_geocode(lat, lng, locale)
-            place_label, area = rev["address"], area or rev["area"]
+            rev = google_maps.reverse_geocode(lat, lng, locale) if google_maps.configured() else google_maps.offline_place(lat, lng)
         except ApiError:
-            place_label = "Pinned location"
+            rev = google_maps.offline_place(lat, lng)
+        place_label, area = rev["address"], area or rev["area"]
     cart = cart_svc.get_cart(user)
     items = list(CartItem.objects.filter(cart=cart, saved_for_later=False).select_related("variant__product__brand"))
     priced = {str(r["id"]): r for r in q["cart"]["items"]}
@@ -229,6 +231,6 @@ def _remember_place(user, lat: float, lng: float, label: str, area: str, data: d
         near.last_used_at = now
         near.save(update_fields=["last_used_at"])
         return
-    SavedPlace.objects.create(user=user, kind="recent", address=label or "Pinned location", area=area, landmark_note=(data.get("landmarkNote") or "")[:120], location=pt, place_id=data.get("placeId") or "", last_used_at=now)
+    SavedPlace.objects.create(user=user, kind="recent", address=label or google_maps.offline_place(lat, lng)["address"], area=area, landmark_note=(data.get("landmarkNote") or "")[:120], location=pt, place_id=data.get("placeId") or "", last_used_at=now)
     stale = SavedPlace.objects.filter(user=user, kind="recent").order_by("-last_used_at").values_list("id", flat=True)[8:]
     SavedPlace.objects.filter(id__in=list(stale)).delete()

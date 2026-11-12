@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.permissions import AdminPerm
+from accounts.permissions import AdminPerm, IsAdmin
 
 from . import settings_service
 from .audit import audit
@@ -154,3 +154,13 @@ class AuditLogView(APIView):
             "actor": (r.actor_admin.name or r.actor_admin.email) if r.actor_admin else (r.actor_user.display_name if r.actor_user else "System"),
             "before": r.before, "after": r.after, "meta": r.meta, "ip": r.ip, "requestId": r.request_id, "createdAt": r.created_at.isoformat(),
         } for r in rows], "nextCursor": nxt})
+
+
+class AdminMapsConfigView(APIView):
+    """Browser map config for every admin screen with a map. The browser key is meant to be HTTP-referrer restricted."""
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request):
+        m = settings_service.get("maps.google")
+        return Response({"browserApiKey": m.browserApiKey or None, "mapId": m.mapId or None, "regionCode": m.regionCode, "language": m.language})

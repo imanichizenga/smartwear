@@ -6,6 +6,7 @@ urlpatterns = [
     path("health", v.HealthView.as_view()),
     path("ready", v.ReadyView.as_view()),
     path("v1/config/public", v.PublicConfigView.as_view()),
+    path("v1/admin/maps/config", v.AdminMapsConfigView.as_view()),
     path("v1/admin/settings", v.SettingsGroupsView.as_view()),
     path("v1/admin/settings/status", v.IntegrationStatusView.as_view()),
     path("v1/admin/settings/<str:group>", v.SettingsGroupView.as_view()),

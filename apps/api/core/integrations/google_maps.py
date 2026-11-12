@@ -209,3 +209,55 @@ def route(origin: tuple[float, float], dest: tuple[float, float], *, mode: str |
         except (httpx.HTTPError, ValueError) as e:
             logger.warning("routes error: %s", e)
     return fallback
+
+
+# ------------------------------------------------------------------ offline fallback (no Maps key / Google down)
+
+_OLC = "23456789CFGHJMPQRVWX"
+
+
+def plus_code(lat: float, lng: float, length: int = 10) -> str:
+    """Open Location Code (Plus Code), computed locally — e.g. -6.7712, 39.2399 → '6GFP6672+GW'.
+    Riders can paste it straight into Google Maps, so a pin is never just "somewhere"."""
+    lat = min(max(lat, -90.0), 90.0 - 1e-10) + 90.0
+    lng = ((lng + 180.0) % 360.0)
+    code = ""
+    res = 20.0
+    for _ in range(length // 2):
+        d_lat, d_lng = int(lat // res), int(lng // res)
+        lat -= d_lat * res
+        lng -= d_lng * res
+        code += _OLC[d_lat] + _OLC[d_lng]
+        res /= 20.0
+        if len(code) == 8:
+            code += "+"
+    return code
+
+
+def short_plus_code(lat: float, lng: float) -> str:
+    """The locally useful form: drop the 4-char area prefix ('6672+GW')."""
+    return plus_code(lat, lng)[4:]
+
+
+def offline_place(lat: float, lng: float) -> dict[str, Any]:
+    """Best label we can give without Google: the delivery zone (or nearest store's neighbourhood) + Plus Code."""
+    from django.contrib.gis.db.models.functions import Distance
+    from django.contrib.gis.geos import Point
+
+    pt = Point(lng, lat, srid=4326)
+    area = ""
+    try:
+        from delivery.models import DeliveryZone
+        from inventory.models import Store
+
+        z = DeliveryZone.objects.filter(is_active=True, polygon__covers=pt).order_by("-priority").first()
+        if z:
+            area = z.name
+        else:
+            s = Store.objects.filter(is_active=True).annotate(d=Distance("location", pt)).order_by("d").first()
+            if s and s.d.m < 1500:
+                area = f"Near {s.area or s.name}"
+    except Exception:  # noqa: BLE001 — a label must never break checkout
+        logger.exception("offline place lookup failed")
+    code = short_plus_code(lat, lng)
+    return {"lat": lat, "lng": lng, "address": f"{area}, {code}" if area else code, "area": area.removeprefix("Near "), "plusCode": plus_code(lat, lng), "placeId": ""}

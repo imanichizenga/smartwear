@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Eye, Plus, Trash2 } from 'lucide-react';
+import { Check, Copy, Eye, Plus, Trash2 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
@@ -9,7 +10,7 @@ import { Field, Input, Select, Textarea } from '@/components/ui/field';
 import { Card, Checkbox, Switch } from '@/components/ui/primitives';
 import { api, ApiError } from '@/lib/api';
 import { cn } from '@/lib/cn';
-import { humanize, type FieldMeta, type GroupMeta } from '@/lib/settings-meta';
+import { humanize, type FieldMeta, type GroupMeta, type LayoutSection } from '@/lib/settings-meta';
 import { usePendingAction } from '@/lib/use-pending';
 
 /* ------------------------------------------------------------------ JSON-schema helpers */
@@ -166,38 +167,91 @@ export function SchemaForm({ group, schema, value, onChange, meta, secrets, canR
   const layout = meta?.layout ?? [{ title: '', fields: visible }];
   const placed = new Set(layout.flatMap((l) => l.fields));
   const rest = visible.filter((k) => !placed.has(k));
-  const sections = rest.length && meta?.layout ? [...layout, { title: 'More', fields: rest }] : layout;
+  const all: LayoutSection[] = rest.length && meta?.layout ? [...layout, { title: 'More', fields: rest }] : layout;
+  const sections = all.filter((sec) => !sec.showWhen || sec.showWhen.equals.includes(String(value[sec.showWhen.field] ?? '')));
   const set = (k: string, v: Json) => onChange({ ...value, [k]: v });
   return (
     <div className="flex flex-col gap-4">
-      {sections.map((sec) => (
-        <Card key={sec.title || 'main'}>
-          {sec.title && (
-            <div className="border-b border-hairline px-5 py-4">
-              <h3 className="font-sans text-[15px] font-semibold tracking-normal">{sec.title}</h3>
-              {'description' in sec && sec.description && <p className="mt-0.5 text-[13px] text-muted">{sec.description}</p>}
-            </div>
-          )}
-          <div className="grid gap-x-6 gap-y-5 p-5 md:grid-cols-2">
-            {sec.fields.filter((k) => props[k] && !fm[k]?.hidden).map((k) => (
-              <Node
-                key={k}
-                group={group}
-                path={k}
-                name={k}
-                schema={props[k]!}
-                root={schema}
-                value={value[k] ?? null}
-                onChange={(v) => set(k, v)}
-                meta={fm}
-                secrets={secrets}
-                canReveal={canReveal}
-                currency={currency}
-              />
-            ))}
-          </div>
-        </Card>
-      ))}
+      <AnimatePresence initial={false} mode="popLayout">
+        {sections.map((sec) => (
+          <motion.div
+            key={sec.title || 'main'}
+            layout
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 320 }}
+          >
+            <Card>
+              {sec.title && (
+                <div className="border-b border-hairline px-5 py-4">
+                  <h3 className="font-sans text-[15px] font-semibold tracking-normal">{sec.title}</h3>
+                  {sec.description && <p className="mt-0.5 text-[13px] text-muted">{sec.description}</p>}
+                </div>
+              )}
+              {sec.steps && (
+                <ol className="flex flex-col gap-3 border-b border-hairline bg-canvas/60 px-5 py-4">
+                  {sec.steps.map((t, i) => (
+                    <li key={i} className="flex gap-3 text-[13px] leading-5">
+                      <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[11px] text-on-ink tabular">{i + 1}</span>
+                      <span className="text-muted">{t}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
+              {sec.copy && <CopyValue spec={sec.copy} value={value} />}
+              <div className="grid gap-x-6 gap-y-5 p-5 md:grid-cols-2">
+                {sec.fields.filter((k) => props[k] && !fm[k]?.hidden).map((k) => (
+                  <Node
+                    key={k}
+                    group={group}
+                    path={k}
+                    name={k}
+                    schema={props[k]!}
+                    root={schema}
+                    value={value[k] ?? null}
+                    onChange={(v) => set(k, v)}
+                    meta={fm}
+                    secrets={secrets}
+                    canReveal={canReveal}
+                    currency={currency}
+                  />
+                ))}
+              </div>
+            </Card>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/** Read-only value assembled from other fields (webhook URLs) with a one-tap copy. */
+function CopyValue({ spec, value }: { spec: NonNullable<LayoutSection['copy']>; value: Obj }) {
+  const [copied, setCopied] = useState(false);
+  const keys = [...spec.template.matchAll(/\{(\w+)\}/g)].map((m) => m[1] ?? '');
+  const missing = keys.some((k) => !String(value[k] ?? '').replace(/\/+$/, ''));
+  const text = spec.template.replace(/\{(\w+)\}/g, (_, k: string) => String(value[k] ?? '').replace(/\/+$/, ''));
+  const copy = async () => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  };
+  return (
+    <div className="border-b border-hairline px-5 py-4">
+      <div className="label-caps mb-2 text-muted">{spec.label}</div>
+      {missing ? (
+        <p className="text-[13px] text-warning">{spec.missing ?? 'Fill in the fields above first.'}</p>
+      ) : (
+        <div className="flex items-center gap-2">
+          <code className="min-w-0 flex-1 truncate rounded-sm border border-hairline bg-canvas px-3 py-2 font-mono text-[12.5px]">{text}</code>
+          <Button variant="secondary" size="icon" onClick={() => void copy()} aria-label={`Copy ${spec.label}`}>
+            {copied ? <Check className="size-4 text-success" strokeWidth={2} /> : <Copy className="size-4" strokeWidth={1.5} />}
+          </Button>
+        </div>
+      )}
+      {spec.help && !missing && <p className="mt-2 text-xs text-muted">{spec.help}</p>}
+      {!missing && !text.startsWith('https://') && <p className="mt-2 text-xs text-warning">Providers only post to HTTPS addresses — use your public domain in production.</p>}
     </div>
   );
 }
