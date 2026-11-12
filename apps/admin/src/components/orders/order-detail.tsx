@@ -180,7 +180,11 @@ export function OrderDetail({ initial }: { initial: Order }) {
                 </div>
               )}
               <dl className="grid grid-cols-3 gap-2 border-t border-hairline px-5 py-4 text-[13px]">
-                <div><dt className="label-caps text-muted">ETA</dt><dd className="mt-1 font-semibold tabular">{fmtEta(o.eta.liveSeconds)}</dd></div>
+                {d.status === 'COMPLETED' || d.status === 'CANCELLED' ? (
+                  <div><dt className="label-caps text-muted">{d.status === 'COMPLETED' ? 'Delivered' : 'Cancelled'}</dt><dd className="mt-1 font-semibold tabular">{d.status === 'COMPLETED' ? fmtDateTime(d.timeline.completed) : '—'}</dd></div>
+                ) : (
+                  <div><dt className="label-caps text-muted">ETA</dt><dd className="mt-1 font-semibold tabular">{fmtEta(o.eta.liveSeconds)}</dd></div>
+                )}
                 <div><dt className="label-caps text-muted">Distance</dt><dd className="mt-1 font-semibold tabular">{fmtDistance(d.distanceMeters)}</dd></div>
                 <div><dt className="label-caps text-muted">PIN</dt><dd className="mt-1 flex items-center gap-1 font-semibold tabular tracking-[0.2em]"><KeyRound className="size-3.5" strokeWidth={1.5} /> {o.pin ?? '—'}</dd></div>
               </dl>

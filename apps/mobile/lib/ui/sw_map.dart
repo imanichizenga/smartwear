@@ -16,9 +16,12 @@ import '../core/providers.dart';
 import '../design/theme.dart';
 import 'icons.dart';
 
-/// Native Google Maps unless built with `--dart-define=MAPS_NATIVE=false` (or under test), in
-/// which case the branded plan view renders the same markers and routes.
-const _nativeMaps = bool.fromEnvironment('MAPS_NATIVE', defaultValue: true);
+/// Native Google Maps when the build carries the display key (`--dart-define=MAPS_API_KEY=…`, which
+/// the Android build also injects into the manifest; on iOS it also goes in ios/Flutter/Maps.xcconfig).
+/// Without a key — or with `--dart-define=MAPS_NATIVE=false`, or under test — the branded plan view
+/// renders the same markers and routes, so a keyless build never shows a blank or crashing map.
+const _mapsKey = String.fromEnvironment('MAPS_API_KEY');
+const _nativeMaps = bool.fromEnvironment('MAPS_NATIVE', defaultValue: _mapsKey != '');
 bool get _useNative => _nativeMaps && Platform.environment['FLUTTER_TEST'] != 'true';
 
 enum PinKind { client, rider, store }

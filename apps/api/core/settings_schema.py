@@ -4,9 +4,12 @@ Secret fields are listed in SECRET_FIELDS and encrypted at rest.
 """
 from __future__ import annotations
 
+import json
+from functools import lru_cache
+from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 SECRET_PLACEHOLDER = "__SECRET_UNCHANGED__"
 
@@ -59,6 +62,15 @@ class Auth(BaseModel):
     jwtSecret: str = ""
 
 
+@lru_cache(maxsize=1)
+def _map_styles() -> dict[str, list[dict[str, Any]]]:
+    return json.loads((Path(__file__).with_name("map_styles.json")).read_text())
+
+
+def _default_map_style(kind: str) -> list[dict[str, Any]]:
+    return [dict(x) for x in _map_styles()[kind]]
+
+
 class MapsGoogle(BaseModel):
     serverApiKey: str = ""
     browserApiKey: str = ""
@@ -68,8 +80,15 @@ class MapsGoogle(BaseModel):
     autocompleteRadiusMeters: int = Field(30000, ge=1000, le=50000)
     routesTravelMode: Literal["TWO_WHEELER", "DRIVE", "BICYCLE", "WALK"] = "TWO_WHEELER"
     routeCacheSeconds: int = Field(60, ge=10, le=600)
-    mapStyleLight: list[dict[str, Any]] = []
-    mapStyleDark: list[dict[str, Any]] = []
+    # Empty = the brand's minimal silver / dark styles (core/map_styles.json, exported from
+    # packages/shared/src/mapStyles.ts) so native maps never fall back to Google's default look.
+    mapStyleLight: list[dict[str, Any]] = Field(default_factory=lambda: _default_map_style("light"))
+    mapStyleDark: list[dict[str, Any]] = Field(default_factory=lambda: _default_map_style("dark"))
+
+    @field_validator("mapStyleLight", "mapStyleDark", mode="after")
+    @classmethod
+    def _brand_style_when_empty(cls, v: list[dict[str, Any]], info) -> list[dict[str, Any]]:
+        return v or _default_map_style("light" if info.field_name == "mapStyleLight" else "dark")
 
 
 class Push(BaseModel):

@@ -98,3 +98,13 @@ def test_s3_test_connection_against_local_store(admin_user):
     names = {c["name"]: c["ok"] for c in r["checks"]}
     assert names["Put object"] and names["Get object"] and names["Delete object"], r
     assert r["ok"] is True, r
+
+
+def test_empty_map_styles_fall_back_to_brand_silver(db):
+    from core.settings_schema import MapsGoogle
+
+    m = MapsGoogle(mapStyleLight=[], mapStyleDark=[])
+    assert m.mapStyleLight[0] == {"elementType": "geometry", "stylers": [{"color": "#f3f1ec"}]}
+    assert m.mapStyleDark and m.mapStyleDark != m.mapStyleLight
+    custom = [{"elementType": "geometry", "stylers": [{"color": "#000000"}]}]
+    assert MapsGoogle(mapStyleLight=custom).mapStyleLight == custom

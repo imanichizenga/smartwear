@@ -136,7 +136,7 @@ export const SETTINGS_META: Record<string, GroupMeta> = {
     fields: {
       serverApiKey: { label: 'Server API key', help: 'Restrict to Places API (New), Geocoding API and Routes API, by server IP.' },
       browserApiKey: { label: 'Admin map key', help: 'Maps JavaScript API, restricted to your admin domain.' },
-      mapId: { label: 'Map ID', help: 'Optional cloud-styled map ID for the admin maps.' },
+      mapId: { label: 'Map ID', help: 'Brand styling for admin maps. Without it the admin uses Google’s demo Map ID (default Google colours). In Cloud Console → Map management, create a JavaScript vector Map ID and attach a style made from the Light/Dark JSON below.' },
       regionCode: { label: 'Region bias' },
       language: { label: 'Result language' },
       autocompleteRadiusMeters: { label: 'Search bias radius', suffix: 'metres' },

@@ -20,6 +20,10 @@ Transactions: [snippe.sh/dashboard/payments/transactions](https://snippe.sh/dash
 
 ## Native build-time values
 
-- Google Maps **native** SDK key (display only, restricted) via `--dart-define`/platform config. All Places/Geocoding/Routes calls go through the API with the DB-stored server key.
+- Google Maps **native** SDK key (display only; restrict it to the Android package + SHA-1 and the iOS bundle ID, Maps SDK only). All Places/Geocoding/Routes calls go through the API with the DB-stored server key.
+  - Build with `flutter build apk|appbundle|ipa --dart-define=MAPS_API_KEY=<key>`. Android reads it from the dart-defines automatically (fallbacks: `MAPS_API_KEY` env var, or `MAPS_API_KEY=` in `android/local.properties`) and writes it into the manifest.
+  - iOS also needs `ios/Flutter/Maps.xcconfig` (git-ignored; copy `Maps.xcconfig.example`) with the iOS key — `AppDelegate` calls `GMSServices.provideAPIKey` from `Info.plist`'s `GMSApiKey`.
+  - No key → the app uses its branded plan view (same black client / blue rider and store dots and routes); it never opens a native map without a key.
+- Location permissions are declared for checkout/tracking (when in use) and Rider Mode (background: Android foreground service with a persistent notification; iOS `UIBackgroundModes=location`). While-in-use permission is enough: Android keeps rider updates alive through the foreground service, iOS through the blue background-location indicator.
 - Google Sign-In URL scheme (iOS) / SHA-1 (Android); the `webClientId` is fetched from `GET /v1/config/public`.
 - Push: `google-services.json` / APNs entitlements; server keys in the DB.

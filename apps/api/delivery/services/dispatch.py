@@ -109,11 +109,14 @@ def update_location(rider: Rider, *, lat: float, lng: float, heading: float | No
         raise ApiError.bad_request("Invalid coordinates")
     now = timezone.now()
     at = recorded_at or now
-    prev, prev_at = rider.last_location, rider.last_seen_at
     _store_location(rider, lat, lng, heading, at, persist=True)
     jobs = list(DeliveryJob.objects.filter(rider=rider, status__in=state.RIDER_HOLDS).select_related("order"))
-    moved = google_maps.haversine_m((prev.y, prev.x), (lat, lng)) if prev else 1e9
-    if not prev_at or (at - prev_at).total_seconds() >= PING_SAMPLE_SECONDS or moved >= PING_SAMPLE_METERS:
+    # Sample against the last *saved* ping (not the previous update): riders report every 3–5 s and
+    # ~20 m apart, so comparing consecutive updates would never cross the thresholds.
+    last = RiderLocationPing.objects.filter(rider=rider).order_by("-recorded_at").only("recorded_at", "location", "job_id").first()
+    job_id = jobs[0].id if jobs else None
+    moved = google_maps.haversine_m((last.location.y, last.location.x), (lat, lng)) if last else 1e9
+    if last is None or last.job_id != job_id or abs((at - last.recorded_at).total_seconds()) >= PING_SAMPLE_SECONDS or moved >= PING_SAMPLE_METERS:
         RiderLocationPing.objects.create(rider=rider, job=jobs[0] if jobs else None, location=Point(lng, lat, srid=4326), heading=heading, speed_mps=speed, accuracy_m=accuracy, battery=battery, recorded_at=at)
     payload = {"type": "rider.location", "riderId": str(rider.id), "lat": lat, "lng": lng, "heading": heading, "speed": speed, "at": at.isoformat()}
     broadcast("dispatch", payload)

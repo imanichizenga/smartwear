@@ -1,7 +1,31 @@
+import java.util.Base64
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+/**
+ * The display-only Google Maps key, from (first match): --dart-define=MAPS_API_KEY=…,
+ * the MAPS_API_KEY environment variable (EAS/CI secrets), or MAPS_API_KEY in android/local.properties.
+ * Places/Geocoding/Routes never use it — those go through the API with the DB-stored server key.
+ */
+fun mapsApiKey(): String {
+    val defines = (project.findProperty("dart-defines") as String?)
+        ?.split(",")
+        ?.mapNotNull { runCatching { String(Base64.getDecoder().decode(it)) }.getOrNull() }
+        ?.associate { it.substringBefore("=") to it.substringAfter("=", "") }
+        .orEmpty()
+    defines["MAPS_API_KEY"]?.takeIf { it.isNotBlank() }?.let { return it }
+    System.getenv("MAPS_API_KEY")?.takeIf { it.isNotBlank() }?.let { return it }
+    val local = rootProject.file("local.properties")
+    if (local.exists()) {
+        val p = Properties().apply { local.inputStream().use { load(it) } }
+        p.getProperty("MAPS_API_KEY")?.takeIf { it.isNotBlank() }?.let { return it }
+    }
+    return ""
 }
 
 android {
@@ -27,6 +51,7 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey()
     }
 
     buildTypes {

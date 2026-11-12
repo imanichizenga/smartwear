@@ -1,0 +1,4 @@
+// Copy to Maps.xcconfig (git-ignored) and paste the iOS-restricted Google Maps SDK key.
+// Display only — Places, Geocoding and Routes go through the API with the DB-stored server key.
+// Without a key the app shows its branded plan view instead of native maps.
+MAPS_API_KEY = 

@@ -1,1 +1,3 @@
 #include "Generated.xcconfig"
+// Optional, git-ignored: MAPS_API_KEY = <restricted iOS Maps SDK key>  (see Maps.xcconfig.example)
+#include? "Maps.xcconfig"
