@@ -92,18 +92,19 @@ class ChoiceChipSw extends StatelessWidget {
   }
 }
 
-/// Token-coloured shimmer placeholder for lists and grids (actions use the A loader instead).
-class Skeleton extends StatefulWidget {
-  const Skeleton({super.key, this.width, this.height = 14, this.radius = SwRadius.xs, this.aspectRatio});
-  final double? width, height;
-  final double radius;
-  final double? aspectRatio;
+/// One shimmer clock for every skeleton on screen (installed once in the app builder). Skeletons outside a
+/// scope (tests, isolated widgets) fall back to their own controller.
+class SkeletonScope extends StatefulWidget {
+  const SkeletonScope({super.key, required this.child});
+  final Widget child;
+
+  static Animation<double>? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<_SkeletonClock>()?.animation;
 
   @override
-  State<Skeleton> createState() => _SkeletonState();
+  State<SkeletonScope> createState() => _SkeletonScopeState();
 }
 
-class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin {
+class _SkeletonScopeState extends State<SkeletonScope> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400))..repeat();
 
   @override
@@ -113,27 +114,181 @@ class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin
   }
 
   @override
+  Widget build(BuildContext context) => _SkeletonClock(animation: _c, child: widget.child);
+}
+
+class _SkeletonClock extends InheritedWidget {
+  const _SkeletonClock({required this.animation, required super.child});
+  final Animation<double> animation;
+  @override
+  bool updateShouldNotify(_SkeletonClock o) => o.animation != animation;
+}
+
+/// Token-coloured shimmer placeholder for lists and grids (actions use the A loader instead).
+/// With reduce-motion on it is a static tint.
+class Skeleton extends StatefulWidget {
+  const Skeleton({super.key, this.width, this.height = 14, this.radius = SwRadius.xs, this.aspectRatio, this.dark = false});
+  final double? width, height;
+  final double radius;
+  final double? aspectRatio;
+
+  /// For skeletons over full-bleed dark media (Discover).
+  final bool dark;
+
+  /// Fills its parent (both axes).
+  const Skeleton.expand({super.key, this.radius = 0, this.dark = false})
+      : width = double.infinity,
+        height = double.infinity,
+        aspectRatio = null;
+
+  @override
+  State<Skeleton> createState() => _SkeletonState();
+}
+
+class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin {
+  AnimationController? _own;
+
+  Animation<double> _clock(BuildContext context) {
+    final shared = SkeletonScope.of(context);
+    if (shared != null) return shared;
+    return _own ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 1400))..repeat();
+  }
+
+  @override
+  void dispose() {
+    _own?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final c = context.sw;
-    Widget box = AnimatedBuilder(
-      animation: _c,
-      builder: (context, _) {
-        final t = context.reduceMotion ? 0.5 : _c.value;
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(widget.radius),
-            gradient: LinearGradient(
-              begin: Alignment(-1.6 + 3.2 * t, 0),
-              end: Alignment(-0.6 + 3.2 * t, 0),
-              colors: [c.hairline, Color.lerp(c.hairline, c.surface, 0.6)!, c.hairline],
-            ),
-          ),
-          child: SizedBox(width: widget.width, height: widget.aspectRatio == null ? widget.height : null),
-        );
-      },
-    );
+    final reduce = context.reduceMotion;
+    final base = widget.dark ? Colors.white.withValues(alpha: 0.08) : c.hairline;
+    final hi = widget.dark ? Colors.white.withValues(alpha: 0.16) : Color.lerp(c.hairline, c.surface, 0.6)!;
+    final size = SizedBox(width: widget.width, height: widget.aspectRatio == null ? widget.height : null);
+    Widget box = reduce
+        ? DecoratedBox(decoration: BoxDecoration(borderRadius: BorderRadius.circular(widget.radius), color: base), child: size)
+        : AnimatedBuilder(
+            animation: _clock(context),
+            child: size,
+            builder: (context, child) {
+              final t = _clock(context).value;
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(widget.radius),
+                  gradient: LinearGradient(begin: Alignment(-1.6 + 3.2 * t, 0), end: Alignment(-0.6 + 3.2 * t, 0), colors: [base, hi, base]),
+                ),
+                child: child,
+              );
+            },
+          );
     if (widget.aspectRatio != null) box = AspectRatio(aspectRatio: widget.aspectRatio!, child: box);
     return ExcludeSemantics(child: box);
+  }
+}
+
+/// A line of text that hasn't loaded yet.
+class SkeletonLine extends StatelessWidget {
+  const SkeletonLine({super.key, this.width, this.height = 12, this.dark = false});
+  final double? width;
+  final double height;
+  final bool dark;
+  @override
+  Widget build(BuildContext context) => Skeleton(width: width, height: height, radius: height / 2.5, dark: dark);
+}
+
+/// An image or card block (fixed size or aspect ratio).
+class SkeletonBox extends StatelessWidget {
+  const SkeletonBox({super.key, this.width, this.height, this.aspectRatio, this.radius = SwRadius.xs, this.dark = false});
+  final double? width, height, aspectRatio;
+  final double radius;
+  final bool dark;
+  @override
+  Widget build(BuildContext context) => Skeleton(width: width, height: height, aspectRatio: aspectRatio, radius: radius, dark: dark);
+}
+
+class SkeletonAvatar extends StatelessWidget {
+  const SkeletonAvatar({super.key, this.size = 40, this.dark = false});
+  final double size;
+  final bool dark;
+  @override
+  Widget build(BuildContext context) => Skeleton(width: size, height: size, radius: size / 2, dark: dark);
+}
+
+/// [count] skeleton rows shaped like the real list rows.
+class SkeletonList extends StatelessWidget {
+  const SkeletonList({super.key, required this.itemBuilder, this.count = 6, this.padding = const EdgeInsets.symmetric(horizontal: SwSpace.s5, vertical: SwSpace.s4), this.gap = SwSpace.s5, this.sliver = false});
+  final Widget Function(BuildContext context, int index) itemBuilder;
+  final int count;
+  final EdgeInsetsGeometry padding;
+  final double gap;
+  final bool sliver;
+
+  @override
+  Widget build(BuildContext context) {
+    final children = [for (var i = 0; i < count; i++) ...[if (i > 0) SizedBox(height: gap), itemBuilder(context, i)]];
+    final body = Padding(padding: padding, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children));
+    final content = Semantics(label: context.s('common.loading'), liveRegion: true, child: body);
+    return sliver ? SliverToBoxAdapter(child: content) : SingleChildScrollView(physics: const NeverScrollableScrollPhysics(), child: content);
+  }
+}
+
+/// Error state for a failed load: a distinct offline view (no connection) versus a server-error view, each
+/// with an inline retry. Use with `AsyncValue.when(skipLoadingOnRefresh: true, …)` so pull-to-refresh keeps
+/// the data on screen.
+class LoadError extends StatelessWidget {
+  const LoadError({super.key, required this.error, this.onRetry, this.compact = false});
+  final Object error;
+  final VoidCallback? onRetry;
+  final bool compact;
+
+  static bool isOffline(Object e) => e is ApiException && e.isNetwork;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.s;
+    final offline = isOffline(error);
+    final title = offline ? s('state.offline.title') : s('common.error.title');
+    final body = offline ? s('state.offline.body') : s('common.error.body');
+    final action = onRetry == null ? null : SwButton(label: s('common.retry'), icon: Ic.refreshCw, variant: SwButtonVariant.secondary, onPressed: onRetry);
+    if (compact) {
+      final c = context.sw;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: SwSpace.s5, vertical: SwSpace.s4),
+        child: Row(children: [
+          Icon(offline ? Ic.wifiOff : Ic.circleAlert, size: 18, color: c.muted),
+          const SizedBox(width: SwSpace.s3),
+          Expanded(child: Text(offline ? s('state.offline.title') : s('common.error.title'), style: context.type.bodyS.copyWith(color: c.muted))),
+          if (onRetry != null) SwButton(label: s('common.retry'), variant: SwButtonVariant.ghost, onPressed: onRetry),
+        ]),
+      );
+    }
+    return EmptyState(title: title, body: body, icon: offline ? Ic.wifiOff : Ic.circleAlert, action: action);
+  }
+}
+
+/// Neutral, branded stand-in for media that is genuinely missing — never a "broken image" icon.
+class MediaFallback extends StatelessWidget {
+  const MediaFallback({super.key, this.dark = false});
+  final bool dark;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.sw;
+    final base = dark ? const Color(0xFF1C1A18) : c.hairline;
+    return ExcludeSemantics(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color.lerp(base, c.surface, dark ? 0.05 : 0.55)!, base]),
+        ),
+        child: LayoutBuilder(builder: (context, box) {
+          final size = (box.biggest.shortestSide * 0.18).clamp(10.0, 28.0).toDouble();
+          return Center(
+            child: Text('SW', style: context.type.titleS.copyWith(fontSize: size, letterSpacing: size * 0.3, color: (dark ? Colors.white : c.ink).withValues(alpha: 0.14), fontWeight: FontWeight.w700)),
+          );
+        }),
+      ),
+    );
   }
 }
 
@@ -990,8 +1145,10 @@ Future<T?> showSwSheet<T>(BuildContext context, {required Widget Function(BuildC
   );
 }
 
-void showSwToast(BuildContext context, String message, {IconData icon = Ic.check, bool error = false}) {
+/// Floating toast. With [actionLabel] / [onAction] it shows a text action (e.g. Undo) and stays a little longer.
+void showSwToast(BuildContext context, String message, {IconData icon = Ic.check, bool error = false, String? actionLabel, VoidCallback? onAction}) {
   final c = context.sw;
+  final hasAction = actionLabel != null && onAction != null;
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(SnackBar(
@@ -1000,13 +1157,21 @@ void showSwToast(BuildContext context, String message, {IconData icon = Ic.check
       backgroundColor: c.ink,
       margin: const EdgeInsets.fromLTRB(SwSpace.s5, 0, SwSpace.s5, 96),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SwRadius.md)),
-      duration: const Duration(milliseconds: 2400),
+      duration: Duration(milliseconds: hasAction ? 4000 : 2400),
+      action: hasAction ? SnackBarAction(label: actionLabel, textColor: c.accent, onPressed: onAction) : null,
       content: Row(children: [
         Icon(error ? Ic.circleAlert : icon, size: 18, color: error ? c.dangerSoft : c.accent),
         const SizedBox(width: SwSpace.s3),
         Expanded(child: Text(message, style: context.type.bodyS.copyWith(color: c.onInk))),
       ]),
     ));
+}
+
+/// Bottom clearance for content and bottom bars. Inside the tab shell this already includes the floating nav
+/// bar (the shell's Scaffold uses `extendBody`, which adds the bar's height to MediaQuery's bottom padding);
+/// on pushed pages it is just the system inset. Use this instead of magic numbers.
+extension SwInsets on BuildContext {
+  double get bottomInset => MediaQuery.paddingOf(this).bottom;
 }
 
 /// Hairline divider with optional inset.

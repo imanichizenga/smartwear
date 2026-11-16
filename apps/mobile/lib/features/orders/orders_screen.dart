@@ -31,8 +31,10 @@ class OrdersScreen extends ConsumerWidget {
         title: Text(s('orders.title'), style: context.type.displayS),
       ),
       body: orders.when(
-        loading: () => ListView(padding: const EdgeInsets.all(SwSpace.s5), children: [for (var i = 0; i < 4; i++) const Padding(padding: EdgeInsets.only(bottom: SwSpace.s3), child: Skeleton(height: 96, radius: SwRadius.md))]),
-        error: (e, _) => EmptyState(title: s('common.error.title'), action: SwButton(label: s('common.retry'), onPressed: () => ref.refresh(ordersProvider.future))),
+        skipLoadingOnRefresh: true,
+        skipLoadingOnReload: true,
+        loading: () => const OrderCardSkeletonList(),
+        error: (e, _) => Center(child: LoadError(error: e, onRetry: () => ref.invalidate(ordersProvider))),
         data: (items) {
           if (items.isEmpty) return EmptyState(title: s('orders.empty.title'), body: s('orders.empty.body'), icon: Ic.package, action: SwButton(label: s('bag.empty.cta'), onPressed: () => context.go('/')));
           final active = items.where((o) => _active.contains(o.str('status'))).toList();
@@ -101,6 +103,38 @@ class _OrderCard extends ConsumerWidget {
             ),
           ]),
         ),
+      ),
+    );
+  }
+}
+
+/// Skeleton rows shaped exactly like [_OrderCard]: fanned thumbs, number + total, meta line, status chip.
+class OrderCardSkeletonList extends StatelessWidget {
+  const OrderCardSkeletonList({super.key, this.count = 4});
+  final int count;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.sw;
+    return SkeletonList(
+      count: count,
+      gap: SwSpace.s3,
+      padding: const EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s2, SwSpace.s5, SwSpace.s5),
+      itemBuilder: (context, _) => Container(
+        padding: const EdgeInsets.all(SwSpace.s4),
+        decoration: BoxDecoration(color: c.surface, borderRadius: BorderRadius.circular(SwRadius.md), border: Border.all(color: c.hairline)),
+        child: const Row(children: [
+          SkeletonBox(width: 56, height: 70),
+          SizedBox(width: SwSpace.s4),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [SkeletonLine(width: 88, height: 14), Spacer(), SkeletonLine(width: 72, height: 14)]),
+              SizedBox(height: SwSpace.s2),
+              SkeletonLine(width: 140, height: 10),
+              SizedBox(height: SwSpace.s3),
+              SkeletonBox(width: 84, height: 24, radius: SwRadius.full),
+            ]),
+          ),
+        ]),
       ),
     );
   }

@@ -230,10 +230,13 @@ class ProductQuery {
 }
 
 class ProductPage {
-  const ProductPage({this.items = const [], this.nextCursor, this.loadingMore = false, this.total, this.facets});
+  const ProductPage({this.items = const [], this.nextCursor, this.loadingMore = false, this.loadMoreFailed = false, this.total, this.facets});
   final List<Json> items;
   final String? nextCursor;
   final bool loadingMore;
+
+  /// The last "next page" request failed (offline): the grid offers a retry instead of spinning forever.
+  final bool loadMoreFailed;
   final int? total;
   final Json? facets;
 }
@@ -250,13 +253,18 @@ class ProductListNotifier extends AsyncNotifier<ProductPage> {
     return ProductPage(items: r.list('items'), nextCursor: r.strN('nextCursor'), total: r.intN('total'), facets: r.obj('facets'));
   }
 
-  /// Infinite scroll: append the next cursor page.
-  Future<void> loadMore() async {
+  /// Infinite scroll: append the next cursor page. After a failure only an explicit [retry] tries again,
+  /// so scrolling while offline doesn't fire a request per scroll tick.
+  Future<void> loadMore({bool retry = false}) async {
     final cur = state.value;
-    if (cur == null || cur.nextCursor == null || cur.loadingMore) return;
+    if (cur == null || cur.nextCursor == null || cur.loadingMore || (cur.loadMoreFailed && !retry)) return;
     state = AsyncData(ProductPage(items: cur.items, nextCursor: cur.nextCursor, loadingMore: true, total: cur.total, facets: cur.facets));
-    final r = await ref.read(apiProvider).get<Json>('/products', query: query.toQuery(cur.nextCursor));
-    state = AsyncData(ProductPage(items: [...cur.items, ...r.list('items')], nextCursor: r.strN('nextCursor'), total: cur.total, facets: cur.facets));
+    try {
+      final r = await ref.read(apiProvider).get<Json>('/products', query: query.toQuery(cur.nextCursor));
+      state = AsyncData(ProductPage(items: [...cur.items, ...r.list('items')], nextCursor: r.strN('nextCursor'), total: cur.total, facets: cur.facets));
+    } on ApiException {
+      state = AsyncData(ProductPage(items: cur.items, nextCursor: cur.nextCursor, loadMoreFailed: true, total: cur.total, facets: cur.facets));
+    }
   }
 }
 
@@ -279,16 +287,25 @@ class CartNotifier extends AsyncNotifier<Json> {
     state = AsyncData(await _api.post<Json>('/cart/items', {'variantId': variantId, 'qty': qty}));
   }
 
+  /// Latest request per line wins: a slow earlier response can never overwrite a newer quantity.
+  final Map<int, int> _qtySeq = {};
+
   /// Optimistic quantity change; the server's re-priced cart (tiers, savings) replaces it.
   Future<void> setQty(int itemId, int qty) async {
+    final seq = (_qtySeq[itemId] ?? 0) + 1;
+    _qtySeq[itemId] = seq;
     final prev = state.value;
     if (prev != null) {
-      state = AsyncData({...prev, 'items': [for (final i in prev.list('items')) if (i.integer('id') == itemId) {...i, 'qty': qty} else i]});
+      state = AsyncData({
+        ...prev,
+        'items': [for (final i in prev.list('items')) if (i.integer('id') != itemId || qty > 0) (i.integer('id') == itemId ? {...i, 'qty': qty} : i)],
+      });
     }
     try {
-      state = AsyncData(qty <= 0 ? await _api.delete<Json>('/cart/items/$itemId') : await _api.patch<Json>('/cart/items/$itemId', {'qty': qty}));
+      final next = qty <= 0 ? await _api.delete<Json>('/cart/items/$itemId') : await _api.patch<Json>('/cart/items/$itemId', {'qty': qty});
+      if (_qtySeq[itemId] == seq) state = AsyncData(next);
     } on ApiException {
-      if (prev != null) state = AsyncData(prev);
+      if (prev != null && _qtySeq[itemId] == seq) state = AsyncData(prev);
       rethrow;
     }
   }

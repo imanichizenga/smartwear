@@ -121,10 +121,13 @@ class _TrackingScreenState extends ConsumerState<TrackingScreen> {
       if (_lastPhase != null && p != _lastPhase && (p == TrackPhase.arrived || p == TrackPhase.toStore || p == TrackPhase.delivered)) HapticFeedback.heavyImpact();
       _lastPhase = p;
       if (p == TrackPhase.delivered || p == TrackPhase.closed) _poll?.cancel();
-    } on ApiException {
-      // Keep the last known state; the header shows "updating…".
+    } on ApiException catch (e) {
+      // Keep the last known state; the header shows "updating…". Only the very first load surfaces an error.
+      if (mounted && _o == null) setState(() => _firstLoadError = e);
     }
   }
+
+  Object? _firstLoadError;
 
   int? get _etaNow => _etaSeconds == null ? null : math.max(0, _etaSeconds! - DateTime.now().difference(_etaAt).inSeconds);
 
@@ -133,7 +136,23 @@ class _TrackingScreenState extends ConsumerState<TrackingScreen> {
     final s = ref.s;
     final c = context.sw;
     final o = _o;
-    if (o == null) return Scaffold(body: ALoaderBlock(message: s('loader.searchingRider')));
+    if (o == null) {
+      if (_firstLoadError != null) {
+        return Scaffold(
+          appBar: AppBar(leading: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), onPressed: () => context.canPop() ? context.pop() : context.go('/orders'))),
+          body: Center(
+            child: LoadError(
+              error: _firstLoadError!,
+              onRetry: () {
+                setState(() => _firstLoadError = null);
+                _load();
+              },
+            ),
+          ),
+        );
+      }
+      return const _TrackingSkeleton();
+    }
     final phase = phaseOf(o);
     final store = LatLngD.fromJson(o.obj('store')?['location']);
     final dest = LatLngD.fromJson(o.obj('destination')?['location']);
@@ -706,4 +725,45 @@ class _SparkleBurst extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _SparkleBurst o) => o.t != t;
+}
+
+/// First load: the map area shimmers and the sheet shows its real shape (status, progress, rider row, items).
+class _TrackingSkeleton extends StatelessWidget {
+  const _TrackingSkeleton();
+  @override
+  Widget build(BuildContext context) {
+    final c = context.sw;
+    final sheetH = MediaQuery.sizeOf(context).height * 0.42;
+    return Scaffold(
+      body: Stack(children: [
+        const Positioned.fill(child: Skeleton.expand()),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: sheetH,
+          child: Container(
+            padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s5, SwSpace.s5, SwSpace.s5 + context.bottomInset),
+            decoration: BoxDecoration(color: c.surface, borderRadius: const BorderRadius.vertical(top: Radius.circular(SwRadius.lg))),
+            child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Center(child: SkeletonBox(width: 36, height: 4, radius: 2)),
+              SizedBox(height: SwSpace.s5),
+              SkeletonLine(width: 200, height: 22),
+              SizedBox(height: SwSpace.s2),
+              SkeletonLine(width: 140, height: 12),
+              SizedBox(height: SwSpace.s5),
+              SkeletonBox(height: 4, radius: 2),
+              SizedBox(height: SwSpace.s6),
+              Row(children: [
+                SkeletonAvatar(size: 44),
+                SizedBox(width: SwSpace.s3),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [SkeletonLine(width: 120, height: 14), SizedBox(height: SwSpace.s2), SkeletonLine(width: 80, height: 10)])),
+                SkeletonAvatar(size: 44),
+              ]),
+            ]),
+          ),
+        ),
+      ]),
+    );
+  }
 }

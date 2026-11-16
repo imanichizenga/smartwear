@@ -381,6 +381,13 @@ const Map<String, String> messagesEn = {
   'auth.otp.verified': 'Verified',
   'auth.otp.resent': 'A new code is on its way.',
   'common.offlineAction': 'You are offline. Check your connection and try again.',
+  'state.offline.title': 'You\'re offline',
+  'state.offline.body': 'Check your connection — we\'ll load this as soon as you\'re back.',
+  'bag.problems.title': 'Some items changed since you added them',
+  'bag.removed': 'Removed from your bag',
+  'bag.decrease': 'Decrease quantity',
+  'bag.increase': 'Increase quantity',
+  'common.undo': 'Undo',
 };
 
 const Map<String, String> messagesSw = {
@@ -757,4 +764,11 @@ const Map<String, String> messagesSw = {
   'auth.otp.verified': 'Imethibitishwa',
   'auth.otp.resent': 'Msimbo mpya unakuja.',
   'common.offlineAction': 'Hauko mtandaoni. Angalia muunganisho wako kisha ujaribu tena.',
+  'state.offline.title': 'Hauko mtandaoni',
+  'state.offline.body': 'Angalia muunganisho wako — tutapakia hii utakaporudi mtandaoni.',
+  'bag.problems.title': 'Baadhi ya bidhaa zimebadilika tangu uziweke',
+  'bag.removed': 'Imeondolewa kwenye mfuko',
+  'bag.decrease': 'Punguza idadi',
+  'bag.increase': 'Ongeza idadi',
+  'common.undo': 'Tendua',
 };

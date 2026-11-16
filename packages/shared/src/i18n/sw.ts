@@ -114,4 +114,11 @@ export const sw: Partial<Record<keyof typeof en, string>> = {
   'auth.otp.verified': 'Imethibitishwa',
   'auth.otp.resent': 'Msimbo mpya unakuja.',
   'common.offlineAction': 'Hauko mtandaoni. Angalia muunganisho wako kisha ujaribu tena.',
+  'state.offline.title': 'Hauko mtandaoni',
+  'state.offline.body': 'Angalia muunganisho wako — tutapakia hii utakaporudi mtandaoni.',
+  'bag.problems.title': 'Baadhi ya bidhaa zimebadilika tangu uziweke',
+  'bag.removed': 'Imeondolewa kwenye mfuko',
+  'bag.decrease': 'Punguza idadi',
+  'bag.increase': 'Ongeza idadi',
+  'common.undo': 'Tendua',
 };

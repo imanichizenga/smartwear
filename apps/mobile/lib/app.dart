@@ -42,7 +42,8 @@ class SmartWearApp extends ConsumerWidget {
       // Dynamic Type: honour the user's text size up to 130% (layouts are tested at that scale).
       builder: (context, child) {
         final mq = MediaQuery.of(context);
-        return MediaQuery(data: mq.copyWith(textScaler: mq.textScaler.clamp(maxScaleFactor: 1.3)), child: child!);
+        // One shared shimmer clock for every skeleton on screen.
+        return MediaQuery(data: mq.copyWith(textScaler: mq.textScaler.clamp(maxScaleFactor: 1.3)), child: SkeletonScope(child: child!));
       },
     );
   }

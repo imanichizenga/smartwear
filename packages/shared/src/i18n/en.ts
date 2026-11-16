@@ -394,4 +394,11 @@ export const en = {
   'auth.otp.verified': 'Verified',
   'auth.otp.resent': 'A new code is on its way.',
   'common.offlineAction': 'You are offline. Check your connection and try again.',
+  'state.offline.title': 'You\'re offline',
+  'state.offline.body': 'Check your connection — we\'ll load this as soon as you\'re back.',
+  'bag.problems.title': 'Some items changed since you added them',
+  'bag.removed': 'Removed from your bag',
+  'bag.decrease': 'Decrease quantity',
+  'bag.increase': 'Increase quantity',
+  'common.undo': 'Undo',
 } as const;

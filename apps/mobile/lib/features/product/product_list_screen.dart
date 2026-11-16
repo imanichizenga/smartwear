@@ -39,14 +39,22 @@ class ProductGridView extends ConsumerWidget {
     final page = ref.watch(productListProvider(query));
     final wish = ref.watch(wishlistProvider).value ?? const <String>{};
     return page.when(
-      loading: () => CustomScrollView(slivers: [if (header != null) SliverToBoxAdapter(child: header), const SliverToBoxAdapter(child: GridSkeleton())]),
-      error: (e, _) => EmptyState(title: ref.s('common.error.title'), body: e is ApiException ? e.message : null, action: SwButton(label: ref.s('common.retry'), onPressed: () => ref.refresh(productListProvider(query).future))),
+      skipLoadingOnRefresh: true,
+      skipLoadingOnReload: true,
+      loading: () => CustomScrollView(physics: const NeverScrollableScrollPhysics(), slivers: [if (header != null) SliverToBoxAdapter(child: header), const SliverToBoxAdapter(child: GridSkeleton())]),
+      error: (e, _) => CustomScrollView(slivers: [
+        if (header != null) SliverToBoxAdapter(child: header),
+        SliverFillRemaining(hasScrollBody: false, child: Center(child: LoadError(error: e, onRetry: () => ref.invalidate(productListProvider(query))))),
+      ]),
       data: (pg) => NotificationListener<ScrollNotification>(
         onNotification: (n) {
           if (n.metrics.extentAfter < 600) ref.read(productListProvider(query).notifier).loadMore();
           return false;
         },
-        child: CustomScrollView(slivers: [
+        child: RefreshIndicator(
+        color: context.sw.ink,
+        onRefresh: () => ref.refresh(productListProvider(query).future),
+        child: CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
           if (header != null) SliverToBoxAdapter(child: header),
           if (pg.items.isEmpty)
             SliverFillRemaining(hasScrollBody: false, child: EmptyState(title: ref.s('search.noResults.title'), body: ref.s('search.noResults.body'), icon: Ic.search))
@@ -77,11 +85,18 @@ class ProductGridView extends ConsumerWidget {
             ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, SwSpace.s8, 0, 120 + context.safe.bottom),
-              child: Center(child: pg.loadingMore ? const ALoader(size: ALoaderSize.lg) : const SizedBox.shrink()),
+              padding: EdgeInsets.fromLTRB(0, SwSpace.s8, 0, SwSpace.s8 + context.bottomInset),
+              child: Center(
+                child: pg.loadingMore
+                    ? const ALoader(size: ALoaderSize.lg)
+                    : pg.loadMoreFailed
+                        ? SwButton(label: ref.s('common.retry'), icon: Ic.refreshCw, variant: SwButtonVariant.ghost, onPressed: () => ref.read(productListProvider(query).notifier).loadMore(retry: true))
+                        : const SizedBox.shrink(),
+              ),
             ),
           ),
         ]),
+        ),
       ),
     );
   }
