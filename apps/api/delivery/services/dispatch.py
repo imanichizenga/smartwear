@@ -132,6 +132,12 @@ def update_location(rider: Rider, *, lat: float, lng: float, heading: float | No
 
 def _refresh_eta(job: DeliveryJob, lat: float, lng: float) -> None:
     to_store = job.status in ("ACCEPTED", "AT_STORE")
+    if not to_store and job.order.destination is None:
+        # Manual details without GPS: there is no point to route to, so no live ETA/route for this leg.
+        if job.eta_seconds is not None or job.route_polyline or job.route_leg != "to_client":
+            job.eta_seconds, job.route_polyline, job.route_leg = None, "", "to_client"
+            job.save(update_fields=["eta_seconds", "route_polyline", "route_leg"])
+        return
     target = job.pickup if to_store else job.dropoff
     leg = "to_store" if to_store else "to_client"
     now = timezone.now()
@@ -202,8 +208,15 @@ def create_job(order) -> DeliveryJob:
     if existing:
         return existing
     pricing = settings_service.get("delivery.pricing")
-    dist = order.distance_m or int(google_maps.haversine_m((order.store.location.y, order.store.location.x), (order.destination.y, order.destination.x)) * google_maps.DETOUR_FACTOR)
-    job = DeliveryJob.objects.create(order=order, store=order.store, pickup=order.store.location, dropoff=order.destination, distance_m=dist, earning=rider_earning(pricing, dist, order.delivery_fee), currency=order.currency, status="SEARCHING", searching_since=timezone.now())
+    if order.destination is not None:
+        dist = order.distance_m or int(google_maps.haversine_m((order.store.location.y, order.store.location.x), (order.destination.y, order.destination.x)) * google_maps.DETOUR_FACTOR)
+        dropoff = order.destination
+    else:
+        # Manual delivery details without GPS: no coordinates to route to. The store stands in as the job's point
+        # (the column is required) and riders get the written location + a call instead of a map pin.
+        dist = order.distance_m or pricing.includedMeters
+        dropoff = order.store.location
+    job = DeliveryJob.objects.create(order=order, store=order.store, pickup=order.store.location, dropoff=dropoff, distance_m=dist, earning=rider_earning(pricing, dist, order.delivery_fee), currency=order.currency, status="SEARCHING", searching_since=timezone.now())
     if order.status == "CONFIRMED":
         from commerce.services.orders import transition
 
@@ -380,7 +393,8 @@ def advance(job: DeliveryJob, to: str, *, actor: str, actor_id: str = "", pin: s
             job.pin_attempts += 1
             job.save(update_fields=["pin_attempts"])
             raise ApiError("That PIN doesn't match. Ask the customer to check their app.", status_code=400, code="pin_invalid", details={"attemptsRemaining": max(0, 5 - job.pin_attempts)})
-    if to == "ARRIVED" and lat is not None and lng is not None:
+    # Proximity check only when the customer gave real coordinates (manual orders without GPS have none).
+    if to == "ARRIVED" and lat is not None and lng is not None and job.order.destination is not None:
         dist = google_maps.haversine_m((lat, lng), (job.dropoff.y, job.dropoff.x))
         if dist > 600:
             raise ApiError.conflict("too_far", f"You're {dist / 1000:.1f} km from the drop-off. Get closer before marking arrived.")
@@ -526,7 +540,9 @@ def offer_out(o: DeliveryOffer) -> dict[str, Any]:
         "earning": o.earning, "currency": j.currency, "distanceToStoreMeters": o.distance_to_store_m, "tripDistanceMeters": j.distance_m,
         "store": {"name": j.store.name, "address": j.store.address, "location": {"lat": j.pickup.y, "lng": j.pickup.x}},
         # Drop-off is approximate (~300m grid) until accepted — protects the customer's exact location.
-        "dropoffArea": {"label": order.destination_area or "Customer area", "approx": {"lat": round(j.dropoff.y, 3), "lng": round(j.dropoff.x, 3)}},
+        # Manual orders without GPS have no drop-off point at all.
+        "dropoffArea": {"label": order.destination_area or "Customer area", "approx": {"lat": round(j.dropoff.y, 3), "lng": round(j.dropoff.x, 3)} if order.destination is not None else None},
+        "locationMode": order.location_mode,
         "items": order.items.count(),
     }
 
@@ -534,16 +550,22 @@ def offer_out(o: DeliveryOffer) -> dict[str, Any]:
 def job_out(j: DeliveryJob, *, for_rider: bool = False) -> dict[str, Any]:
     order = j.order
     show_exact = j.status in state.RIDER_HOLDS
+    has_point = order.destination is not None
+    nav_target = j.pickup if j.status in ("ACCEPTED", "AT_STORE") else (j.dropoff if has_point else None)
     out = {
         "id": str(j.id), "status": j.status, "orderId": str(order.id), "orderNumber": order.number, "earning": j.earning, "currency": j.currency, "distanceMeters": j.distance_m,
         "store": {"id": str(j.store_id), "name": j.store.name, "address": j.store.address, "phone": j.store.phone or None, "location": {"lat": j.pickup.y, "lng": j.pickup.x}},
-        "dropoff": {"location": {"lat": j.dropoff.y, "lng": j.dropoff.x}, "label": order.destination_label, "area": order.destination_area, "landmark": order.landmark_note or None} if show_exact or not for_rider else None,
+        "dropoff": {
+            "location": {"lat": j.dropoff.y, "lng": j.dropoff.x} if has_point else None, "label": order.destination_label, "area": order.destination_area, "landmark": order.landmark_note or None,
+            # Manual mode: what the customer wrote. Riders without a pin call the customer.
+            "locationMode": order.location_mode, "locationDetails": order.location_details or None, "deliveryNotes": order.delivery_notes or None,
+        } if show_exact or not for_rider else None,
         "customer": {"firstName": (order.contact_name or "Customer").split(" ")[0], "phone": order.contact_phone} if show_exact else None,
         "payment": {"method": order.payment_method, "collect": order.total if order.payment_method == "CASH_ON_DELIVERY" and order.payment_status != "PAID" else 0},
         "items": [{"title": i.title, "options": i.options_label, "qty": i.qty} for i in order.items.all()],
         "route": j.route_polyline or None, "routeLeg": j.route_leg or None, "etaSeconds": j.eta_seconds, "pinRequired": settings_service.get("delivery.dispatch").deliveryPinEnabled,
         "nextStep": {"ACCEPTED": "AT_STORE", "AT_STORE": "PICKED_UP", "PICKED_UP": "EN_ROUTE", "EN_ROUTE": "ARRIVED", "ARRIVED": "COMPLETED"}.get(j.status),
         "timeline": {k: getattr(j, f"{k}_at").isoformat() if getattr(j, f"{k}_at") else None for k in ("accepted", "at_store", "picked_up", "en_route", "arrived", "completed")},
-        "navigationUrl": f"https://www.google.com/maps/dir/?api=1&destination={(j.pickup if j.status in ('ACCEPTED', 'AT_STORE') else j.dropoff).y},{(j.pickup if j.status in ('ACCEPTED', 'AT_STORE') else j.dropoff).x}&travelmode=driving" if show_exact else None,
+        "navigationUrl": f"https://www.google.com/maps/dir/?api=1&destination={nav_target.y},{nav_target.x}&travelmode=driving" if show_exact and nav_target is not None else None,
     }
     return out

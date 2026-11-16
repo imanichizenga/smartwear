@@ -162,6 +162,12 @@ class Order(UUIDModel):
     destination_label = models.CharField(max_length=240, blank=True, default="")
     destination_area = models.CharField(max_length=80, blank=True, default="")
     landmark_note = models.CharField(max_length=120, blank=True, default="")
+    # How the delivery location was given: "automatic" (map pin / GPS) or "manual" (written details). In manual
+    # mode `destination` may be empty (no GPS) and the rider relies on the written details and a call.
+    location_mode = models.CharField(max_length=10, default="automatic", choices=[("automatic", "Automatic (map)"), ("manual", "Manual (form)")])
+    location_details = models.TextField(blank=True, default="", max_length=500)
+    delivery_notes = models.TextField(blank=True, default="", max_length=500)
+    location_accuracy_m = models.FloatField(null=True, blank=True)
     distance_m = models.PositiveIntegerField(null=True, blank=True)
     contact_name = models.CharField(max_length=120, blank=True, default="")
     contact_phone = models.CharField(max_length=20, blank=True, default="")

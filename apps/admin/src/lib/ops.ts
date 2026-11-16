@@ -61,6 +61,8 @@ export interface OrderDetail {
   deliveryOption: { id: string; kind: string; name: string; etaMinMinutes: number; etaMaxMinutes: number } | null;
   store: { id: string; name: string; address: string; location: LatLng; phone: string | null };
   destination: { location: LatLng; label: string; area: string | null; landmark: string | null } | null;
+  /** How the shopper gave the location; manual orders carry written details (and may have no coordinates). */
+  location?: { mode: 'automatic' | 'manual'; details: string | null; notes: string | null; hasCoordinates: boolean; accuracyMeters: number | null };
   eta: { minMinutes: number | null; maxMinutes: number | null; promisedBy: string | null; liveSeconds: number | null };
   payment: { method: string; status: string; checkoutUrl: string | null };
   items: { id: number; productId: string | null; title: string; brand: string | null; options: string; sku: string; image: MediaOut | null; qty: number; unitPrice: number; retailUnitPrice: number; basis: string; tier: { minQty: number } | null; lineTotal: number; savings: number }[];

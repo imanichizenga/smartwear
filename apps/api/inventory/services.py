@@ -109,22 +109,26 @@ def _touch_product(variant) -> None:
     Product.objects.filter(id=variant.product_id).exclude(in_stock=in_stock).update(in_stock=in_stock)
 
 
-def nearest_store_with_stock(lat: float, lng: float, lines: list[tuple], *, pickup: bool = False) -> tuple[Store | None, float | None, list[Store]]:
-    """Closest active store (by road-agnostic geodesic distance) that can fulfil every line."""
-    point = Point(lng, lat, srid=4326)
-    stores = list(
-        Store.objects.filter(is_active=True, **({"allows_pickup": True} if pickup else {"fulfils_delivery": True}))
-        .annotate(dist=Distance("location", point)).order_by("dist")
-    )
+def nearest_store_with_stock(lat: float | None, lng: float | None, lines: list[tuple], *, pickup: bool = False) -> tuple[Store | None, float | None, list[Store]]:
+    """Closest active store (by road-agnostic geodesic distance) that can fulfil every line.
+    Without a location (manual delivery details, no GPS) stores are taken in their admin sort order."""
+    qs = Store.objects.filter(is_active=True, **({"allows_pickup": True} if pickup else {"fulfils_delivery": True}))
+    if lat is None or lng is None:
+        stores = list(qs.order_by("sort_order", "name"))
+        for s in stores:
+            s.dist = None
+    else:
+        point = Point(lng, lat, srid=4326)
+        stores = list(qs.annotate(dist=Distance("location", point)).order_by("dist"))
     if not lines:
-        return (stores[0], stores[0].dist.m, stores) if stores else (None, None, [])
+        return (stores[0], stores[0].dist.m if stores[0].dist is not None else None, stores) if stores else (None, None, [])
     variant_ids = [v.id for v, _ in lines]
     avail: dict = {}
     for lvl in InventoryLevel.objects.filter(variant_id__in=variant_ids, store__in=stores).values("store_id", "variant_id").annotate(a=F("on_hand") - F("reserved")):
         avail[(lvl["store_id"], lvl["variant_id"])] = lvl["a"]
     for s in stores:
         if all(avail.get((s.id, v.id), 0) >= q for v, q in lines):
-            return s, s.dist.m, stores
+            return s, (s.dist.m if s.dist is not None else None), stores
     return None, None, stores
 
 

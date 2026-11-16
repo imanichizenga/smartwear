@@ -178,6 +178,10 @@ def order_out(order: Order, *, viewer: str = "customer", locale: str = "en") -> 
         "promoCode": order.promo_code or None, "fulfilment": order.fulfilment, "deliveryOption": order.delivery_option,
         "store": {"id": str(order.store_id), "name": order.store.name, "address": order.store.address, "location": _point(order.store.location), "phone": order.store.phone or None},
         "destination": {"location": _point(order.destination), "label": order.destination_label, "area": order.destination_area or None, "landmark": order.landmark_note or None} if order.destination else None,
+        "location": {
+            "mode": order.location_mode, "details": order.location_details or None, "notes": order.delivery_notes or None,
+            "hasCoordinates": order.destination is not None, "accuracyMeters": order.location_accuracy_m,
+        },
         "eta": {"minMinutes": order.eta_min_minutes, "maxMinutes": order.eta_max_minutes, "promisedBy": order.promised_by.isoformat() if order.promised_by else None, "liveSeconds": job.eta_seconds if job else None},
         "payment": {"method": order.payment_method, "status": order.payment_status, "checkoutUrl": next((p.checkout_url for p in order.payments.all() if p.status == "PENDING" and p.checkout_url), None)},
         "items": [{"id": i.id, "productId": str(i.product_id) if i.product_id else None, "variantId": str(i.variant_id) if i.variant_id else None, "title": i.title, "brand": i.brand or None, "options": i.options_label, "sku": i.sku, "image": media_out(i.image) if i.image_id else None, "qty": i.qty, "unitPrice": i.unit_price, "retailUnitPrice": i.retail_unit_price, "basis": i.price_basis, "tier": i.tier, "lineTotal": i.line_total, "savings": i.savings, "reviewed": i.reviewed} for i in order.items.all()],

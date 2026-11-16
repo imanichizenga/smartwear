@@ -207,6 +207,23 @@ export function OrderDetail({ initial }: { initial: Order }) {
               {o.contact.name && o.contact.name !== o.customer.name && <div className="mt-1 text-muted">Recipient: {o.contact.name}</div>}
               {Object.entries(o.extraFields ?? {}).map(([k, v]) => <div key={k} className="mt-1 text-muted">{titleCase(k)}: {v}</div>)}
             </div>
+            {o.location?.mode === 'manual' && (
+              <div className="grid gap-3 border-t border-hairline px-5 py-4 text-[13px]">
+                <div className="flex items-center gap-2">
+                  <span className="label-caps text-muted">Delivery details</span>
+                  <Chip tone="neutral">Manual</Chip>
+                  {!o.location.hasCoordinates && <Chip tone="warning">No GPS — call the customer</Chip>}
+                </div>
+                {o.location.details && (
+                  <div className="flex gap-2">
+                    <MapPin className="mt-0.5 size-4 shrink-0 text-muted" strokeWidth={1.5} />
+                    <p className="whitespace-pre-line font-semibold">{o.location.details}</p>
+                  </div>
+                )}
+                {o.location.notes && <p className="whitespace-pre-line rounded-sm bg-canvas px-3 py-2 text-muted">{o.location.notes}</p>}
+                {o.location.hasCoordinates && o.location.accuracyMeters != null && <p className="text-xs text-subtle">Detected location, accurate to about {Math.round(o.location.accuracyMeters)} m.</p>}
+              </div>
+            )}
           </Card>
           <Card>
             <CardHeader title="Payment" actions={<Chip tone={paymentTone(o.payment.status)}>{titleCase(o.payment.status)}</Chip>} />

@@ -42,9 +42,19 @@ class ConfigNotifier extends AsyncNotifier<Json> {
     });
     if (cached != null) {
       fresh.then((c) => state = AsyncData(c), onError: (_) {});
-      return Map<String, dynamic>.from(jsonDecode(cached) as Map);
+      try {
+        return Map<String, dynamic>.from(jsonDecode(cached) as Map);
+      } catch (_) {
+        // Corrupt cache: fall through to the network copy.
+      }
     }
     return fresh;
+  }
+
+  /// A fresher copy fetched elsewhere (e.g. checkout re-reads the location mode).
+  void replace(Json c) {
+    state = AsyncData(c);
+    ref.read(prefsProvider).setString(_key, jsonEncode(c));
   }
 }
 

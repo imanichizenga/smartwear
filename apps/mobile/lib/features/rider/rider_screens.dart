@@ -664,6 +664,18 @@ class _JobScreen extends ConsumerWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             if (!toStore && j.obj('dropoff')?.strN('landmark') != null) Text('“${j.obj('dropoff')!.str('landmark')}”', style: context.type.caption.copyWith(color: c.muted)),
+                            // Manual delivery details: what the customer wrote (and a "call" hint when there's no GPS pin).
+                            if (!toStore && j.obj('dropoff')?.strN('locationDetails') != null) ...[
+                              const SizedBox(height: SwSpace.s1),
+                              Text(j.obj('dropoff')!.str('locationDetails'), style: context.type.bodyS, maxLines: 3, overflow: TextOverflow.ellipsis),
+                            ],
+                            if (!toStore && j.obj('dropoff')?.strN('deliveryNotes') != null)
+                              Text(j.obj('dropoff')!.str('deliveryNotes'), style: context.type.caption.copyWith(color: c.muted), maxLines: 2, overflow: TextOverflow.ellipsis),
+                            if (!toStore && j.obj('dropoff') != null && j.obj('dropoff')!['location'] == null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: SwSpace.s1),
+                                child: Text(s('rider.noPinCall'), style: context.type.caption.copyWith(color: c.warning)),
+                              ),
                             if (toStore)
                               Text(
                                 j.list('items').map((i) => '${i.integer('qty')}× ${i.str('title')}').join(', '),

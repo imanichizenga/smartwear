@@ -37,9 +37,35 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     Future.microtask(() => ref.read(deliveryPointProvider.notifier).init());
   }
 
-  Future<void> _place(Json q) async {
+  /// Manual-mode validation errors, keyed 'location' / 'notes'.
+  Map<String, String> _manualErrors = const {};
+  final _manualKey = GlobalKey();
+
+  bool _validateManual(Json cfg) {
+    final d = ref.read(manualDetailsProvider);
     final s = ref.s;
-    final dp = ref.read(deliveryPointProvider).point!;
+    final errors = <String, String>{
+      if (cfg.manualField['required'] != false && d.location.trim().isEmpty) 'location': s('checkout.manual.required'),
+      if (cfg.notesField['required'] == true && d.notes.trim().isEmpty) 'notes': s('checkout.manual.required'),
+    };
+    setState(() => _manualErrors = errors);
+    if (errors.isNotEmpty) {
+      HapticFeedback.heavyImpact();
+      final ctx = _manualKey.currentContext;
+      if (ctx != null) Scrollable.ensureVisible(ctx, duration: SwMotion.base, curve: SwMotion.atelier, alignment: 0.1);
+    }
+    return errors.isEmpty;
+  }
+
+  Future<void> _place(Json q) async {
+    if (_placing) return;
+    final s = ref.s;
+    final cfg = ref.read(checkoutConfigProvider).value ?? const {};
+    final manual = cfg.manualLocation;
+    if (manual && !_validateManual(cfg)) return;
+    final dp = ref.read(deliveryPointProvider).point;
+    if (dp == null && !manual) return;
+    final details = ref.read(manualDetailsProvider);
     final choice = ref.read(checkoutChoiceProvider);
     final method = choice.method ?? q.obj('payment')?.obj('default')?.strN('method');
     setState(() => _placing = true);
@@ -49,20 +75,25 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           .post<Json>(
             '/orders',
             {
-              'lat': dp.point.lat,
-              'lng': dp.point.lng,
+              if (dp != null) 'lat': dp.point.lat,
+              if (dp != null) 'lng': dp.point.lng,
+              if (dp?.accuracy != null) 'accuracy': dp!.accuracy,
               'deliveryOptionId': q.strN('selectedOptionId'),
               'expectedTotal': q.obj('cart')?.integer('total'),
               'paymentMethod': method,
               if (choice.msisdn != null) 'msisdn': choice.msisdn,
-              if (dp.label != null) 'label': dp.label,
-              if (dp.area != null) 'area': dp.area,
-              if (dp.landmark != null) 'landmarkNote': dp.landmark,
+              if (!manual && dp?.label != null) 'label': dp!.label,
+              if (dp?.area != null) 'area': dp!.area,
+              if (!manual && dp?.landmark != null) 'landmarkNote': dp!.landmark,
+              if (manual) 'locationMode': 'manual',
+              if (manual) 'locationDetails': details.location.trim(),
+              if (manual) 'deliveryNotes': details.notes.trim(),
               if (choice.extra.isNotEmpty) 'extraFields': choice.extra,
             },
             {'Idempotency-Key': _idem},
           );
       HapticFeedback.mediumImpact();
+      ref.read(manualDetailsProvider.notifier).clear();
       ref.invalidate(cartProvider);
       ref.invalidate(ordersProvider);
       if (!mounted) return;
@@ -77,6 +108,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       if (e.code == 'total_changed' || e.code == 'checkout_problems') {
         ref.invalidate(quoteProvider);
         showSwToast(context, s('checkout.priceChanged'), error: true);
+      } else if (e.details['field'] == 'locationDetails' || e.details['field'] == 'deliveryNotes' || e.details['field'] == 'location') {
+        // The admin switched the location mode while this checkout was open: reload it in the new mode.
+        ref.invalidate(checkoutConfigProvider);
+        showSwToast(context, e.message, error: true);
+      } else if (e.isNetwork) {
+        showSwToast(context, s('common.offlineAction'), error: true);
       } else {
         showSwToast(context, e.message, error: true);
       }
@@ -85,10 +122,78 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
 
+  /// Everything priced by the quote — the same in both location modes.
+  List<Widget> _quoteSections(AsyncValue<Json?> quote, Json? q) {
+    final s = ref.s;
+    final c = context.sw;
+    if (quote.isLoading && q == null) return const [_QuoteSkeleton()];
+    if (quote.hasError && q == null) {
+      return [LoadError(error: quote.error!, onRetry: () => ref.invalidate(quoteProvider))];
+    }
+    if (q == null) return const [];
+    return [
+      for (final p in q.list('problems')) _Problem(p: p),
+      _Section(s('checkout.deliveryOption')),
+      _OptionCards(q: q),
+      const SizedBox(height: SwSpace.s6),
+      _Section(s('checkout.payment')),
+      _PaymentRow(q: q),
+      const SizedBox(height: SwSpace.s6),
+      _Section(s('checkout.summary')),
+      _Summary(q: q),
+      if (q.list('extraFields').isNotEmpty) ...[const SizedBox(height: SwSpace.s6), _ExtraFields(fields: q.list('extraFields'))],
+      const SizedBox(height: SwSpace.s5),
+      Row(
+        children: [
+          Icon(Ic.phone, size: 16, color: c.muted),
+          const SizedBox(width: SwSpace.s2),
+          Expanded(child: Text(s('checkout.contact', {'phone': q.obj('contact')?.str('phone') ?? ''}), style: context.type.caption.copyWith(color: c.muted))),
+        ],
+      ),
+    ];
+  }
+
+  /// Manual mode: no map is built or loaded. Detected location (read-only), the two written fields, then the
+  /// same priced sections and the place bar.
+  Widget _buildManual(Json cfg) {
+    final s = ref.s;
+    final quote = ref.watch(quoteProvider);
+    final q = quote.value;
+    return Scaffold(
+      appBar: AppBar(
+        leading: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), onPressed: () => context.canPop() ? context.pop() : context.go('/bag')),
+        title: Text(s('checkout.title'), style: context.type.titleM),
+        centerTitle: true,
+      ),
+      body: Column(children: [
+        Expanded(
+          child: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s2, SwSpace.s5, SwSpace.s8),
+            children: [
+              const _DetectedLocationChip(),
+              const SizedBox(height: SwSpace.s5),
+              KeyedSubtree(key: _manualKey, child: _ManualDetailsForm(cfg: cfg, errors: _manualErrors, onEdited: (k) {
+                if (_manualErrors.containsKey(k)) setState(() => _manualErrors = {..._manualErrors}..remove(k));
+              })),
+              const SizedBox(height: SwSpace.s6),
+              ..._quoteSections(quote, q),
+            ],
+          ),
+        ),
+        if (q != null) _PlaceBar(q: q, placing: _placing, onPlace: () => _place(q)),
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.s;
     final c = context.sw;
+    final cfgAsync = ref.watch(checkoutConfigProvider);
+    if (!cfgAsync.hasValue) return const _CheckoutSkeleton();
+    final cfg = cfgAsync.value!;
+    if (cfg.manualLocation) return _buildManual(cfg);
     final dps = ref.watch(deliveryPointProvider);
     final quote = ref.watch(quoteProvider);
     final q = quote.value;
@@ -98,9 +203,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final route = decodePolyline(q?.obj('route')?.strN('polyline'));
 
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
+      body: Column(children: [
+        Expanded(
+          child: CustomScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverToBoxAdapter(
                 child: SizedBox(
@@ -140,7 +246,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       Positioned(
                         top: context.safe.top + SwSpace.s2,
                         left: SwSpace.s4,
-                        child: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), filled: true, onPressed: () => context.pop()),
+                        child: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), filled: true, onPressed: () => context.canPop() ? context.pop() : context.go('/bag')),
                       ),
                       Positioned(
                         top: context.safe.top + SwSpace.s4,
@@ -162,60 +268,221 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s4, SwSpace.s5, 160 + context.safe.bottom),
-                sliver: SliverList.list(
-                  children: [
-                    if (dest == null)
-                      const SizedBox.shrink()
-                    else if (quote.isLoading && q == null) ...[
-                      for (var i = 0; i < 3; i++)
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: SwSpace.s3),
-                          child: Skeleton(height: 72, radius: SwRadius.md),
-                        ),
-                    ] else if (quote.hasError)
-                      EmptyState(
-                        title: s('common.error.title'),
-                        body: (quote.error is ApiException) ? (quote.error as ApiException).message : null,
-                        action: SwButton(label: s('common.retry'), onPressed: () => ref.invalidate(quoteProvider)),
-                      )
-                    else if (q != null) ...[
-                      for (final p in q.list('problems')) _Problem(p: p),
-                      _Section(s('checkout.deliveryOption')),
-                      _OptionCards(q: q),
-                      const SizedBox(height: SwSpace.s6),
-                      _Section(s('checkout.payment')),
-                      _PaymentRow(q: q),
-                      const SizedBox(height: SwSpace.s6),
-                      _Section(s('checkout.summary')),
-                      _Summary(q: q),
-                      if (q.list('extraFields').isNotEmpty) ...[const SizedBox(height: SwSpace.s6), _ExtraFields(fields: q.list('extraFields'))],
-                      const SizedBox(height: SwSpace.s5),
-                      Row(
-                        children: [
-                          Icon(Ic.phone, size: 16, color: c.muted),
-                          const SizedBox(width: SwSpace.s2),
-                          Expanded(
-                            child: Text(s('checkout.contact', {'phone': q.obj('contact')?.str('phone') ?? ''}), style: context.type.caption.copyWith(color: c.muted)),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
+                padding: const EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s4, SwSpace.s5, SwSpace.s8),
+                sliver: SliverList.list(children: dest == null ? const [] : _quoteSections(quote, q)),
               ),
             ],
           ),
-          if (q != null)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _PlaceBar(q: q, placing: _placing, onPlace: () => _place(q)),
-            ),
-        ],
+        ),
+        // The place bar sits under the content (not over it), so nothing hides behind it on any phone.
+        if (q != null) _PlaceBar(q: q, placing: _placing, onPlace: () => _place(q)),
+      ]),
+    );
+  }
+}
+
+/// While the location mode is being read: the shape of the checkout (map band, sections, place bar).
+class _CheckoutSkeleton extends StatelessWidget {
+  const _CheckoutSkeleton();
+  @override
+  Widget build(BuildContext context) {
+    final mapH = math.min(360.0, MediaQuery.sizeOf(context).height * 0.42);
+    return Scaffold(
+      body: Column(children: [
+        SizedBox(height: mapH, child: const Skeleton.expand()),
+        const Expanded(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s5, SwSpace.s5, 0),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [_QuoteSkeleton()]),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s4, SwSpace.s5, SwSpace.s4 + context.bottomInset),
+          decoration: BoxDecoration(color: context.sw.surface, border: Border(top: BorderSide(color: context.sw.hairline))),
+          child: const Column(mainAxisSize: MainAxisSize.min, children: [
+            Row(children: [SkeletonLine(width: 60, height: 16), Spacer(), SkeletonLine(width: 120, height: 22)]),
+            SizedBox(height: SwSpace.s3),
+            SkeletonBox(height: 56, radius: SwRadius.full),
+          ]),
+        ),
+      ]),
+    );
+  }
+}
+
+/// Delivery options, payment row and summary, in their real shapes.
+class _QuoteSkeleton extends StatelessWidget {
+  const _QuoteSkeleton();
+  @override
+  Widget build(BuildContext context) {
+    return const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SkeletonLine(width: 120, height: 10),
+      SizedBox(height: SwSpace.s3),
+      SkeletonBox(height: 72, radius: SwRadius.md),
+      SizedBox(height: SwSpace.s3),
+      SkeletonBox(height: 72, radius: SwRadius.md),
+      SizedBox(height: SwSpace.s6),
+      SkeletonLine(width: 80, height: 10),
+      SizedBox(height: SwSpace.s3),
+      SkeletonBox(height: 56, radius: SwRadius.md),
+      SizedBox(height: SwSpace.s6),
+      SkeletonLine(width: 90, height: 10),
+      SizedBox(height: SwSpace.s3),
+      Row(children: [SkeletonLine(width: 80), Spacer(), SkeletonLine(width: 70)]),
+      SizedBox(height: SwSpace.s2),
+      Row(children: [SkeletonLine(width: 64), Spacer(), SkeletonLine(width: 56)]),
+    ]);
+  }
+}
+
+/// Manual mode: the silently detected location, read-only. Manual checkout works without it.
+class _DetectedLocationChip extends ConsumerWidget {
+  const _DetectedLocationChip();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.s;
+    final c = context.sw;
+    final dps = ref.watch(deliveryPointProvider);
+    final p = dps.point;
+    final loc = ref.read(locationServiceProvider);
+    final String title;
+    final String? sub;
+    String? action;
+    Future<void> Function()? onAction;
+    if (p != null) {
+      title = p.area ?? p.label ?? s('checkout.manual.detected');
+      sub = [
+        if (p.area != null && p.label != null && p.label != p.area) p.label!,
+        if (p.accuracy != null) s('checkout.accuracy', {'meters': p.accuracy!.round()}),
+      ].join(' · ');
+    } else if (dps.locating) {
+      title = s('checkout.manual.detecting');
+      sub = null;
+    } else {
+      title = s('checkout.manual.notDetected');
+      switch (dps.permission) {
+        case LocPermission.serviceOff:
+          sub = s('checkout.manual.serviceOff');
+          action = s('checkout.manual.turnOn');
+          onAction = loc.openLocationSettings;
+        case LocPermission.deniedForever:
+          sub = s('checkout.manual.deniedForever');
+          action = s('checkout.manual.openSettings');
+          onAction = loc.openSettings;
+        default:
+          sub = s('checkout.manual.optional');
+          action = s('checkout.manual.useLocation');
+          onAction = () => ref.read(deliveryPointProvider.notifier).requestAndLocate();
+      }
+    }
+    return Semantics(
+      container: true,
+      label: '${s('checkout.manual.detectedLabel')}: $title',
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(SwSpace.s4, SwSpace.s3, SwSpace.s3, SwSpace.s3),
+        decoration: BoxDecoration(color: c.surface, borderRadius: BorderRadius.circular(SwRadius.md), border: Border.all(color: c.hairline)),
+        child: Row(children: [
+          if (dps.locating) const ALoader(size: ALoaderSize.xs) else Icon(p != null ? Ic.mapPin : Ic.locateFixed, size: 18, color: p != null ? c.ink : c.muted),
+          const SizedBox(width: SwSpace.s3),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+              Text(caps(s('checkout.manual.detectedLabel')), style: context.type.labelS.copyWith(color: c.muted)),
+              const SizedBox(height: 2),
+              Text(title, style: context.type.titleS, maxLines: 1, overflow: TextOverflow.ellipsis),
+              if (sub != null && sub.isNotEmpty) Text(sub, style: context.type.caption.copyWith(color: c.muted), maxLines: 2, overflow: TextOverflow.ellipsis),
+            ]),
+          ),
+          if (action != null && onAction != null) SwButton(label: action, variant: SwButtonVariant.ghost, onPressed: onAction),
+        ]),
       ),
     );
+  }
+}
+
+/// The two admin-configured fields (labels in English / Swahili), multi-line with counters. Text lives in
+/// [manualDetailsProvider] so it survives rebuilds and leaving/returning to checkout.
+class _ManualDetailsForm extends ConsumerStatefulWidget {
+  const _ManualDetailsForm({required this.cfg, required this.errors, required this.onEdited});
+  final Json cfg;
+  final Map<String, String> errors;
+  final ValueChanged<String> onEdited;
+  @override
+  ConsumerState<_ManualDetailsForm> createState() => _ManualDetailsFormState();
+}
+
+class _ManualDetailsFormState extends ConsumerState<_ManualDetailsForm> {
+  late final TextEditingController _loc;
+  late final TextEditingController _notes;
+  final _locFocus = FocusNode();
+  final _notesFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    final d = ref.read(manualDetailsProvider);
+    _loc = TextEditingController(text: d.location);
+    _notes = TextEditingController(text: d.notes);
+  }
+
+  @override
+  void dispose() {
+    _loc.dispose();
+    _notes.dispose();
+    _locFocus.dispose();
+    _notesFocus.dispose();
+    super.dispose();
+  }
+
+  String _t(Json f, String key, String fallback) {
+    final sw = ref.watch(localeProvider) == 'sw';
+    final v = sw ? (f.strN('${key}Sw') ?? f.strN(key)) : f.strN(key);
+    return (v == null || v.isEmpty) ? fallback : v;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.s;
+    final lf = widget.cfg.manualField;
+    final nf = widget.cfg.notesField;
+    String label(Json f, String fallback) => '${_t(f, 'label', fallback)}${f['required'] == false ? ' ${s('checkout.manual.optionalTag')}' : ''}';
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      SwTextField(
+        controller: _loc,
+        focusNode: _locFocus,
+        label: label(lf, s('checkout.manual.location')),
+        hint: _t(lf, 'placeholder', ''),
+        error: widget.errors['location'],
+        minLines: 2,
+        maxLines: 4,
+        maxLength: lf.integer('maxLength', 300),
+        showCounter: true,
+        textCapitalization: TextCapitalization.sentences,
+        textInputAction: TextInputAction.next,
+        onSubmitted: (_) => _notesFocus.requestFocus(),
+        onChanged: (v) {
+          ref.read(manualDetailsProvider.notifier).location(v);
+          widget.onEdited('location');
+        },
+      ),
+      const SizedBox(height: SwSpace.s5),
+      SwTextField(
+        controller: _notes,
+        focusNode: _notesFocus,
+        label: label(nf, s('checkout.manual.notes')),
+        hint: _t(nf, 'placeholder', ''),
+        error: widget.errors['notes'],
+        minLines: 2,
+        maxLines: 5,
+        maxLength: nf.integer('maxLength', 300),
+        showCounter: true,
+        textCapitalization: TextCapitalization.sentences,
+        textInputAction: TextInputAction.done,
+        onChanged: (v) {
+          ref.read(manualDetailsProvider.notifier).notes(v);
+          widget.onEdited('notes');
+        },
+      ),
+    ]);
   }
 }
 
@@ -810,7 +1077,7 @@ class _PlaceBar extends ConsumerWidget {
     final cart = q.obj('cart') ?? const {};
     final can = q.flag('canPlace') || (q.list('problems').isEmpty && q.strN('selectedOptionId') != null && !q.flag('requiresPhone'));
     return Container(
-      padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s4, SwSpace.s5, SwSpace.s4 + context.safe.bottom),
+      padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s4, SwSpace.s5, SwSpace.s4 + context.bottomInset),
       decoration: BoxDecoration(
         color: c.surface,
         border: Border(top: BorderSide(color: c.hairline)),

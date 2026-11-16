@@ -67,6 +67,9 @@ class LocationService {
 
   Future<void> openSettings() => Geolocator.openAppSettings();
 
+  /// The phone's Location switch (when location services are off).
+  Future<void> openLocationSettings() => Geolocator.openLocationSettings();
+
   static LocFix _fix(Position p, {required bool precise}) => LocFix(LatLngD(p.latitude, p.longitude), accuracy: p.accuracy, heading: p.heading >= 0 ? p.heading : null, speed: p.speed, precise: precise);
 
   static LocPermission _map(LocationPermission p) => switch (p) {

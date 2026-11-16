@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api.dart';
 import '../../core/geo.dart';
 import '../../core/location.dart';
+import '../../core/providers.dart';
 
 enum PointSource { gps, saved, search, map }
 
@@ -97,12 +98,52 @@ class CheckoutChoiceNotifier extends Notifier<CheckoutChoice> {
   void extra(String k, String v) => state = state.copyWith(extra: {...state.extra, k: v});
 }
 
+/* ------------------------------------------------------------------ location mode */
+
+/// The checkout section of the public config, re-read every time checkout opens so an admin switching
+/// Automatic ↔ Manual applies to the very next checkout. Falls back to the cached config when offline.
+final checkoutConfigProvider = FutureProvider.autoDispose<Json>((ref) async {
+  final cached = ref.read(configProvider).value;
+  try {
+    final fresh = await ref.read(apiProvider).get<Json>('/config/public').timeout(const Duration(milliseconds: 2500));
+    ref.read(configProvider.notifier).replace(fresh);
+    return fresh.obj('checkout') ?? const {};
+  } catch (_) {
+    return cached?.obj('checkout') ?? const {};
+  }
+});
+
+extension CheckoutConfigX on Json {
+  bool get manualLocation => str('locationMode', 'automatic') == 'manual';
+  Json get manualField => obj('manualDetailFields')?.obj('location') ?? const {};
+  Json get notesField => obj('manualDetailFields')?.obj('notes') ?? const {};
+}
+
+/// What the shopper typed in manual mode. Not auto-disposed: leaving checkout and coming back (or any
+/// rebuild) keeps the text.
+class ManualDetails {
+  const ManualDetails({this.location = '', this.notes = ''});
+  final String location, notes;
+}
+
+final manualDetailsProvider = NotifierProvider<ManualDetailsNotifier, ManualDetails>(ManualDetailsNotifier.new);
+
+class ManualDetailsNotifier extends Notifier<ManualDetails> {
+  @override
+  ManualDetails build() => const ManualDetails();
+  void location(String v) => state = ManualDetails(location: v, notes: state.notes);
+  void notes(String v) => state = ManualDetails(location: state.location, notes: v);
+  void clear() => state = const ManualDetails();
+}
+
 /// Server quote for the current point + option. All prices, fees and ETAs come from here.
+/// Manual mode quotes with or without coordinates (the server prices it without GPS).
 final quoteProvider = FutureProvider.autoDispose<Json?>((ref) async {
+  final cfg = await ref.watch(checkoutConfigProvider.future);
   final p = ref.watch(deliveryPointProvider.select((s) => s.point?.point));
   final option = ref.watch(checkoutChoiceProvider.select((c) => c.optionId));
-  if (p == null) return null;
-  return ref.read(apiProvider).post<Json>('/checkout/quote', {'lat': p.lat, 'lng': p.lng, 'deliveryOptionId': ?option});
+  if (p == null && !cfg.manualLocation) return null;
+  return ref.read(apiProvider).post<Json>('/checkout/quote', {if (p != null) 'lat': p.lat, if (p != null) 'lng': p.lng, 'deliveryOptionId': ?option});
 });
 
 final placesProvider = FutureProvider.autoDispose<Json>((ref) => ref.read(apiProvider).get<Json>('/me/places'));

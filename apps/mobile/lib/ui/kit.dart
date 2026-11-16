@@ -800,43 +800,86 @@ class RatingStars extends StatelessWidget {
 
 /* ================================================================ inputs */
 
+/// Label → field → helper / error (s2 apart), one style everywhere. Multi-line with [minLines]/[maxLines];
+/// [showCounter] shows "12/300" under the field (needs [maxLength]).
 class SwTextField extends StatelessWidget {
-  const SwTextField({super.key, this.controller, this.hint, this.label, this.prefix, this.keyboardType, this.autofocus = false, this.onChanged, this.onSubmitted, this.error, this.inputFormatters, this.textInputAction, this.autofillHints, this.leadingIcon, this.trailing, this.focusNode, this.maxLength});
+  const SwTextField({
+    super.key,
+    this.controller,
+    this.hint,
+    this.label,
+    this.prefix,
+    this.keyboardType,
+    this.autofocus = false,
+    this.onChanged,
+    this.onSubmitted,
+    this.error,
+    this.inputFormatters,
+    this.textInputAction,
+    this.autofillHints,
+    this.leadingIcon,
+    this.trailing,
+    this.focusNode,
+    this.maxLength,
+    this.minLines,
+    this.maxLines = 1,
+    this.helper,
+    this.showCounter = false,
+    this.readOnly = false,
+    this.textCapitalization = TextCapitalization.none,
+    this.onTap,
+  });
   final TextEditingController? controller;
-  final String? hint, label, error;
+  final String? hint, label, error, helper;
   final Widget? prefix, trailing;
   final IconData? leadingIcon;
   final TextInputType? keyboardType;
-  final bool autofocus;
+  final bool autofocus, showCounter, readOnly;
   final ValueChanged<String>? onChanged, onSubmitted;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
   final FocusNode? focusNode;
-  final int? maxLength;
+  final int? maxLength, minLines, maxLines;
+  final TextCapitalization textCapitalization;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.sw;
     OutlineInputBorder b(Color col, [double w = 1]) => OutlineInputBorder(borderRadius: BorderRadius.circular(SwRadius.sm), borderSide: BorderSide(color: col, width: w));
+    final counter = showCounter && maxLength != null;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       if (label != null) Padding(padding: const EdgeInsets.only(bottom: SwSpace.s2), child: Text(label!, style: context.type.titleS)),
       TextField(
         controller: controller,
         focusNode: focusNode,
         autofocus: autofocus,
-        keyboardType: keyboardType,
+        keyboardType: keyboardType ?? ((maxLines ?? 2) > 1 ? TextInputType.multiline : null),
         onChanged: onChanged,
         onSubmitted: onSubmitted,
+        onTap: onTap,
+        readOnly: readOnly,
         inputFormatters: inputFormatters,
         textInputAction: textInputAction,
+        textCapitalization: textCapitalization,
         autofillHints: autofillHints,
         maxLength: maxLength,
+        minLines: minLines,
+        maxLines: maxLines,
+        // Keep the focused field clear of the keyboard and any bottom bar.
+        scrollPadding: const EdgeInsets.fromLTRB(20, 20, 20, 160),
         style: context.type.bodyM,
         cursorColor: c.ink,
+        buildCounter: counter
+            ? (context, {required currentLength, required isFocused, maxLength}) => Padding(
+                  padding: const EdgeInsets.only(top: SwSpace.s1),
+                  child: Text('$currentLength/$maxLength', style: context.type.caption.copyWith(color: maxLength != null && currentLength >= maxLength ? c.warning : c.subtle)),
+                )
+            : null,
         decoration: InputDecoration(
           isDense: true,
-          counterText: '',
+          counterText: counter ? null : '',
           hintText: hint,
           hintStyle: context.type.bodyM.copyWith(color: c.subtle),
           filled: true,
@@ -850,13 +893,14 @@ class SwTextField extends StatelessWidget {
           border: b(c.hairline),
         ),
       ),
-      if (error != null) Padding(padding: const EdgeInsets.only(top: SwSpace.s2), child: Text(error!, style: context.type.caption.copyWith(color: c.danger))),
+      if (error != null)
+        Padding(padding: const EdgeInsets.only(top: SwSpace.s2), child: Text(error!, style: context.type.caption.copyWith(color: c.danger)))
+      else if (helper != null)
+        Padding(padding: const EdgeInsets.only(top: SwSpace.s2), child: Text(helper!, style: context.type.caption.copyWith(color: c.muted))),
     ]);
   }
 }
 
-/// Six-box OTP input that auto-submits on the last digit; supports paste and SMS autofill
-/// (`AutofillHints.oneTimeCode` on iOS; the Android SMS Retriever feeds [controller]).
 /// One-time-code field: responsive boxes, blinking caret, paste (long-press), SMS autofill hints,
 /// error shake and a success state. [onCompleted] fires once per distinct complete code, never while
 /// disabled, so rebuilds / selection changes can't double-submit.

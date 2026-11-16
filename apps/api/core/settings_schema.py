@@ -210,6 +210,28 @@ class CheckoutExtraField(BaseModel):
     placeholder: str | None = None
 
 
+class ManualDetailField(BaseModel):
+    label: str
+    labelSw: str | None = None
+    placeholder: str | None = None
+    placeholderSw: str | None = None
+    required: bool = True
+    maxLength: int = Field(300, ge=20, le=500)
+
+
+class ManualDetailFields(BaseModel):
+    """The two written fields shown instead of the map when locationMode is "manual"."""
+
+    location: ManualDetailField = ManualDetailField(
+        label="Describe your location (street, building, landmark)", labelSw="Eleza mahali ulipo (mtaa, jengo, alama maarufu)",
+        placeholder="e.g. Mikocheni B, Kawawa Rd, blue gate opposite the pharmacy", placeholderSw="mf. Mikocheni B, barabara ya Kawawa, geti la bluu mkabala na duka la dawa",
+    )
+    notes: ManualDetailField = ManualDetailField(
+        label="What do you need / delivery instructions", labelSw="Unahitaji nini / maelekezo ya kufikisha",
+        placeholder="e.g. Call when you reach the gate", placeholderSw="mf. Nipigie ukifika getini", required=False,
+    )
+
+
 class Checkout(BaseModel):
     extraFields: list[CheckoutExtraField] = []
     slideToConfirm: bool = False
@@ -217,6 +239,12 @@ class Checkout(BaseModel):
     allowGuestCheckout: bool = False
     minOrderAmount: int = Field(0, ge=0)
     showDeliveryEstimateOnPdp: bool = True
+    # Delivery location: "automatic" = map + pin (GPS); "manual" = no map, two written fields. Manual still
+    # detects GPS silently when allowed, but never requires it.
+    locationMode: Literal["automatic", "manual"] = "automatic"
+    manualDetailFields: ManualDetailFields = ManualDetailFields()
+    # Delivery fee for a manual order without GPS. Empty = the base fee from Delivery pricing.
+    manualDeliveryFee: int | None = Field(None, ge=0)
 
 
 class PricingWholesale(BaseModel):
@@ -391,7 +419,7 @@ SECRET_FIELDS: dict[str, list[str]] = {
 PUBLIC_CONFIG_PICK: dict[str, list[str] | str] = {
     "branding": ["storeName", "tagline", "taglineSw", "supportPhone", "supportEmail", "supportWhatsApp", "accentLight", "accentDark", "logoMediaId", "welcomeVideoMediaId", "welcomeImageMediaId", "appDownloadLink"],
     "features": "*",
-    "checkout": ["extraFields", "slideToConfirm", "allowGuestCheckout", "minOrderAmount", "showDeliveryEstimateOnPdp"],
+    "checkout": ["extraFields", "slideToConfirm", "allowGuestCheckout", "minOrderAmount", "showDeliveryEstimateOnPdp", "locationMode", "manualDetailFields"],
     "localization": "*",
     "auth": ["googleWebClientId", "googleIosClientId", "googleAndroidClientId", "otpLength", "otpResendCooldownSeconds", "requirePhoneForCheckout", "defaultCountry", "defaultDialCode"],
     "maps.google": ["mapStyleLight", "mapStyleDark", "regionCode"],

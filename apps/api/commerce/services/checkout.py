@@ -53,20 +53,42 @@ def payment_methods(user) -> dict[str, Any]:
     return {"available": available, "saved": saved, "default": default or ({"id": None, "method": available[0]["method"], "provider": None, "label": available[0]["label"], "isDefault": True} if available else None)}
 
 
-def quote(user, *, lat, lng, option_id: str | None = None, promo_code: str | None = None, locale: str = "en") -> dict[str, Any]:
-    lat, lng = _validate_point(lat, lng)
+def _optional_point(lat, lng) -> tuple[float, float] | None:
+    if lat in (None, "") and lng in (None, ""):
+        return None
+    return _validate_point(lat, lng)
+
+
+def _manual_fee(pricing_cfg, checkout_cfg, *, option, subtotal: int, at, tz: str) -> dict[str, Any]:
+    """Fee for a manual-details order without GPS: the admin's flat manual fee, else the base fee (the price of
+    a trip inside the included distance). Never depends on coordinates."""
+    fee = compute_fee(pricing_cfg, distance_m=pricing_cfg.includedMeters, zone=None, option=option, subtotal=subtotal, at=at, tz=tz)
+    if checkout_cfg.manualDeliveryFee is not None and option.kind != "pickup":
+        flat = checkout_cfg.manualDeliveryFee
+        fee.update({"baseFee": flat, "distanceFee": 0, "subtotalBeforeFree": flat, "fee": 0 if fee["freeDelivery"] else flat})
+    fee["manual"] = True
+    fee["distanceMeters"] = None
+    return fee
+
+
+def quote(user, *, lat=None, lng=None, option_id: str | None = None, promo_code: str | None = None, locale: str = "en") -> dict[str, Any]:
+    checkout_cfg = settings_service.get("checkout")
+    manual = checkout_cfg.locationMode == "manual"
+    point = _optional_point(lat, lng)
+    if point is None and not manual:
+        raise ApiError.bad_request("Choose where to deliver", details={"field": "location"})
     lines = _lines(user)
     if not lines:
         raise ApiError.bad_request("Your bag is empty", details={"code": "empty_cart"})
     pricing_cfg = settings_service.get("delivery.pricing")
-    checkout_cfg = settings_service.get("checkout")
     tz = settings_service.get("localization").timezone
     now = timezone.now()
+    lat, lng = point if point else (None, None)
     store, straight_m, _ = nearest_store_with_stock(lat, lng, lines)
     pickup_store, _, _ = nearest_store_with_stock(lat, lng, lines, pickup=True)
     priced0 = cart_svc.price_for_user(user, promo_code=promo_code, locale=locale)
-    route = google_maps.route((store.location.y, store.location.x), (lat, lng)) if store else None
-    zone = match_zone(lat, lng)
+    route = google_maps.route((store.location.y, store.location.x), (lat, lng)) if store and point else None
+    zone = match_zone(lat, lng) if point else None
     options = []
     for opt in sorted([o for o in pricing_cfg.options if o.enabled], key=lambda o: o.sortOrder):
         if opt.kind == "pickup":
@@ -79,8 +101,13 @@ def quote(user, *, lat, lng, option_id: str | None = None, promo_code: str | Non
         if store is None:
             options.append({"id": opt.id, "name": opt.nameSw if locale == "sw" and opt.nameSw else opt.name, "kind": opt.kind, "available": False, "reason": "out_of_stock"})
             continue
-        fee = compute_fee(pricing_cfg, distance_m=route["distanceMeters"], zone=zone, option=opt, subtotal=priced0["subtotal"] - priced0["discount"], at=now, tz=tz)
-        mn, mx = eta_window(opt, route["durationSeconds"] / 60, checkout_cfg.prepTimeMinutes)
+        sub = priced0["subtotal"] - priced0["discount"]
+        if route is None:
+            fee = _manual_fee(pricing_cfg, checkout_cfg, option=opt, subtotal=sub, at=now, tz=tz)
+            mn, mx = eta_window(opt, None, checkout_cfg.prepTimeMinutes)
+        else:
+            fee = compute_fee(pricing_cfg, distance_m=route["distanceMeters"], zone=zone, option=opt, subtotal=sub, at=now, tz=tz)
+            mn, mx = eta_window(opt, route["durationSeconds"] / 60, checkout_cfg.prepTimeMinutes)
         options.append({"id": opt.id, "name": opt.nameSw if locale == "sw" and opt.nameSw else opt.name, "kind": opt.kind, "description": opt.description, "available": fee["serviceable"], "reason": fee.get("reason"), "fee": fee["fee"], "freeDelivery": fee["freeDelivery"], "feeBeforeFree": fee["subtotalBeforeFree"], "etaMinMinutes": mn, "etaMaxMinutes": mx, "breakdown": fee})
     avail = [o for o in options if o["available"]]
     selected = next((o for o in avail if o["id"] == option_id), None) or (avail[0] if avail else None)
@@ -98,7 +125,9 @@ def quote(user, *, lat, lng, option_id: str | None = None, promo_code: str | Non
     if selected:
         eta_by = (now + timedelta(minutes=selected["etaMaxMinutes"])).isoformat()
     return {
-        "deliverTo": {"lat": lat, "lng": lng},
+        "locationMode": checkout_cfg.locationMode,
+        "manualDetailFields": checkout_cfg.manualDetailFields.model_dump() if manual else None,
+        "deliverTo": {"lat": lat, "lng": lng} if point else None,
         "store": {"id": str(store.id), "name": store.name, "address": store.address, "location": {"lat": store.location.y, "lng": store.location.x}, "distanceMeters": route["distanceMeters"] if route else None, "straightMeters": int(straight_m) if straight_m else None} if store else None,
         "route": {"polyline": route["polyline"] or None, "durationSeconds": route["durationSeconds"], "source": route["source"]} if route else None,
         "zone": zone and {"id": zone["id"], "name": zone["name"]},
@@ -112,7 +141,15 @@ def quote(user, *, lat, lng, option_id: str | None = None, promo_code: str | Non
 
 def place(user, data: dict[str, Any], *, request=None, locale: str = "en") -> Order:
     """Creates the order exactly as quoted — or fails with a precise reason the app can show."""
-    lat, lng = _validate_point(data.get("lat"), data.get("lng"))
+    checkout_cfg = settings_service.get("checkout")
+    manual = checkout_cfg.locationMode == "manual"
+    point = _optional_point(data.get("lat"), data.get("lng"))
+    details, notes = _validate_manual_details(data, checkout_cfg) if manual else ("", "")
+    lat, lng = point if point else (None, None)
+    try:
+        accuracy = float(data["accuracy"]) if data.get("accuracy") not in (None, "") and point else None
+    except (TypeError, ValueError):
+        accuracy = None
     option_id = data.get("deliveryOptionId")
     method = data.get("paymentMethod")
     q = quote(user, lat=lat, lng=lng, option_id=option_id, promo_code=data.get("promoCode"), locale=locale)
@@ -138,7 +175,10 @@ def place(user, data: dict[str, Any], *, request=None, locale: str = "en") -> Or
     store = Store.objects.get(id=(selected["store"]["id"] if pickup else q["store"]["id"]))
     place_label = (data.get("label") or "").strip()[:240]
     area = (data.get("area") or "").strip()[:80]
-    if not place_label:
+    if not point:
+        # Manual details without GPS: the written location is the address.
+        place_label = place_label or details[:240]
+    elif not place_label:
         try:
             rev = google_maps.reverse_geocode(lat, lng, locale) if google_maps.configured() else google_maps.offline_place(lat, lng)
         except ApiError:
@@ -155,8 +195,9 @@ def place(user, data: dict[str, Any], *, request=None, locale: str = "en") -> Or
             currency=q["cart"]["currency"], subtotal=q["cart"]["subtotal"], discount=q["cart"]["discount"], delivery_fee=q["cart"]["deliveryFee"], tax=q["cart"]["tax"], total=q["cart"]["total"], savings=q["cart"]["savings"],
             promo_code=(q["cart"]["promo"] or {}).get("code", "") if (q["cart"]["promo"] or {}).get("ok") else "",
             fulfilment="pickup" if pickup else "delivery", delivery_option={k: selected.get(k) for k in ("id", "name", "kind", "etaMinMinutes", "etaMaxMinutes")}, fee_breakdown=selected.get("breakdown") or {},
-            store=store, destination=None if pickup else Point(lng, lat, srid=4326), destination_label=place_label if not pickup else store.address, destination_area=area,
+            store=store, destination=None if pickup or not point else Point(lng, lat, srid=4326), destination_label=place_label if not pickup else store.address, destination_area=area,
             landmark_note=(data.get("landmarkNote") or "").strip()[:120], distance_m=(q["store"] or {}).get("distanceMeters"),
+            location_mode="manual" if manual else "automatic", location_details=details, delivery_notes=notes, location_accuracy_m=accuracy,
             contact_name=user.name, contact_phone=user.phone or "", extra_fields=extra, payment_method=method, delivery_pin=pin_enc if not pickup else "",
             eta_min_minutes=selected["etaMinMinutes"], eta_max_minutes=selected["etaMaxMinutes"], promised_by=timezone.now() + timedelta(minutes=selected["etaMaxMinutes"]),
             share_token=__import__("secrets").token_urlsafe(16),
@@ -187,7 +228,8 @@ def place(user, data: dict[str, Any], *, request=None, locale: str = "en") -> Or
         CartItem.objects.filter(cart=cart, saved_for_later=False).delete()
         cart.promo_code = ""
         cart.save(update_fields=["promo_code", "updated_at"])
-        _remember_place(user, lat, lng, place_label, area, data)
+        if point:
+            _remember_place(user, lat, lng, place_label, area, data)
         if method == "CASH_ON_DELIVERY" or payment.status == "PAID":
             order = transition(order, "CONFIRMED", actor="system", data={"payment": method})
             if not pickup:
@@ -195,6 +237,18 @@ def place(user, data: dict[str, Any], *, request=None, locale: str = "en") -> Or
 
                 create_job(order)
     return order
+
+
+def _validate_manual_details(data: dict, checkout_cfg) -> tuple[str, str]:
+    """Manual mode: the two written fields, trimmed; required ones must not be blank."""
+    f = checkout_cfg.manualDetailFields
+    details = " ".join(str(data.get("locationDetails") or "").split())[: f.location.maxLength]
+    notes = str(data.get("deliveryNotes") or "").strip()[: f.notes.maxLength]
+    if f.location.required and not details:
+        raise ApiError.bad_request(f"{f.location.label} is required", details={"field": "locationDetails"})
+    if f.notes.required and not notes:
+        raise ApiError.bad_request(f"{f.notes.label} is required", details={"field": "deliveryNotes"})
+    return details, notes
 
 
 def _validate_extra_fields(values: dict) -> dict:

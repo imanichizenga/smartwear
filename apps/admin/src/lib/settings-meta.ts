@@ -281,10 +281,30 @@ export const SETTINGS_META: Record<string, GroupMeta> = {
     section: 'Store',
     description: 'Checkout has no forms by default. Add optional fields here only if you need them.',
     layout: [
+      {
+        title: 'Delivery location',
+        description: 'How shoppers tell you where to deliver. The app reads this before it shows any map, so a change applies on the next checkout.',
+        fields: ['locationMode'],
+      },
+      {
+        title: 'Manual location form',
+        description: 'Shown instead of the map. The app still detects the location quietly when the shopper allows it, but never requires it.',
+        fields: ['manualDetailFields', 'manualDeliveryFee'],
+        showWhen: { field: 'locationMode', equals: ['manual'] },
+      },
       { title: 'Behaviour', fields: ['slideToConfirm', 'minOrderAmount', 'prepTimeMinutes', 'showDeliveryEstimateOnPdp', 'allowGuestCheckout'] },
       { title: 'Extra fields', description: 'Shown collapsed and optional unless marked required.', fields: ['extraFields'] },
     ],
     fields: {
+      locationMode: {
+        label: 'Delivery location',
+        options: { automatic: 'Automatic (map) — pin on a map, GPS', manual: 'Manual (form) — no map, written location + instructions' },
+        help: 'Automatic gives riders an exact pin and distance-based fees. Manual suits areas with poor maps or GPS: riders read the details and call the customer.',
+      },
+      manualDetailFields: { label: 'Form fields', help: 'Labels in English and Swahili, and whether each field is required.' },
+      location: { label: 'Location field' },
+      notes: { label: 'Instructions field' },
+      manualDeliveryFee: { label: 'Fee when there is no GPS', money: true, help: 'Leave empty to charge the base fee from Delivery pricing.' },
       slideToConfirm: { label: 'Slide to place order', help: 'Instead of a tap — prevents accidental orders.' },
       minOrderAmount: { label: 'Minimum order', money: true },
       prepTimeMinutes: { label: 'Store preparation time', suffix: 'minutes' },
