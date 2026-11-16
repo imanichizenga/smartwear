@@ -17,6 +17,7 @@ import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
 import '../../ui/sw_map.dart';
+import '../chat/chat_data.dart';
 import '../chat/chat_screen.dart';
 
 enum TrackPhase { payment, searching, noRider, preparing, toStore, onTheWay, arrived, delivered, closed }
@@ -222,6 +223,7 @@ class _TrackingScreenState extends ConsumerState<TrackingScreen> {
           right: 0,
           bottom: 0,
           child: _Sheet(
+            footer: SwButton(label: s('support.askAboutOrder'), icon: Ic.messageCircle, variant: SwButtonVariant.ghost, expand: true, onPressed: () => openSupportChat(context, ref, widget.orderId)),
             child: AnimatedSwitcher(
               duration: SwMotion.slow,
               switchInCurve: SwMotion.atelier,
@@ -315,17 +317,21 @@ class _TrackingScreenState extends ConsumerState<TrackingScreen> {
 /* ------------------------------------------------------------------ sheet pieces */
 
 class _Sheet extends StatelessWidget {
-  const _Sheet({required this.child});
+  const _Sheet({required this.child, this.footer});
   final Widget child;
+
+  /// "Ask about this order" — the same in every phase.
+  final Widget? footer;
   @override
   Widget build(BuildContext context) {
     final c = context.sw;
     return Container(
-      padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s3, SwSpace.s5, SwSpace.s5 + context.safe.bottom),
+      padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s3, SwSpace.s5, SwSpace.s3 + context.bottomInset),
       decoration: BoxDecoration(color: c.surface, borderRadius: const BorderRadius.vertical(top: Radius.circular(SwRadius.lg)), boxShadow: [BoxShadow(color: c.ink.withValues(alpha: 0.14), blurRadius: 40, offset: const Offset(0, -8))]),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: SwSpace.s4), decoration: BoxDecoration(color: c.hairline, borderRadius: BorderRadius.circular(2))),
         AnimatedSize(duration: SwMotion.slow, curve: SwMotion.atelier, alignment: Alignment.bottomCenter, child: child),
+        if (footer != null) Padding(padding: const EdgeInsets.only(top: SwSpace.s2), child: footer),
       ]),
     );
   }

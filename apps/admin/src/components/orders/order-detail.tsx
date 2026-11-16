@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import {
-  ArrowLeft, Ban, Bike, Check, ChefHat, CircleDollarSign, FileText, KeyRound, MapPin, Phone, Printer, RefreshCw, RotateCcw, Search, Star, Tag, Wand2,
+  ArrowLeft, Ban, Bike, Check, ChefHat, CircleDollarSign, FileText, KeyRound, MapPin, MessageCircle, Phone, Printer, RefreshCw, RotateCcw, Search, Star, Tag, Wand2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { LiveMap, type MapMarker, type MapRoute } from '@/components/maps/live-map';
@@ -39,6 +40,17 @@ export function OrderDetail({ initial }: { initial: Order }) {
   const canManage = useCan('orders.manage');
   const canRefund = useCan('orders.refund');
   const canAssign = useCan('dispatch.assign');
+  const canChat = useCan('support.chat');
+  const router = useRouter();
+  /** Opens (or creates) this order's support conversation in the inbox. */
+  const messageCustomer = async () => {
+    try {
+      const t = await api<{ id: string }>('/admin/support', { body: { orderId: initial.id } });
+      router.push(`/support?thread=${t.id}`);
+    } catch (e) {
+      toast.error(e instanceof ApiError ? e.message : 'Could not open the conversation');
+    }
+  };
   const [dialog, setDialog] = useState<null | 'cancel' | 'refund' | 'assign'>(null);
 
   useRealtime(
@@ -200,7 +212,7 @@ export function OrderDetail({ initial }: { initial: Order }) {
             </Card>
           )}
           <Card>
-            <CardHeader title="Customer" />
+            <CardHeader title="Customer" actions={canChat ? <ActionButton size="sm" variant="secondary" icon={<MessageCircle strokeWidth={1.5} />} onAction={messageCustomer}>Message customer</ActionButton> : undefined} />
             <div className="px-5 py-4 text-[13px]">
               <AppLink href={`/customers/${o.customer.id}`} className="text-sm font-semibold hover:underline">{o.customer.name}</AppLink>
               <div className="mt-1 flex items-center gap-2 text-muted"><Phone className="size-3.5" strokeWidth={1.5} /> <a href={`tel:${o.contact.phone || o.customer.phone}`} className="tabular hover:text-ink">{o.contact.phone || o.customer.phone}</a></div>

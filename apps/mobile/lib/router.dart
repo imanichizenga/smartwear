@@ -6,6 +6,7 @@ import 'core/providers.dart';
 import 'features/auth/auth_screens.dart';
 import 'features/bag/bag_screen.dart';
 import 'features/chat/chat_screen.dart';
+import 'features/chat/support_screen.dart';
 import 'features/checkout/checkout_screen.dart';
 import 'features/checkout/payment_wait_screen.dart';
 import 'features/orders/orders_screen.dart';
@@ -112,6 +113,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/orders/:id/pay', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => PaymentWaitScreen(orderId: s.pathParameters['id']!)),
       GoRoute(path: '/chat/:id', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => ChatScreen(threadId: s.pathParameters['id']!, title: s.uri.queryParameters['title'])),
       // Profile sub-pages (account-only; guests are sent to sign in by the guard above).
+      GoRoute(path: '/support', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const SupportScreen()),
       GoRoute(path: '/profile/edit', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const EditProfileScreen()),
       GoRoute(path: '/wishlist', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const WishlistScreen()),
       GoRoute(path: '/places', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const PlacesScreen()),

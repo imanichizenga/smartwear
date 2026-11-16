@@ -97,6 +97,13 @@ class Realtime {
     return true;
   }
 
+  /// Fire-and-forget client event (e.g. `chat.typing`); returns false when the socket is down.
+  bool emit(Map<String, dynamic> m) {
+    if (!_up) return false;
+    _send(m);
+    return true;
+  }
+
   void _send(Map<String, dynamic> m) {
     try {
       _ch?.sink.add(jsonEncode(m));

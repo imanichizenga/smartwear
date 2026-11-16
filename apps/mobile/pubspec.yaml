@@ -28,6 +28,8 @@ dependencies:
   video_player: ^2.14.1
   url_launcher: ^6.3.3
   image_picker: ^1.2.4
+  # Emoji panel for chat (replaces the keyboard while open). Run `flutter pub get` after pulling.
+  emoji_picker_flutter: ^4.5.4
 
 dev_dependencies:
   flutter_test:

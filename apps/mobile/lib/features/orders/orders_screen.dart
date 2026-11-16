@@ -8,6 +8,7 @@ import '../../core/providers.dart';
 import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
+import '../chat/chat_data.dart';
 
 const _active = {'PENDING_PAYMENT', 'CONFIRMED', 'PREPARING', 'READY_FOR_PICKUP', 'ASSIGNED', 'PICKED_UP', 'ON_THE_WAY', 'ARRIVED'};
 
@@ -94,6 +95,7 @@ class _OrderCard extends ConsumerWidget {
                 Row(children: [
                   SwChip(o.str('statusLabel', o.str('status')), tone: orderTone(o.str('status'))),
                   const Spacer(),
+                  SwIconButton(icon: Ic.messageCircle, size: 40, semanticLabel: s('support.askAboutOrder'), onPressed: () => openSupportChat(context, ref, o.str('id'))),
                   if (live)
                     Row(children: [Text(s('orders.track'), style: context.type.titleS), const SizedBox(width: 2), Icon(Ic.chevronRight, size: 16, color: c.ink)])
                   else if (placed != null)

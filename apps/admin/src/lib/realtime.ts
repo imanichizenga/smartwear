@@ -21,7 +21,10 @@ type Status = 'connecting' | 'live' | 'polling';
  * httpOnly admin cookie authenticates). If the socket can't stay up, `onPoll` runs every `pollMs`
  * so the screen keeps moving — the status tells the UI which mode it is in.
  */
-export function useRealtime(channels: string[], onEvent: (e: RealtimeEvent) => void, { onPoll, pollMs = 5000 }: { onPoll?: () => void; pollMs?: number } = {}) {
+export type RealtimeEmit = (message: Record<string, unknown>) => boolean;
+
+/** Pass `emitter` (a ref) to send client events such as `chat.typing`; it returns false while the socket is down. */
+export function useRealtime(channels: string[], onEvent: (e: RealtimeEvent) => void, { onPoll, pollMs = 5000, emitter }: { onPoll?: () => void; pollMs?: number; emitter?: { current: RealtimeEmit | null } } = {}) {
   const [status, setStatus] = useState<Status>('connecting');
   const handler = useRef(onEvent);
   const poll = useRef(onPoll);
@@ -68,6 +71,13 @@ export function useRealtime(channels: string[], onEvent: (e: RealtimeEvent) => v
         stopPolling();
         setStatus('live');
         rooms.forEach((channel) => ws?.send(JSON.stringify({ type: 'subscribe', channel })));
+        if (emitter) {
+          emitter.current = (message) => {
+            if (ws?.readyState !== WebSocket.OPEN) return false;
+            ws.send(JSON.stringify(message));
+            return true;
+          };
+        }
         pingTimer = setInterval(() => ws?.readyState === WebSocket.OPEN && ws.send('{"type":"ping"}'), 25_000);
       };
       ws.onmessage = (m) => {
@@ -79,6 +89,7 @@ export function useRealtime(channels: string[], onEvent: (e: RealtimeEvent) => v
         }
       };
       ws.onclose = () => {
+        if (emitter) emitter.current = null;
         if (openTimer) clearTimeout(openTimer);
         if (pingTimer) clearInterval(pingTimer);
         if (closed) return;
@@ -97,7 +108,7 @@ export function useRealtime(channels: string[], onEvent: (e: RealtimeEvent) => v
       stopPolling();
       ws?.close();
     };
-  }, [key, pollMs]);
+  }, [key, pollMs, emitter]);
 
   return status;
 }
