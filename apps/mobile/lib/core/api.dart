@@ -250,6 +250,9 @@ class Api {
 
   /// Called after every successful refresh with the fresh user, so the session can update its cache.
   void Function(Json user)? onRefreshed;
+
+  /// Reachability: true after any response from the API, false when a request couldn't reach it.
+  void Function(bool online)? onNetwork;
   String locale = 'en';
   Future<RefreshResult>? _refreshing;
 
@@ -280,10 +283,12 @@ class Api {
   Future<T> _send<T>(Future<Response<dynamic>> Function() call, {bool retried = false, bool idempotent = false, int attempt = 0}) async {
     try {
       final r = await call();
+      onNetwork?.call(true);
       return r.data as T;
     } on DioException catch (e) {
       final status = e.response?.statusCode ?? 0;
       final code = _code(e);
+      onNetwork?.call(e.response != null || !_isTransient(e));
       if (status == 401 && !retried && tokens.refresh != null) {
         final res = await refreshSession();
         if (res == RefreshResult.ok) return _send<T>(call, retried: true, idempotent: idempotent);

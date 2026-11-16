@@ -302,4 +302,7 @@ export const sw: Partial<Record<keyof typeof en, string>> = {
   'support.empty.title': 'Bado hakuna oda',
   'support.empty.body': 'Ukishaagiza, unaweza kuzungumza nasi kuihusu hapa.',
   'support.whatsapp': 'Tuandikie WhatsApp',
+  'checkout.problem.minOrder': 'Oda ya chini ni {{amount}}. Ongeza kidogo ili ulipe.',
+  'checkout.problem.notServed': 'Bado hatufikishi mahali hapa. Jaribu anwani nyingine au chukua dukani.',
+  'pay.approve.stale': 'Ombi la malipo huenda limekwisha muda. Litume tena, au ghairi uchague njia nyingine.',
 };

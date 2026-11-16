@@ -43,8 +43,55 @@ class SmartWearApp extends ConsumerWidget {
       builder: (context, child) {
         final mq = MediaQuery.of(context);
         // One shared shimmer clock for every skeleton on screen.
-        return MediaQuery(data: mq.copyWith(textScaler: mq.textScaler.clamp(maxScaleFactor: 1.3)), child: SkeletonScope(child: child!));
+        return MediaQuery(
+          data: mq.copyWith(textScaler: mq.textScaler.clamp(maxScaleFactor: 1.3)),
+          child: SkeletonScope(child: Stack(fit: StackFit.expand, children: [child!, const _OfflineBanner()])),
+        );
       },
+    );
+  }
+}
+
+/// "You are offline. Showing saved content." — slides in under the status bar while the API can't be
+/// reached, and away again as soon as a request (or the realtime socket) gets through.
+class _OfflineBanner extends ConsumerWidget {
+  const _OfflineBanner();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final offline = !ref.watch(onlineProvider);
+    final c = context.sw;
+    return Positioned(
+      top: MediaQuery.paddingOf(context).top + SwSpace.s2,
+      left: SwSpace.s5,
+      right: SwSpace.s5,
+      child: IgnorePointer(
+        child: AnimatedSlide(
+          offset: offline ? Offset.zero : const Offset(0, -2),
+          duration: context.reduceMotion ? Duration.zero : SwMotion.base,
+          curve: SwMotion.atelier,
+          child: AnimatedOpacity(
+            opacity: offline ? 1 : 0,
+            duration: SwMotion.base,
+            child: Center(
+              child: Semantics(
+                liveRegion: true,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: SwSpace.s4, vertical: SwSpace.s2),
+                    decoration: BoxDecoration(color: c.ink, borderRadius: BorderRadius.circular(SwRadius.full)),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(Ic.wifiOff, size: 14, color: c.onInk),
+                      const SizedBox(width: SwSpace.s2),
+                      Flexible(child: Text(S(ref.watch(localeProvider))('common.offline'), style: context.type.caption.copyWith(color: c.onInk), maxLines: 2, textAlign: TextAlign.center)),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -16,11 +16,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.wait([
-      ref.read(sessionProvider.notifier).restore(),
-      ref.read(configProvider.future).catchError((_) => <String, dynamic>{}),
-      Future<void>.delayed(const Duration(milliseconds: 1100)),
-    ]);
+    // Never block on the network: the session restores from secure storage (cached user, no /me wait) and the
+    // config comes from its cache or safe defaults. The router leaves the splash as soon as the session is
+    // ready; if storage is unusually slow, we stop waiting after 1.2 s.
+    final session = ref.read(sessionProvider.notifier);
+    session.restore().timeout(const Duration(milliseconds: 1200), onTimeout: session.markReady).catchError((_) => session.markReady());
+    ref.read(configProvider.future).ignore();
   }
 
   @override

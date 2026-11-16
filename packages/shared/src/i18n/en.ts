@@ -582,4 +582,7 @@ export const en = {
   'support.empty.title': 'No orders yet',
   'support.empty.body': 'Once you\'ve ordered, you can chat with us about it here.',
   'support.whatsapp': 'Message us on WhatsApp',
+  'checkout.problem.minOrder': 'The minimum order is {{amount}}. Add a little more to check out.',
+  'checkout.problem.notServed': 'We don\'t deliver to this location yet. Try another address or pick up in store.',
+  'pay.approve.stale': 'The payment prompt may have expired. Resend it, or cancel and choose another way to pay.',
 } as const;

@@ -24,9 +24,13 @@ class PaymentWaitScreen extends ConsumerStatefulWidget {
 }
 
 class _PaymentWaitScreenState extends ConsumerState<PaymentWaitScreen> with SingleTickerProviderStateMixin {
-  Timer? _poll;
+  Timer? _poll, _timeout;
   String _status = 'PENDING';
   bool _done = false;
+
+  /// The USSD prompt expires after a couple of minutes: then say so and offer to resend or cancel.
+  bool _stale = false;
+  String _payKey = 'pay-${DateTime.now().microsecondsSinceEpoch}';
   void Function()? _unsub;
   StreamSubscription<RtEvent>? _rt;
   late final AnimationController _pulse = AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
@@ -37,6 +41,13 @@ class _PaymentWaitScreenState extends ConsumerState<PaymentWaitScreen> with Sing
   void initState() {
     super.initState();
     _poll = Timer.periodic(const Duration(seconds: 3), (_) => _check());
+    _timeout = Timer(const Duration(minutes: 2), () {
+      if (!mounted || _done) return;
+      setState(() => _stale = true);
+      // Keep checking, but gently: the webhook may still arrive.
+      _poll?.cancel();
+      _poll = Timer.periodic(const Duration(seconds: 10), (_) => _check());
+    });
     final rt = ref.read(realtimeProvider);
     _unsub = rt.subscribe('order.${widget.orderId}');
     _rt = rt.events.where((e) => e['orderId'] == widget.orderId || '${e['type']}'.startsWith('order.')).listen((_) => _check());
@@ -46,6 +57,7 @@ class _PaymentWaitScreenState extends ConsumerState<PaymentWaitScreen> with Sing
   @override
   void dispose() {
     _poll?.cancel();
+    _timeout?.cancel();
     _rt?.cancel();
     _unsub?.call();
     _pulse.dispose();
@@ -83,6 +95,10 @@ class _PaymentWaitScreenState extends ConsumerState<PaymentWaitScreen> with Sing
     final paid = _status == 'PAID';
     return PopScope(
       canPop: false,
+      // The order already exists: back leaves the payment for later (it stays pending on the order).
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) context.go('/orders/${widget.orderId}/track');
+      },
       child: Scaffold(
         body: SafeArea(
           child: Padding(
@@ -110,7 +126,7 @@ class _PaymentWaitScreenState extends ConsumerState<PaymentWaitScreen> with Sing
               ),
               const SizedBox(height: SwSpace.s3),
               Text(
-                failed ? s('pay.approve.failedBody') : s('pay.approve.body', {'phone': phone, 'amount': amount}),
+                failed ? s('pay.approve.failedBody') : _stale ? s('pay.approve.stale') : s('pay.approve.body', {'phone': phone, 'amount': amount}),
                 style: context.type.bodyM.copyWith(color: c.muted),
                 textAlign: TextAlign.center,
               ),
@@ -137,14 +153,16 @@ class _PaymentWaitScreenState extends ConsumerState<PaymentWaitScreen> with Sing
                   onPressed: () async {
                     try {
                       if (failed) {
-                        await _api.post<Json>('/me/orders/${widget.orderId}/pay');
-                        setState(() => _status = 'PENDING');
+                        await _api.post<Json>('/me/orders/${widget.orderId}/pay', const {}, {'Idempotency-Key': _payKey});
+                        _payKey = 'pay-${DateTime.now().microsecondsSinceEpoch}'; // a later retry is a new attempt
+                        if (mounted) setState(() => _status = 'PENDING');
                       } else {
                         await _api.post<Json>('/me/orders/${widget.orderId}/payment');
                       }
+                      if (mounted) setState(() => _stale = false);
                       if (context.mounted) showSwToast(context, s('pay.approve.resent'), icon: Ic.send);
                     } on ApiException catch (e) {
-                      if (context.mounted) showSwToast(context, e.message, error: true);
+                      if (context.mounted) showSwToast(context, e.isNetwork ? s('common.offlineAction') : e.message, error: true);
                     }
                   },
                 ),

@@ -569,6 +569,9 @@ const Map<String, String> messagesEn = {
   'support.empty.title': 'No orders yet',
   'support.empty.body': 'Once you\'ve ordered, you can chat with us about it here.',
   'support.whatsapp': 'Message us on WhatsApp',
+  'checkout.problem.minOrder': 'The minimum order is {{amount}}. Add a little more to check out.',
+  'checkout.problem.notServed': 'We don\'t deliver to this location yet. Try another address or pick up in store.',
+  'pay.approve.stale': 'The payment prompt may have expired. Resend it, or cancel and choose another way to pay.',
 };
 
 const Map<String, String> messagesSw = {
@@ -1133,4 +1136,7 @@ const Map<String, String> messagesSw = {
   'support.empty.title': 'Bado hakuna oda',
   'support.empty.body': 'Ukishaagiza, unaweza kuzungumza nasi kuihusu hapa.',
   'support.whatsapp': 'Tuandikie WhatsApp',
+  'checkout.problem.minOrder': 'Oda ya chini ni {{amount}}. Ongeza kidogo ili ulipe.',
+  'checkout.problem.notServed': 'Bado hatufikishi mahali hapa. Jaribu anwani nyingine au chukua dukani.',
+  'pay.approve.stale': 'Ombi la malipo huenda limekwisha muda. Litume tena, au ghairi uchague njia nyingine.',
 };

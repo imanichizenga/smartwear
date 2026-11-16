@@ -321,6 +321,7 @@ class _LookPageState extends ConsumerState<LookPage> with SingleTickerProviderSt
 
   Future<void> _react(String kind, {bool? force}) async {
     await requireSignIn(context, ref, () async {
+      if (!mounted) return; // signed in on another page and this look was scrolled away
       final on = force ?? !(kind == 'like' ? _liked : _saved);
       setState(() {
         if (kind == 'like') {

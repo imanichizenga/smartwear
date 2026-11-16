@@ -132,7 +132,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
     if (q == null) return const [];
     return [
-      for (final p in q.list('problems')) _Problem(p: p),
+      for (final p in q.list('problems')) _Problem(p: p, currency: q.obj('cart')?.str('currency', 'TZS') ?? 'TZS'),
       _Section(s('checkout.deliveryOption')),
       _OptionCards(q: q),
       const SizedBox(height: SwSpace.s6),
@@ -646,8 +646,20 @@ class _DeliverToCard extends ConsumerWidget {
 }
 
 class _Problem extends StatelessWidget {
-  const _Problem({required this.p});
+  const _Problem({required this.p, this.currency = 'TZS'});
   final Json p;
+  final String currency;
+
+  /// Known reasons get a clear, translated sentence; anything else shows the server's message.
+  String _text(BuildContext context) {
+    final s = context.s;
+    return switch (p.str('reason')) {
+      'min_order' => s('checkout.problem.minOrder', {'amount': formatMoney(p.integer('minOrderAmount'), currency)}),
+      'no_delivery_option' => s('checkout.problem.notServed'),
+      _ => p.str('message', s('common.error.body')),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.sw;
@@ -659,7 +671,7 @@ class _Problem extends StatelessWidget {
         children: [
           Icon(Ic.circleAlert, size: 18, color: c.warning),
           const SizedBox(width: SwSpace.s3),
-          Expanded(child: Text(p.str('message', p.str('reason')), style: context.type.bodyS)),
+          Expanded(child: Text(_text(context), style: context.type.bodyS)),
         ],
       ),
     );

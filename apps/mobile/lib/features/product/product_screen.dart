@@ -489,7 +489,7 @@ class _DesignerNoteState extends State<DesignerNote> {
       await p.setUrl(widget.media.str('url'));
       _pos = p.positionStream.listen((d) {
         final total = p.duration?.inMilliseconds ?? widget.media.integer('durationMs', 1);
-        setState(() => _progress = (d.inMilliseconds / total).clamp(0, 1));
+        if (mounted) setState(() => _progress = (d.inMilliseconds / total).clamp(0, 1));
       });
       p.playerStateStream.listen((s) {
         if (s.processingState == ProcessingState.completed) {

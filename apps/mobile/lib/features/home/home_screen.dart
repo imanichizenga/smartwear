@@ -464,7 +464,7 @@ class _DropCountdownState extends ConsumerState<_DropCountdown> {
                         : () => requireSignIn(context, ref, () async {
                               await ref.read(apiProvider).post<Json>('/collections/${widget.drop.str('id')}/notify');
                               HapticFeedback.lightImpact();
-                              setState(() => _subscribed = true);
+                              if (mounted) setState(() => _subscribed = true);
                             }),
                   ),
                 ]),

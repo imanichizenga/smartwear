@@ -687,6 +687,7 @@ class _DeliveredState extends ConsumerState<_Delivered> with SingleTickerProvide
               : () async {
                   try {
                     await ref.read(apiProvider).post<Json>('/me/orders/${widget.o.str('id')}/rate', {'riderRating': _stars, 'riderTags': _tags.toList()});
+                    if (!mounted) return;
                     setState(() => _sent = true);
                     HapticFeedback.lightImpact();
                     await widget.onRated();

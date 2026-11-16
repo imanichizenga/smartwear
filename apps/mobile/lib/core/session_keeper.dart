@@ -16,6 +16,10 @@ import 'realtime.dart';
 class SessionKeeper {
   SessionKeeper(this.ref) {
     _life = AppLifecycleListener(onResume: _onResume, onPause: () => _timer?.cancel());
+    _api.onNetwork = _onNetwork;
+    _socket = ref.read(realtimeProvider).connected.listen((up) {
+      if (up) _onNetwork(true);
+    });
     _events = ref.read(realtimeProvider).events.listen(_onEvent);
     ref.listen<SessionState>(sessionProvider, (prev, next) => _onSession(prev, next), fireImmediately: true);
   }
@@ -23,7 +27,19 @@ class SessionKeeper {
   final Ref ref;
   late final AppLifecycleListener _life;
   late final StreamSubscription<RtEvent> _events;
-  Timer? _timer;
+  late final StreamSubscription<bool> _socket;
+  Timer? _timer, _probe;
+
+  /// Offline: show the banner and probe every 10 s (a cheap public GET) until the API answers again.
+  void _onNetwork(bool online) {
+    ref.read(onlineProvider.notifier).set(online);
+    if (online) {
+      _probe?.cancel();
+      _probe = null;
+    } else {
+      _probe ??= Timer.periodic(const Duration(seconds: 10), (_) => _api.get<Json>('/config/public').ignore());
+    }
+  }
 
   Api get _api => ref.read(apiProvider);
 
@@ -73,6 +89,8 @@ class SessionKeeper {
 
   void dispose() {
     _timer?.cancel();
+    _probe?.cancel();
+    _socket.cancel();
     _events.cancel();
     _life.dispose();
   }

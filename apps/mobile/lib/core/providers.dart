@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,17 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
   void set(ThemeMode m) {
     state = m;
     ref.read(prefsProvider).setString('sw.theme', m.name);
+  }
+}
+
+/// Can we reach the API? Drives the global offline banner. Starts optimistic.
+final onlineProvider = NotifierProvider<OnlineNotifier, bool>(OnlineNotifier.new);
+
+class OnlineNotifier extends Notifier<bool> {
+  @override
+  bool build() => true;
+  void set(bool v) {
+    if (state != v) state = v;
   }
 }
 
@@ -48,8 +60,22 @@ class ConfigNotifier extends AsyncNotifier<Json> {
         // Corrupt cache: fall through to the network copy.
       }
     }
-    return fresh;
+    try {
+      return await fresh;
+    } catch (_) {
+      // First launch offline / API down: run on safe defaults (every reader treats missing keys as
+      // defaults) and keep trying in the background — never leave the app stuck on the splash.
+      _retry = Timer(Duration(seconds: math.min(60, 5 << _attempt)), () {
+        _attempt = math.min(_attempt + 1, 4);
+        ref.invalidateSelf();
+      });
+      ref.onDispose(() => _retry?.cancel());
+      return const <String, dynamic>{};
+    }
   }
+
+  Timer? _retry;
+  int _attempt = 0;
 
   /// A fresher copy fetched elsewhere (e.g. checkout re-reads the location mode).
   void replace(Json c) {
@@ -123,6 +149,13 @@ class SessionNotifier extends Notifier<SessionState> {
     }
     state = SessionState(user: tokens.cachedUser, signedIn: true, ready: true);
     unawaited(revalidate());
+  }
+
+  /// Leave the splash with whatever we know (used when restoring takes too long or fails).
+  void markReady() {
+    if (state.ready) return;
+    final t = _tokens;
+    state = SessionState(user: t.cachedUser, signedIn: t.signedIn, ready: true);
   }
 
   /// Refresh the user from `/me`. Errors keep the current session; a real revocation arrives through
