@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
-import { Ban, Briefcase, Building2, Check, ExternalLink, FileText, Search, ShieldCheck, Star, Users, X } from 'lucide-react';
+import { Ban, Briefcase, Building2, Check, ExternalLink, FileText, LogOut, Search, ShieldCheck, Smartphone, Star, Users, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { AppLink } from '@/components/ui/app-link';
 import { ActionButton, Button } from '@/components/ui/button';
@@ -31,7 +31,9 @@ interface CustomerDetail extends Omit<CustomerRow, 'orders' | 'ltv' | 'lastOrder
   orders: OrderRow[];
   wholesaleApplications: WholesaleApp[];
   priceLists: { id: string; name: string; active: boolean }[];
+  sessions: CustomerSession[];
 }
+interface CustomerSession { id: string; platform: string; appVersion: string; lastUsedAt: string; createdAt: string; ip: string | null }
 
 const SEGMENTS = [
   { key: '', label: 'Everyone' },
@@ -206,6 +208,7 @@ function CustomerSheet({ id, currency, onClose }: { id: string; currency: string
               {c.wholesaleApplications.map((a) => <AppCard key={a.id} a={a} compact />)}
             </div>
           )}
+          <SessionsBlock customerId={id} sessions={c.sessions ?? []} canManage={canManage} />
           <div>
             <div className="label-caps mb-2 text-muted">Recent orders</div>
             {c.orders.length === 0 ? <p className="text-sm text-muted">No orders yet.</p> : (
@@ -230,6 +233,44 @@ function CustomerSheet({ id, currency, onClose }: { id: string; currency: string
         <Field label="Reason" help="Visible to your team only.">{(fid) => <Input id={fid} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Repeated fake orders" />}</Field>
       </Dialog>
     </Dialog>
+  );
+}
+
+/** Signed-in devices. Revoking signs that device out within seconds (realtime) and on its next request at the latest. */
+function SessionsBlock({ customerId, sessions, canManage }: { customerId: string; sessions: CustomerSession[]; canManage: boolean }) {
+  const qc = useQueryClient();
+  const revoke = async (sid?: string) => {
+    try {
+      const r = await api<{ revoked: number; items: CustomerSession[] }>(`/admin/customers/${customerId}/sessions${sid ? `/${sid}` : ''}`, { method: 'DELETE' });
+      qc.setQueryData<CustomerDetail>(['customer', customerId], (old) => (old ? { ...old, sessions: r.items } : old));
+      toast.success(sid ? 'Device signed out' : `Signed out of ${r.revoked} ${r.revoked === 1 ? 'device' : 'devices'}`);
+    } catch (e) {
+      toast.error(e instanceof ApiError ? e.message : 'Could not sign out');
+    }
+  };
+  return (
+    <div>
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="label-caps text-muted">Signed-in devices</div>
+        {canManage && sessions.length > 0 && (
+          <ActionButton size="sm" variant="ghost" icon={<LogOut strokeWidth={1.5} />} onAction={() => revoke()}>Sign out everywhere</ActionButton>
+        )}
+      </div>
+      {sessions.length === 0 ? <p className="text-sm text-muted">Not signed in on any device.</p> : (
+        <ul className="divide-y divide-hairline rounded-sm border border-hairline">
+          {sessions.map((s) => (
+            <li key={s.id} className="flex items-center gap-3 px-3 py-2.5 text-[13px]">
+              <Smartphone className="size-4 shrink-0 text-muted" strokeWidth={1.5} />
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold">{s.platform === 'ios' ? 'iPhone' : s.platform === 'android' ? 'Android' : 'Device'}{s.appVersion ? <span className="font-normal text-muted"> · v{s.appVersion}</span> : null}</div>
+                <div className="text-xs text-muted">Active {fmtAgo(s.lastUsedAt)} · since {fmtDate(s.createdAt)}</div>
+              </div>
+              {canManage && <ActionButton size="sm" variant="secondary" onAction={() => revoke(s.id)}>Sign out</ActionButton>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 

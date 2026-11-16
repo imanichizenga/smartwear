@@ -46,6 +46,7 @@ def _session_payload(user: User, request, data: dict, is_new: bool) -> dict:
 # ---------------------------------------------------------------- customer / rider auth
 class OtpRequestView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes: list = []  # a stale/expired bearer token from the app must never block signing in or refreshing
 
     def post(self, request):
         d = _valid(RequestOtpIn, request)
@@ -54,19 +55,21 @@ class OtpRequestView(APIView):
 
 class OtpVerifyView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes: list = []  # a stale/expired bearer token from the app must never block signing in or refreshing
 
     def post(self, request):
         d = _valid(VerifyOtpIn, request)
         ch = otp.verify_code(d["phone"], d["code"], request)
         user, is_new = services.login_with_phone(ch.phone)
         if user.is_blocked:
-            raise ApiError.forbidden("This account has been blocked. Contact support for help.")
+            raise ApiError("This account has been blocked. Contact support for help.", status_code=403, code="account_blocked")
         audit("auth.login.phone", "user", user.id, request=request, user=user, meta={"new": is_new})
         return Response(_session_payload(user, request, d, is_new))
 
 
 class GoogleLoginView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes: list = []  # a stale/expired bearer token from the app must never block signing in or refreshing
 
     def post(self, request):
         d = _valid(GoogleIn, request)
@@ -74,7 +77,7 @@ class GoogleLoginView(APIView):
         claims = google.verify_id_token(d["idToken"])
         user, is_new = services.login_with_google(claims)
         if user.is_blocked:
-            raise ApiError.forbidden("This account has been blocked. Contact support for help.")
+            raise ApiError("This account has been blocked. Contact support for help.", status_code=403, code="account_blocked")
         audit("auth.login.google", "user", user.id, request=request, user=user, meta={"new": is_new})
         payload = _session_payload(user, request, d, is_new)
         payload["phoneRequiredAtCheckout"] = settings_service.get("auth").requirePhoneForCheckout and not user.phone_verified_at
@@ -83,6 +86,7 @@ class GoogleLoginView(APIView):
 
 class RefreshView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes: list = []  # a stale/expired bearer token from the app must never block signing in or refreshing
 
     def post(self, request):
         d = _valid(RefreshIn, request)

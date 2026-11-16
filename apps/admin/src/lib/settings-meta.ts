@@ -118,7 +118,7 @@ export const SETTINGS_META: Record<string, GroupMeta> = {
       defaultDialCode: { label: 'Default dial code' },
       requirePhoneForCheckout: { label: 'Ask Google users for a phone at first checkout', help: 'Riders need a number to call.' },
       accessTokenTtlMinutes: { label: 'App access token', suffix: 'minutes' },
-      refreshTokenTtlDays: { label: 'App stays signed in for', suffix: 'days' },
+      refreshTokenTtlDays: { label: 'App stays signed in for', suffix: 'days', help: 'Counted from the last time the app was used — active users never have to sign in again.' },
       adminSessionHours: { label: 'Admin session', suffix: 'hours' },
       jwtSecret: { hidden: true },
     },

@@ -63,7 +63,11 @@ class RealtimeConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({"type": "rider.location.ack", **res})
 
     async def sw_event(self, message):
-        await self.send(text_data=json.dumps(message["event"], default=str))
+        event = message["event"]
+        await self.send(text_data=json.dumps(event, default=str))
+        # An admin blocked the account or a session was revoked: drop this socket if it belongs to that session.
+        if event.get("type") == "session.revoked" and str(getattr(self.principal, "session_id", "") or "") in (event.get("sessionIds") or []):
+            await self.close(code=4403)
 
     @database_sync_to_async
     def _rider_id(self):

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/api.dart';
 import 'core/providers.dart';
+import 'core/session_keeper.dart';
 import 'design/theme.dart';
 import 'l10n/strings.dart';
 import 'router.dart';
+import 'ui/kit.dart';
 
 class SmartWearApp extends ConsumerWidget {
   const SmartWearApp({super.key});
@@ -14,6 +17,18 @@ class SmartWearApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final locale = ref.watch(localeProvider);
+    ref.watch(sessionKeeperProvider);
+    // The server ended the session (admin block / revoke / account deleted): go to Welcome and say why.
+    ref.listen<SessionState>(sessionProvider, (prev, next) {
+      if (prev?.signedIn != true || next.signedIn || next.endedBy == null) return;
+      router.go('/welcome');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx == null || !ctx.mounted) return;
+        final s = S(ref.read(localeProvider));
+        showSwToast(ctx, s(next.endedBy == SignOutReason.blocked ? 'auth.signedOut.blocked' : 'auth.signedOut.revoked'), error: true);
+      });
+    });
     return MaterialApp.router(
       title: 'SmartWear',
       debugShowCheckedModeBanner: false,

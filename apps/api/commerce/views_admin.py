@@ -239,6 +239,7 @@ class AdminCustomerView(APIView):
             "stats": {"ltv": agg["ltv"] or 0, "aov": int(agg["aov"] or 0), "delivered": agg["n"], "orders": orders.count(), "cancelled": orders.filter(status="CANCELLED").count()},
             "orders": [_row(o) for o in orders.select_related("user", "store", "delivery__rider__user").prefetch_related("items")[:20]],
             "wholesaleApplications": [_app_out(a) for a in u.wholesale_applications.order_by("-created_at")],
+            "sessions": _sessions_out(u),
             "priceLists": [{"id": str(p.id), "name": p.name, "active": p.active} for p in PriceList.objects.filter(Q(customer=u) | Q(group_id=u.customer_group_id) if u.customer_group_id else Q(customer=u))],
         })
 
@@ -267,6 +268,43 @@ class AdminCustomerView(APIView):
         u.save()
         audit("customer.update", "user", u.id, request=request, before=before, after={"blocked": u.is_blocked, "type": u.customer_type, "group": str(u.customer_group_id or "")})
         return self.get(request, uid)
+
+
+def _sessions_out(u: User) -> list[dict]:
+    from accounts.models import Session
+
+    rows = Session.objects.filter(user=u, revoked_at__isnull=True, expires_at__gt=timezone.now()).order_by("-last_used_at")[:20]
+    return [{"id": str(s.id), "platform": s.platform, "appVersion": s.app_version, "lastUsedAt": s.last_used_at.isoformat(), "createdAt": s.created_at.isoformat(), "ip": s.ip} for s in rows]
+
+
+class AdminCustomerSessionsView(APIView):
+    """Signed-in devices of a customer. DELETE without an id signs the customer out everywhere."""
+
+    permission_classes = [AdminPerm("customers.view")]
+
+    def get(self, request, uid):
+        u = User.objects.filter(id=uid).first()
+        if u is None:
+            raise ApiError.not_found("Customer")
+        return Response({"items": _sessions_out(u)})
+
+    def delete(self, request, uid, sid=None):
+        require_perm(request, "customers.manage")
+        from accounts.models import Session
+        from accounts.tokens import revoke_all, revoke_session
+
+        u = User.objects.filter(id=uid).first()
+        if u is None:
+            raise ApiError.not_found("Customer")
+        if sid:
+            if not Session.objects.filter(id=sid, user=u).exists():
+                raise ApiError.not_found("Session")
+            revoke_session(str(sid), "admin_revoked")
+            n = 1
+        else:
+            n = revoke_all(u, "admin_revoked")
+        audit("customer.sessions.revoke", "user", u.id, request=request, meta={"sessionId": str(sid) if sid else None, "count": n})
+        return Response({"ok": True, "revoked": n, "items": _sessions_out(u)})
 
 
 def _app_out(a: WholesaleApplication) -> dict:

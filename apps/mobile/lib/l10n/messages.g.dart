@@ -374,6 +374,8 @@ const Map<String, String> messagesEn = {
   'rider.weekEarnings': 'This week',
   'rider.release': 'Can’t do this delivery',
   'rider.locationNeeded': 'Turn on location to go online',
+  'auth.signedOut.revoked': 'You were signed out. Please sign in again.',
+  'auth.signedOut.blocked': 'This account has been blocked. Contact support for help.',
 };
 
 const Map<String, String> messagesSw = {
@@ -743,4 +745,6 @@ const Map<String, String> messagesSw = {
   'rider.weekEarnings': 'Wiki hii',
   'rider.release': 'Siwezi kufanya safari hii',
   'rider.locationNeeded': 'Washa mahali ulipo ili uanze kazi',
+  'auth.signedOut.revoked': 'Umetolewa kwenye akaunti. Tafadhali ingia tena.',
+  'auth.signedOut.blocked': 'Akaunti hii imezuiwa. Wasiliana na huduma kwa wateja kwa msaada.',
 };

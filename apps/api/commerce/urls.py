@@ -49,6 +49,8 @@ urlpatterns = [
     path("admin/orders/<uuid:oid>/<str:doc>.pdf", a.AdminOrderDocumentView.as_view()),
     path("admin/customers", a.AdminCustomersView.as_view()),
     path("admin/customers/<uuid:uid>", a.AdminCustomerView.as_view()),
+    path("admin/customers/<uuid:uid>/sessions", a.AdminCustomerSessionsView.as_view()),
+    path("admin/customers/<uuid:uid>/sessions/<uuid:sid>", a.AdminCustomerSessionsView.as_view()),
     path("admin/wholesale", a.AdminWholesaleView.as_view()),
     path("admin/wholesale/<uuid:aid>", a.AdminWholesaleDecisionView.as_view()),
     path("admin/reviews", a.AdminReviewsView.as_view()),

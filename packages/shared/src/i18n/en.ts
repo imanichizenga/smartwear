@@ -387,4 +387,6 @@ export const en = {
   'rider.weekEarnings': 'This week',
   'rider.release': 'Can’t do this delivery',
   'rider.locationNeeded': 'Turn on location to go online',
+  'auth.signedOut.revoked': 'You were signed out. Please sign in again.',
+  'auth.signedOut.blocked': 'This account has been blocked. Contact support for help.',
 } as const;

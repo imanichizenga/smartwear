@@ -199,6 +199,9 @@ class Session(UUIDModel):
     ip = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.CharField(max_length=300, blank=True, default="")
     last_used_at = models.DateTimeField(default=timezone.now)
+    # When refresh_hash last replaced previous_hash. A client killed between the server rotating and the client
+    # persisting the new token re-presents previous_hash; inside a short grace window that is not treated as theft.
+    rotated_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField()
     revoked_at = models.DateTimeField(null=True, blank=True)
     revoke_reason = models.CharField(max_length=40, blank=True, default="")

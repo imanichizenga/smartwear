@@ -95,9 +95,15 @@ def test_google_sign_in_and_refresh_rotation(api):
         assert again["isNewUser"] is False and again["user"]["id"] == d["user"]["id"]
         r1 = api.post("/v1/auth/refresh", {"refreshToken": again["refreshToken"]}, format="json", HTTP_X_DEVICE_ID="dev-g")
         assert r1.status_code == 200
-        # Reusing the old refresh token = theft signal → whole family revoked
-        assert api.post("/v1/auth/refresh", {"refreshToken": again["refreshToken"]}, format="json", HTTP_X_DEVICE_ID="dev-g").status_code == 401
-        assert api.post("/v1/auth/refresh", {"refreshToken": r1.json()["refreshToken"]}, format="json", HTTP_X_DEVICE_ID="dev-g").status_code == 401
+        # Reusing the old refresh token outside the 2-minute grace window = theft signal → whole family revoked
+        from datetime import timedelta
+
+        from django.utils import timezone
+        from freezegun import freeze_time
+
+        with freeze_time(timezone.now() + timedelta(minutes=3)):
+            assert api.post("/v1/auth/refresh", {"refreshToken": again["refreshToken"]}, format="json", HTTP_X_DEVICE_ID="dev-g").status_code == 401
+            assert api.post("/v1/auth/refresh", {"refreshToken": r1.json()["refreshToken"]}, format="json", HTTP_X_DEVICE_ID="dev-g").status_code == 401
         assert Session.objects.filter(revoke_reason="refresh_reuse").exists()
     finally:
         google.set_verifier(None)

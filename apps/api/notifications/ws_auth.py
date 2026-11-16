@@ -22,7 +22,7 @@ def _principal(token: str | None, admin_token: str | None):
         if is_session_revoked(claims["sid"]):
             return None
         u = User.objects.select_related("rider").filter(id=claims["sub"], deleted_at__isnull=True, is_blocked=False).first()
-        return Principal(kind="rider" if u and u.is_rider else "customer", user=u) if u else None
+        return Principal(kind="rider" if u and u.is_rider else "customer", user=u, session_id=claims["sid"]) if u else None
     if admin_token:
         s = AdminSession.objects.select_related("admin__role").filter(token_hash=sha256(admin_token)).first()
         if s and s.active and s.mfa_passed and s.admin.is_active:

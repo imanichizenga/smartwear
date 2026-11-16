@@ -20,14 +20,15 @@ import 'features/search/search_screen.dart';
 import 'features/shell/shell.dart';
 import 'features/shell/splash.dart';
 
-final _rootKey = GlobalKey<NavigatorState>();
+/// Root navigator; also the context for app-level toasts (e.g. "you were signed out").
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
   final session = ValueNotifier(ref.read(sessionProvider));
   ref.listen(sessionProvider, (_, n) => session.value = n);
   ref.onDispose(session.dispose);
   return GoRouter(
-    navigatorKey: _rootKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/splash',
     refreshListenable: session,
     redirect: (context, state) {
@@ -55,7 +56,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/p/:slug',
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         pageBuilder: (c, s) => CustomTransitionPage(
           key: s.pageKey,
           child: ProductScreen(slug: s.pathParameters['slug']!),
@@ -63,11 +64,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           transitionsBuilder: (c, a, _, child) => FadeTransition(opacity: CurvedAnimation(parent: a, curve: const Cubic(0.22, 0.61, 0.36, 1)), child: child),
         ),
       ),
-      GoRoute(path: '/checkout', parentNavigatorKey: _rootKey, builder: (c, s) => const CheckoutScreen()),
-      GoRoute(path: '/orders', parentNavigatorKey: _rootKey, builder: (c, s) => const OrdersScreen()),
+      GoRoute(path: '/checkout', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const CheckoutScreen()),
+      GoRoute(path: '/orders', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const OrdersScreen()),
       GoRoute(
         path: '/orders/:id/track',
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         pageBuilder: (c, s) => CustomTransitionPage(
           key: s.pageKey,
           child: TrackingScreen(orderId: s.pathParameters['id']!),
@@ -75,18 +76,18 @@ final routerProvider = Provider<GoRouter>((ref) {
           transitionsBuilder: (c, a, _, child) => FadeTransition(opacity: CurvedAnimation(parent: a, curve: const Cubic(0.22, 0.61, 0.36, 1)), child: child),
         ),
       ),
-      GoRoute(path: '/orders/:id/pay', parentNavigatorKey: _rootKey, builder: (c, s) => PaymentWaitScreen(orderId: s.pathParameters['id']!)),
-      GoRoute(path: '/chat/:id', parentNavigatorKey: _rootKey, builder: (c, s) => ChatScreen(threadId: s.pathParameters['id']!, title: s.uri.queryParameters['title'])),
-      GoRoute(path: '/rider', parentNavigatorKey: _rootKey, builder: (c, s) => const RiderHomeScreen()),
-      GoRoute(path: '/rider/earnings', parentNavigatorKey: _rootKey, builder: (c, s) => const RiderEarningsScreen()),
+      GoRoute(path: '/orders/:id/pay', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => PaymentWaitScreen(orderId: s.pathParameters['id']!)),
+      GoRoute(path: '/chat/:id', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => ChatScreen(threadId: s.pathParameters['id']!, title: s.uri.queryParameters['title'])),
+      GoRoute(path: '/rider', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const RiderHomeScreen()),
+      GoRoute(path: '/rider/earnings', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const RiderEarningsScreen()),
       GoRoute(
         path: '/c/:slug',
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (c, s) => ProductListScreen(category: s.pathParameters['slug'], title: s.uri.queryParameters['title']),
       ),
       GoRoute(
         path: '/collection/:slug',
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (c, s) => ProductListScreen(collection: s.pathParameters['slug'], title: s.uri.queryParameters['title']),
       ),
     ],

@@ -107,4 +107,6 @@ export const sw: Partial<Record<keyof typeof en, string>> = {
   'rider.weekEarnings': 'Wiki hii',
   'rider.release': 'Siwezi kufanya safari hii',
   'rider.locationNeeded': 'Washa mahali ulipo ili uanze kazi',
+  'auth.signedOut.revoked': 'Umetolewa kwenye akaunti. Tafadhali ingia tena.',
+  'auth.signedOut.blocked': 'Akaunti hii imezuiwa. Wasiliana na huduma kwa wateja kwa msaada.',
 };

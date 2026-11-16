@@ -57,7 +57,7 @@ class Auth(BaseModel):
     otpMaxPerIpPerHour: int = Field(30, ge=1)
     otpMaxPerDevicePerHour: int = Field(10, ge=1)
     accessTokenTtlMinutes: int = Field(15, ge=5, le=120)
-    refreshTokenTtlDays: int = Field(60, ge=1, le=365)
+    refreshTokenTtlDays: int = Field(180, ge=1, le=365)  # sliding: renewed on every refresh
     requirePhoneForCheckout: bool = True
     defaultCountry: str = Field("TZ", min_length=2, max_length=2)
     defaultDialCode: str = "+255"

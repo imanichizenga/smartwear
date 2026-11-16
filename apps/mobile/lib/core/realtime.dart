@@ -15,8 +15,9 @@ typedef RtEvent = Map<String, dynamic>;
 /// Reconnects with backoff, re-subscribes, and exposes [connected] so screens can show
 /// "updating…" and fall back to polling while offline.
 class Realtime {
-  Realtime(this._tokens);
-  final TokenStore _tokens;
+  Realtime(this._api);
+  final Api _api;
+  TokenStore get _tokens => _api.tokens;
   WebSocketChannel? _ch;
   StreamSubscription<dynamic>? _sub;
   final _events = StreamController<RtEvent>.broadcast();
@@ -26,6 +27,7 @@ class Realtime {
   int _attempt = 0;
   bool _up = false;
   bool _disposed = false;
+  bool _connecting = false;
 
   Stream<RtEvent> get events => _events.stream;
   Stream<bool> get connected => _connected.stream;
@@ -34,12 +36,30 @@ class Realtime {
   static bool get _testing => Platform.environment['FLUTTER_TEST'] == 'true';
 
   void ensure() {
-    if (_testing || _disposed || _ch != null || _tokens.access == null) return;
+    if (_testing || _disposed || _ch != null || _connecting || !_tokens.signedIn) return;
+    _connecting = true;
+    // Never open the socket with an access token that is about to expire (the server would close with 4401).
+    _api.refreshIfExpiring().then((res) {
+      _connecting = false;
+      if (_disposed || _ch != null) return;
+      if (res == RefreshResult.signedOut || _tokens.access == null) return;
+      if (res == RefreshResult.offline) {
+        _scheduleRetry();
+        return;
+      }
+      _open();
+    }, onError: (_) {
+      _connecting = false;
+      _scheduleRetry();
+    });
+  }
+
+  void _open() {
     final base = apiUrl.replaceFirst(RegExp('^http'), 'ws');
     try {
       final ch = WebSocketChannel.connect(Uri.parse('$base/realtime/?token=${Uri.encodeComponent(_tokens.access!)}'));
       _ch = ch;
-      _sub = ch.stream.listen(_onMessage, onDone: _onClosed, onError: (_) => _onClosed());
+      _sub = ch.stream.listen(_onMessage, onDone: () => _onClosed(ch.closeCode), onError: (_) => _onClosed(ch.closeCode));
       ch.ready.then((_) {
         _attempt = 0;
         _setUp(true);
@@ -48,9 +68,9 @@ class Realtime {
         }
         _ping?.cancel();
         _ping = Timer.periodic(const Duration(seconds: 25), (_) => _send({'type': 'ping'}));
-      }, onError: (_) => _onClosed());
+      }, onError: (_) => _onClosed(ch.closeCode));
     } catch (_) {
-      _onClosed();
+      _onClosed(null);
     }
   }
 
@@ -90,15 +110,41 @@ class Realtime {
     } catch (_) {}
   }
 
-  void _onClosed() {
+  /// 4401 = access token expired/invalid → refresh once (single-flight) and reconnect with the new token.
+  /// 4403 = this session was revoked → a refresh asks the server, which signs the app out if it's final.
+  void _onClosed(int? code) {
     _sub?.cancel();
     _ch = null;
     _ping?.cancel();
     _setUp(false);
     if (_disposed) return;
+    if (code == 4401 || code == 4403) {
+      _api.refreshSession().then((res) {
+        if (_disposed) return;
+        if (res == RefreshResult.ok) {
+          _attempt = 0;
+          ensure();
+        } else if (res == RefreshResult.offline) {
+          _scheduleRetry();
+        }
+      });
+      return;
+    }
+    _scheduleRetry();
+  }
+
+  void _scheduleRetry() {
+    if (_disposed) return;
     _retry?.cancel();
     _attempt = math.min(_attempt + 1, 6);
     _retry = Timer(Duration(milliseconds: 600 * (1 << _attempt)), ensure);
+  }
+
+  /// After sign-out: drop the socket and forget rooms tied to the old account.
+  void reset() {
+    close();
+    _rooms.clear();
+    _attempt = 0;
   }
 
   void _setUp(bool v) {
@@ -125,7 +171,7 @@ class Realtime {
 }
 
 final realtimeProvider = Provider<Realtime>((ref) {
-  final rt = Realtime(ref.watch(tokenStoreProvider));
+  final rt = Realtime(ref.watch(apiProvider));
   ref.onDispose(rt.dispose);
   return rt;
 });

@@ -30,7 +30,7 @@ class BearerJWTAuthentication(BaseAuthentication):
         if user is None:
             raise ApiError.unauthorized("Account not found")
         if user.is_blocked:
-            raise ApiError.forbidden("This account has been blocked. Contact support for help.")
+            raise ApiError("This account has been blocked. Contact support for help.", status_code=403, code="account_blocked")
         principal = Principal(kind="rider" if user.is_rider else "customer", user=user, session_id=claims["sid"])
         request._request.principal = principal
         return (principal, claims)

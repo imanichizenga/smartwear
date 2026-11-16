@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -54,42 +55,91 @@ extension ConfigX on Json {
 
 /* ------------------------------------------------------------------ session */
 
+/// SharedPreferences as a [KeyValueStore] — the token store mirrors the (non-secret) device id here.
+class PrefsKv implements KeyValueStore {
+  PrefsKv(this.prefs);
+  final SharedPreferences prefs;
+  @override
+  Future<String?> read(String key) async => prefs.getString(key);
+  @override
+  Future<void> write(String key, String value) => prefs.setString(key, value);
+  @override
+  Future<void> delete(String key) => prefs.remove(key);
+}
+
 class SessionState {
-  const SessionState({this.user, this.ready = false});
+  const SessionState({this.user, this.ready = false, bool? signedIn, this.endedBy}) : _signedIn = signedIn;
   final Json? user;
   final bool ready;
-  bool get signedIn => user != null;
+  final bool? _signedIn;
+
+  /// Set when the server ended the session (admin block / revoke), so the UI can say why.
+  final SignOutReason? endedBy;
+  bool get signedIn => _signedIn ?? user != null;
   bool get isRider => user?['isRider'] == true || user?.obj('rider') != null;
 }
 
 final sessionProvider = NotifierProvider<SessionNotifier, SessionState>(SessionNotifier.new);
 
+/// Sign-in persists until the user signs out or the server definitively ends the session. Restore never waits
+/// for the network: a stored refresh token means "signed in" straight away (with the cached user), and `/me`
+/// is revalidated in the background. Offline, timeouts and 5xx never sign anyone out.
 class SessionNotifier extends Notifier<SessionState> {
   @override
-  SessionState build() => const SessionState();
+  SessionState build() {
+    final api = ref.read(apiProvider);
+    api.onSignedOut = _ended;
+    api.onRefreshed = (u) {
+      if (state.signedIn) state = SessionState(user: u, ready: true);
+    };
+    return const SessionState();
+  }
 
   Api get _api => ref.read(apiProvider);
+  TokenStore get _tokens => ref.read(tokenStoreProvider);
 
   Future<void> restore() async {
-    final tokens = ref.read(tokenStoreProvider);
-    await tokens.load();
+    final tokens = _tokens;
+    if (!tokens.loaded) await tokens.load();
     if (!tokens.signedIn) {
       state = const SessionState(ready: true);
       return;
     }
+    state = SessionState(user: tokens.cachedUser, signedIn: true, ready: true);
+    unawaited(revalidate());
+  }
+
+  /// Refresh the user from `/me`. Errors keep the current session; a real revocation arrives through
+  /// [Api.onSignedOut] (the 401 → refresh → definitive failure path).
+  Future<void> revalidate() async {
+    if (!_tokens.signedIn) return;
     try {
       final me = await _api.get<Json>('/me');
-      state = SessionState(user: me.obj('user') ?? me, ready: true);
-    } on ApiException catch (e) {
-      if (e.status == 401) await tokens.clear();
-      state = SessionState(ready: true, user: e.isNetwork ? const {'offline': true} : null);
+      if (_tokens.signedIn) await _setUser(me.obj('user') ?? me);
+    } on ApiException {
+      // offline / server trouble: stay signed in with what we have
     }
+  }
+
+  Future<void> _setUser(Json user) async {
+    await _tokens.saveUser(user);
+    state = SessionState(user: user, ready: true);
+  }
+
+  void _ended(SignOutReason reason) {
+    if (!state.signedIn) return;
+    state = SessionState(ready: true, endedBy: reason);
+    ref.invalidate(cartProvider);
+    ref.invalidate(wishlistProvider);
   }
 
   /// Returns the API's `isNewUser` so the caller can offer the (skippable) style quiz.
   Future<bool> completeLogin(Json payload) async {
-    await ref.read(tokenStoreProvider).save(payload.str('accessToken'), payload.str('refreshToken'));
-    state = SessionState(user: payload.obj('user'), ready: true);
+    final tokens = _tokens;
+    await tokens.save(payload.str('accessToken'), payload.str('refreshToken'), sessionId: payload.strN('sessionId'));
+    final user = payload.obj('user');
+    if (user != null) await tokens.saveUser(user);
+    state = SessionState(user: user, signedIn: true, ready: true);
     ref.invalidate(cartProvider);
     ref.invalidate(wishlistProvider);
     return payload.flag('isNewUser');
@@ -98,14 +148,14 @@ class SessionNotifier extends Notifier<SessionState> {
   Future<void> requestOtp(String phone) => _api.post<Json>('/auth/otp/request', {'phone': phone});
 
   Future<bool> verifyOtp(String phone, String code) async {
-    final t = ref.read(tokenStoreProvider);
-    final r = await _api.post<Json>('/auth/otp/verify', {'phone': phone, 'code': code, 'deviceId': t.deviceId, 'platform': _platform, 'appVersion': appVersion});
+    final device = await _tokens.ensureDeviceId();
+    final r = await _api.post<Json>('/auth/otp/verify', {'phone': phone, 'code': code, 'deviceId': device, 'platform': _platform, 'appVersion': appVersion});
     return completeLogin(r);
   }
 
   Future<bool> google(String idToken) async {
-    final t = ref.read(tokenStoreProvider);
-    final r = await _api.post<Json>('/auth/google', {'idToken': idToken, 'deviceId': t.deviceId, 'platform': _platform, 'appVersion': appVersion});
+    final device = await _tokens.ensureDeviceId();
+    final r = await _api.post<Json>('/auth/google', {'idToken': idToken, 'deviceId': device, 'platform': _platform, 'appVersion': appVersion});
     return completeLogin(r);
   }
 
@@ -115,13 +165,16 @@ class SessionNotifier extends Notifier<SessionState> {
     } on ApiException {
       // Signing out locally must always work, even offline.
     }
-    await ref.read(tokenStoreProvider).clear();
+    await _tokens.clear();
     state = const SessionState(ready: true);
     ref.invalidate(cartProvider);
     ref.invalidate(wishlistProvider);
   }
 
-  void updateUser(Json user) => state = SessionState(user: user, ready: true);
+  void updateUser(Json user) {
+    state = SessionState(user: user, ready: true);
+    unawaited(_tokens.saveUser(user));
+  }
 
   static String get _platform => defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android';
 }
