@@ -376,6 +376,11 @@ const Map<String, String> messagesEn = {
   'rider.locationNeeded': 'Turn on location to go online',
   'auth.signedOut.revoked': 'You were signed out. Please sign in again.',
   'auth.signedOut.blocked': 'This account has been blocked. Contact support for help.',
+  'auth.otp.paste': 'Paste',
+  'auth.otp.pasteHint': 'Tip: press and hold to paste the code.',
+  'auth.otp.verified': 'Verified',
+  'auth.otp.resent': 'A new code is on its way.',
+  'common.offlineAction': 'You are offline. Check your connection and try again.',
 };
 
 const Map<String, String> messagesSw = {
@@ -747,4 +752,9 @@ const Map<String, String> messagesSw = {
   'rider.locationNeeded': 'Washa mahali ulipo ili uanze kazi',
   'auth.signedOut.revoked': 'Umetolewa kwenye akaunti. Tafadhali ingia tena.',
   'auth.signedOut.blocked': 'Akaunti hii imezuiwa. Wasiliana na huduma kwa wateja kwa msaada.',
+  'auth.otp.paste': 'Bandika',
+  'auth.otp.pasteHint': 'Dokezo: bonyeza na ushikilie ili kubandika msimbo.',
+  'auth.otp.verified': 'Imethibitishwa',
+  'auth.otp.resent': 'Msimbo mpya unakuja.',
+  'common.offlineAction': 'Hauko mtandaoni. Angalia muunganisho wako kisha ujaribu tena.',
 };

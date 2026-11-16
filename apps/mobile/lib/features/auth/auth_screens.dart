@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../core/api.dart';
 import '../../core/providers.dart';
@@ -30,7 +32,12 @@ class WelcomeScreen extends ConsumerWidget {
       final idToken = acct.authentication.idToken;
       if (idToken == null) return;
       final isNew = await ref.read(sessionProvider.notifier).google(idToken);
-      if (context.mounted) _finish(context, ref, isNew);
+      if (context.mounted) {
+        final q = GoRouterState.of(context).uri.queryParameters;
+        finishSignIn(context, ref, isNew: isNew, from: q['from'], pushed: q['return'] == '1');
+      } else {
+        ref.read(sessionProvider.notifier).finishSignIn();
+      }
     } on GoogleSignInException catch (e) {
       if (e.code != GoogleSignInExceptionCode.canceled && context.mounted) showSwToast(context, e.description ?? ref.s('common.error.body'), error: true);
     } on ApiException catch (e) {
@@ -45,7 +52,10 @@ class WelcomeScreen extends ConsumerWidget {
     final home = ref.watch(homeProvider).value;
     final hero = home?.list('sections').where((x) => x.str('type') == 'hero').firstOrNull?.list('items').firstOrNull?.obj('media');
     final cfg = ref.watch(configProvider).value ?? const {};
-    final returning = GoRouterState.of(context).uri.queryParameters['return'] == '1';
+    final q = GoRouterState.of(context).uri.queryParameters;
+    final returning = q['return'] == '1';
+    final from = q['from'];
+    final authQuery = authFlowQuery(from: from, pushed: returning);
     return Scaffold(
       backgroundColor: on.canvas,
       body: Stack(fit: StackFit.expand, children: [
@@ -58,7 +68,8 @@ class WelcomeScreen extends ConsumerWidget {
               Row(children: [
                 Text('SMARTWEAR', style: context.type.titleS.copyWith(color: on.ink, letterSpacing: 13 * 0.32, fontSize: 13, fontWeight: FontWeight.w700)),
                 const Spacer(),
-                if (returning) SwIconButton(icon: Ic.x, color: on.ink, semanticLabel: s('common.close'), onPressed: () => context.pop()),
+                if (returning || from != null)
+                  SwIconButton(icon: Ic.x, color: on.ink, semanticLabel: s('common.close'), onPressed: () => context.canPop() ? context.pop() : context.go('/')),
               ]),
               const Spacer(),
               Text(s('auth.welcome.title'), style: context.type.displayXL.copyWith(color: on.ink)),
@@ -67,8 +78,8 @@ class WelcomeScreen extends ConsumerWidget {
               const SizedBox(height: SwSpace.s8),
               _OnDarkButton(label: s('auth.google'), icon: Ic.globe, primary: true, onPressed: () => _google(context, ref)),
               const SizedBox(height: SwSpace.s3),
-              _OnDarkButton(label: s('auth.phone'), icon: Ic.smartphone, onPressed: () => context.push('/auth/phone${returning ? '?return=1' : ''}')),
-              if (!returning && cfg.feature('guestBrowsing'))
+              _OnDarkButton(label: s('auth.phone'), icon: Ic.smartphone, onPressed: () => context.push('/auth/phone${authQuery.isEmpty ? '' : '?$authQuery'}')),
+              if (!returning && from == null && cfg.feature('guestBrowsing'))
                 Center(
                   child: PressableLink(
                     loaderOverlay: false,
@@ -103,23 +114,61 @@ class _OnDarkButton extends StatelessWidget {
   }
 }
 
-void _finish(BuildContext context, WidgetRef ref, bool isNew) {
+/// Query string that carries the sign-in context through Welcome → Phone → OTP.
+///  * `from`: where the shopper was going (an auth-only page, or the page of a gated action);
+///  * `return=1`: Welcome was *pushed* over that page by [requireSignIn], so finishing pops back to it and
+///    the waiting action (add to bag, wishlist…) resumes.
+String authFlowQuery({String? from, bool pushed = false}) => [
+      if (pushed) 'return=1',
+      if (from != null && from.isNotEmpty) 'from=${Uri.encodeComponent(from)}',
+    ].join('&');
+
+bool _isAuthLocation(String l) => l == '/welcome' || l.startsWith('/auth/');
+
+/// After a successful sign-in, navigate explicitly — never by guessing how many pages to pop:
+///  * pushed over a page (gated action): pop the auth pages; the page underneath is the origin;
+///  * redirected from an auth-only page: go there;
+///  * new shopper with the style quiz on: the quiz;
+///  * otherwise Home.
+void finishSignIn(BuildContext context, WidgetRef ref, {required bool isNew, String? from, bool pushed = false}) {
   ref.read(prefsProvider).setBool('sw.welcomed', true);
+  final session = ref.read(sessionProvider.notifier);
   final cfg = ref.read(configProvider).value ?? const {};
-  if (isNew && cfg.feature('styleQuiz')) {
-    context.go('/auth/quiz');
-  } else if (GoRouter.of(context).canPop()) {
-    while (GoRouter.of(context).canPop()) {
-      GoRouter.of(context).pop();
+  final router = GoRouter.of(context);
+  if (pushed) {
+    // Count the auth pages on top of the router's own match list (Welcome → Phone → OTP) and pop exactly those.
+    final matches = router.routerDelegate.currentConfiguration.matches;
+    var n = 0;
+    for (final m in matches.reversed) {
+      if (!_isAuthLocation(m.matchedLocation)) break;
+      n++;
     }
-  } else {
-    context.go('/');
+    if (n > 0 && n < matches.length) {
+      for (var i = 0; i < n; i++) {
+        router.pop();
+      }
+      session.finishSignIn();
+      return;
+    }
   }
+  if (from != null && from.startsWith('/') && !from.startsWith('/auth') && !from.startsWith('/welcome')) {
+    router.go(from);
+  } else if (isNew && cfg.feature('styleQuiz')) {
+    router.go('/auth/quiz');
+  } else {
+    router.go('/');
+  }
+  session.finishSignIn();
 }
 
 /// Phone: +255 pre-filled, live formatting, Send code.
 class PhoneScreen extends ConsumerStatefulWidget {
-  const PhoneScreen({super.key});
+  const PhoneScreen({super.key, this.initialPhone, this.from, this.pushed = false});
+
+  /// Prefilled when coming back via "Change number" (E.164, e.g. +255712345678).
+  final String? initialPhone;
+  final String? from;
+  final bool pushed;
   @override
   ConsumerState<PhoneScreen> createState() => _PhoneScreenState();
 }
@@ -127,6 +176,16 @@ class PhoneScreen extends ConsumerStatefulWidget {
 class _PhoneScreenState extends ConsumerState<PhoneScreen> {
   final _ctrl = TextEditingController();
   String? _error;
+  bool _sending = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.initialPhone?.replaceAll(RegExp(r'\D'), '') ?? '';
+    // +255712345678 → 712345678 → "712 345 678"
+    final local = p.length > 9 ? p.substring(p.length - 9) : p;
+    if (local.isNotEmpty) _ctrl.value = _TzPhoneFormatter().formatEditUpdate(TextEditingValue.empty, TextEditingValue(text: local));
+  }
 
   @override
   void dispose() {
@@ -139,13 +198,18 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
   bool get _valid => _digits.length == 9;
 
   Future<void> _send() async {
+    if (_sending) return;
     if (!_valid) return setState(() => _error = ref.s('auth.phone.invalid'));
     final phone = '$_dial$_digits';
+    setState(() => _sending = true);
     try {
       await ref.read(sessionProvider.notifier).requestOtp(phone);
-      if (mounted) context.push('/auth/otp?phone=${Uri.encodeComponent(phone)}');
+      final q = authFlowQuery(from: widget.from, pushed: widget.pushed);
+      if (mounted) context.push('/auth/otp?phone=${Uri.encodeComponent(phone)}${q.isEmpty ? '' : '&$q'}');
     } on ApiException catch (e) {
-      setState(() => _error = e.message);
+      if (mounted) setState(() => _error = e.isNetwork ? ref.s('common.offlineAction') : e.message);
+    } finally {
+      if (mounted) setState(() => _sending = false);
     }
   }
 
@@ -153,7 +217,7 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
   Widget build(BuildContext context) {
     final s = ref.s;
     return Scaffold(
-      appBar: AppBar(leading: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), onPressed: () => context.pop())),
+      appBar: AppBar(leading: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), onPressed: () => context.canPop() ? context.pop() : context.go('/welcome'))),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(SwSpace.s6, SwSpace.s4, SwSpace.s6, SwSpace.s6),
@@ -172,10 +236,11 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
               prefix: Padding(padding: const EdgeInsets.only(left: SwSpace.s4, right: SwSpace.s2), child: Align(widthFactor: 1, child: Text('TZ  $_dial', style: context.type.bodyM.copyWith(fontWeight: FontWeight.w600)))),
               error: _error,
               onChanged: (_) => setState(() => _error = null),
+              textInputAction: TextInputAction.send,
               onSubmitted: (_) => _send(),
             ),
             const Spacer(),
-            SwButton(label: s('auth.phone.send'), large: true, expand: true, onPressed: _valid ? _send : null),
+            SwButton(label: s('auth.phone.send'), large: true, expand: true, onPressed: _valid && !_sending ? _send : null),
           ]),
         ),
       ),
@@ -197,10 +262,13 @@ class _TzPhoneFormatter extends TextInputFormatter {
   }
 }
 
-/// OTP: six boxes, autofill, auto-submit on the 6th digit, resend countdown, change number.
+/// OTP: responsive boxes, SMS autofill (Android) / one-time-code autofill (iOS), paste, auto-submit once on the
+/// last digit, success state, resend with the configured cooldown, change number.
 class OtpScreen extends ConsumerStatefulWidget {
-  const OtpScreen({super.key, required this.phone});
+  const OtpScreen({super.key, required this.phone, this.from, this.pushed = false});
   final String phone;
+  final String? from;
+  final bool pushed;
   @override
   ConsumerState<OtpScreen> createState() => _OtpScreenState();
 }
@@ -208,20 +276,41 @@ class OtpScreen extends ConsumerStatefulWidget {
 class _OtpScreenState extends ConsumerState<OtpScreen> {
   final _ctrl = TextEditingController();
   Timer? _timer;
+  StreamSubscription<String>? _sms;
   int _left = 30;
-  bool _busy = false;
+  bool _busy = false, _success = false, _resending = false;
   String? _error;
+
+  int get _cooldown => ref.read(configProvider).value?.obj('auth')?.integer('otpResendCooldownSeconds', 30) ?? 30;
 
   @override
   void initState() {
     super.initState();
-    _left = ref.read(configProvider).value?.obj('auth')?.integer('otpResendCooldownSeconds', 30) ?? 30;
+    _left = _cooldown;
     _tick();
+    _listenForSms();
+  }
+
+  /// Android SMS Retriever: the OTP SMS ends with the app hash (Admin → Settings → SMS), so the code fills in
+  /// without any permission prompt. iOS uses the one-time-code autofill hint on the field.
+  Future<void> _listenForSms() async {
+    if (!Platform.isAndroid) return;
+    try {
+      _sms = SmsAutoFill().code.listen((code) {
+        if (!mounted || _busy || _success) return;
+        final d = code.replaceAll(RegExp(r'\D'), '');
+        if (d.isNotEmpty) _ctrl.value = TextEditingValue(text: d, selection: TextSelection.collapsed(offset: d.length));
+      });
+      await SmsAutoFill().listenForCode();
+    } catch (_) {
+      // Autofill is a convenience; typing and paste still work.
+    }
   }
 
   void _tick() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) return t.cancel();
       if (_left <= 1) t.cancel();
       setState(() => _left = (_left - 1).clamp(0, 999));
     });
@@ -230,12 +319,16 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _sms?.cancel();
+    if (Platform.isAndroid) {
+      SmsAutoFill().unregisterListener().catchError((_) {});
+    }
     _ctrl.dispose();
     super.dispose();
   }
 
   Future<void> _verify(String code) async {
-    if (_busy) return;
+    if (_busy || _success) return;
     setState(() {
       _busy = true;
       _error = null;
@@ -243,55 +336,103 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     try {
       final isNew = await ref.read(sessionProvider.notifier).verifyOtp(widget.phone, code);
       HapticFeedback.mediumImpact();
-      if (mounted) _finish(context, ref, isNew);
+      if (!mounted) {
+        ref.read(sessionProvider.notifier).finishSignIn();
+        return;
+      }
+      // A brief success state before moving on.
+      setState(() {
+        _busy = false;
+        _success = true;
+      });
+      await Future<void>.delayed(Duration(milliseconds: context.reduceMotion ? 120 : 420));
+      if (mounted) {
+        finishSignIn(context, ref, isNew: isNew, from: widget.from, pushed: widget.pushed);
+      } else {
+        ref.read(sessionProvider.notifier).finishSignIn();
+      }
     } on ApiException catch (e) {
       HapticFeedback.heavyImpact();
+      if (!mounted) return;
       _ctrl.clear();
-      setState(() => _error = switch (e.code) { 'otp_expired' => ref.s('auth.otp.expired'), 'otp_too_many' || 'rate_limited' => ref.s('auth.otp.tooMany'), _ => ref.s('auth.otp.invalid') });
+      setState(() {
+        _busy = false;
+        _error = switch (e.code) {
+          'otp_expired' => ref.s('auth.otp.expired'),
+          'otp_too_many' || 'rate_limited' => ref.s('auth.otp.tooMany'),
+          'account_blocked' => ref.s('auth.signedOut.blocked'),
+          _ when e.isNetwork => ref.s('common.offlineAction'),
+          _ => ref.s('auth.otp.invalid'),
+        };
+      });
+    }
+  }
+
+  Future<void> _resend() async {
+    if (_resending || _left > 0) return;
+    setState(() => _resending = true);
+    try {
+      await ref.read(sessionProvider.notifier).requestOtp(widget.phone);
+      if (!mounted) return;
+      _ctrl.clear();
+      setState(() {
+        _error = null;
+        _left = _cooldown;
+      });
+      _tick();
+      showSwToast(context, ref.s('auth.otp.resent'));
+    } on ApiException catch (e) {
+      if (mounted) showSwToast(context, e.isNetwork ? ref.s('common.offlineAction') : e.message, error: true);
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted) setState(() => _resending = false);
+    }
+  }
+
+  void _changeNumber() {
+    // Back to the phone screen with the number still filled in.
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      final q = authFlowQuery(from: widget.from, pushed: widget.pushed);
+      context.go('/auth/phone?phone=${Uri.encodeComponent(widget.phone)}${q.isEmpty ? '' : '&$q'}');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final s = ref.s;
+    final c = context.sw;
     final len = ref.watch(configProvider).value?.obj('auth')?.integer('otpLength', 6) ?? 6;
     return Scaffold(
-      appBar: AppBar(leading: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), onPressed: () => context.pop())),
+      appBar: AppBar(leading: SwIconButton(icon: Ic.arrowLeft, semanticLabel: s('common.back'), onPressed: _changeNumber)),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(SwSpace.s6, SwSpace.s4, SwSpace.s6, SwSpace.s6),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(s('auth.otp.title'), style: context.type.displayL),
             const SizedBox(height: SwSpace.s2),
-            Text(s('auth.otp.subtitle', {'phone': widget.phone}), style: context.type.bodyM.copyWith(color: context.sw.muted)),
+            Text(s('auth.otp.subtitle', {'phone': widget.phone}), style: context.type.bodyM.copyWith(color: c.muted)),
             const SizedBox(height: SwSpace.s8),
-            OtpInput(controller: _ctrl, length: len, error: _error != null, enabled: !_busy, onCompleted: _verify),
+            OtpInput(controller: _ctrl, length: len, error: _error != null, enabled: !_busy && !_success, success: _success, pasteLabel: s('auth.otp.paste'), onCompleted: _verify),
             const SizedBox(height: SwSpace.s4),
-            SizedBox(
-              height: 24,
-              child: _busy
-                  ? Row(children: [const PendingSwap(pending: true, child: SizedBox(width: 20, height: 20)), const SizedBox(width: SwSpace.s2), Text(s('common.loading'), style: context.type.caption)])
-                  : _error != null
-                      ? Text(_error!, style: context.type.caption.copyWith(color: context.sw.danger))
-                      : null,
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 24),
+              child: _success
+                  ? Row(children: [Icon(Ic.check, size: 18, color: c.success), const SizedBox(width: SwSpace.s2), Text(s('auth.otp.verified'), style: context.type.caption.copyWith(color: c.success))])
+                  : _busy
+                      ? Row(children: [const PendingSwap(pending: true, child: SizedBox(width: 20, height: 20)), const SizedBox(width: SwSpace.s2), Text(s('common.loading'), style: context.type.caption)])
+                      : _error != null
+                          ? Text(_error!, style: context.type.caption.copyWith(color: c.danger))
+                          : Text(s('auth.otp.pasteHint'), style: context.type.caption.copyWith(color: c.subtle)),
             ),
             const SizedBox(height: SwSpace.s4),
-            Row(children: [
+            Wrap(alignment: WrapAlignment.spaceBetween, crossAxisAlignment: WrapCrossAlignment.center, spacing: SwSpace.s2, runSpacing: SwSpace.s2, children: [
               SwButton(
                 label: _left > 0 ? s('auth.otp.resendIn', {'seconds': _left}) : s('auth.otp.resend'),
                 variant: SwButtonVariant.ghost,
-                onPressed: _left > 0
-                    ? null
-                    : () async {
-                        await ref.read(sessionProvider.notifier).requestOtp(widget.phone);
-                        setState(() => _left = 30);
-                        _tick();
-                      },
+                onPressed: _left > 0 || _resending || _success ? null : _resend,
               ),
-              const Spacer(),
-              SwButton(label: s('auth.otp.change'), variant: SwButtonVariant.ghost, onPressed: () => context.pop()),
+              SwButton(label: s('auth.otp.change'), variant: SwButtonVariant.ghost, onPressed: _success ? null : _changeNumber),
             ]),
           ]),
         ),

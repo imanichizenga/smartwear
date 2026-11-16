@@ -109,4 +109,9 @@ export const sw: Partial<Record<keyof typeof en, string>> = {
   'rider.locationNeeded': 'Washa mahali ulipo ili uanze kazi',
   'auth.signedOut.revoked': 'Umetolewa kwenye akaunti. Tafadhali ingia tena.',
   'auth.signedOut.blocked': 'Akaunti hii imezuiwa. Wasiliana na huduma kwa wateja kwa msaada.',
+  'auth.otp.paste': 'Bandika',
+  'auth.otp.pasteHint': 'Dokezo: bonyeza na ushikilie ili kubandika msimbo.',
+  'auth.otp.verified': 'Imethibitishwa',
+  'auth.otp.resent': 'Msimbo mpya unakuja.',
+  'common.offlineAction': 'Hauko mtandaoni. Angalia muunganisho wako kisha ujaribu tena.',
 };

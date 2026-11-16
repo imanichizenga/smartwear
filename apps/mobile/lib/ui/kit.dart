@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -701,37 +702,123 @@ class SwTextField extends StatelessWidget {
 
 /// Six-box OTP input that auto-submits on the last digit; supports paste and SMS autofill
 /// (`AutofillHints.oneTimeCode` on iOS; the Android SMS Retriever feeds [controller]).
+/// One-time-code field: responsive boxes, blinking caret, paste (long-press), SMS autofill hints,
+/// error shake and a success state. [onCompleted] fires once per distinct complete code, never while
+/// disabled, so rebuilds / selection changes can't double-submit.
 class OtpInput extends StatefulWidget {
-  const OtpInput({super.key, required this.controller, required this.onCompleted, this.length = 6, this.error = false, this.enabled = true});
+  const OtpInput({super.key, required this.controller, required this.onCompleted, this.length = 6, this.error = false, this.enabled = true, this.success = false, this.pasteLabel = 'Paste'});
   final TextEditingController controller;
   final ValueChanged<String> onCompleted;
   final int length;
-  final bool error, enabled;
+  final bool error, enabled, success;
+  final String pasteLabel;
 
   @override
   State<OtpInput> createState() => _OtpInputState();
 }
 
-class _OtpInputState extends State<OtpInput> {
+class _OtpInputState extends State<OtpInput> with TickerProviderStateMixin {
   final _focus = FocusNode();
+  late final AnimationController _caret = AnimationController(vsync: this, duration: const Duration(milliseconds: 530));
+  late final AnimationController _shake = AnimationController(vsync: this, duration: const Duration(milliseconds: 360));
+  String? _fired;
 
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_changed);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
+    _focus.addListener(_focusChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _focus.requestFocus();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncCaret();
+  }
+
+  @override
+  void didUpdateWidget(OtpInput old) {
+    super.didUpdateWidget(old);
+    if (old.controller != widget.controller) {
+      old.controller.removeListener(_changed);
+      widget.controller.addListener(_changed);
+    }
+    if (widget.error && !old.error && !context.reduceMotion) _shake.forward(from: 0);
+    // Re-enabled after a failed attempt with the same digits still there: allow submitting them again.
+    if (widget.enabled && !old.enabled && widget.error) _fired = null;
+    _syncCaret();
+  }
+
+  void _focusChanged() {
+    if (!mounted) return;
+    setState(() {});
+    _syncCaret();
+  }
+
+  void _syncCaret() {
+    final blink = _focus.hasFocus && widget.enabled && !widget.success && !context.reduceMotion;
+    if (blink && !_caret.isAnimating) {
+      _caret.repeat(reverse: true);
+    } else if (!blink && _caret.isAnimating) {
+      _caret.stop();
+      _caret.value = 1;
+    }
   }
 
   void _changed() {
+    if (!mounted) return;
     setState(() {});
     final v = widget.controller.text;
-    if (v.length == widget.length) widget.onCompleted(v);
+    if (v.length < widget.length) {
+      _fired = null;
+      return;
+    }
+    if (!widget.enabled || v == _fired) return;
+    _fired = v;
+    widget.onCompleted(v);
+  }
+
+  /// Fill from any text: keeps digits only (e.g. "Your code is 123 456").
+  void fill(String raw) {
+    final digits = raw.replaceAll(RegExp(r'\D'), '');
+    if (digits.isEmpty || !widget.enabled) return;
+    final code = digits.length > widget.length ? digits.substring(0, widget.length) : digits;
+    widget.controller.value = TextEditingValue(text: code, selection: TextSelection.collapsed(offset: code.length));
+  }
+
+  Future<void> _paste(Offset globalPos) async {
+    if (!widget.enabled) return;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
+    if (overlay == null) return;
+    HapticFeedback.selectionClick();
+    final picked = await showMenu<bool>(
+      context: context,
+      position: RelativeRect.fromRect(globalPos & const Size(1, 1), Offset.zero & overlay.size),
+      color: context.sw.surfaceRaised,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SwRadius.sm)),
+      items: [
+        PopupMenuItem<bool>(
+          value: true,
+          height: 44,
+          child: Row(children: [Icon(Ic.copy, size: 18, color: context.sw.ink), const SizedBox(width: SwSpace.s3), Text(widget.pasteLabel, style: context.type.bodyM)]),
+        ),
+      ],
+    );
+    if (picked != true) return;
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data?.text != null) fill(data!.text!);
   }
 
   @override
   void dispose() {
     widget.controller.removeListener(_changed);
+    _focus.removeListener(_focusChanged);
     _focus.dispose();
+    _caret.dispose();
+    _shake.dispose();
     super.dispose();
   }
 
@@ -739,48 +826,102 @@ class _OtpInputState extends State<OtpInput> {
   Widget build(BuildContext context) {
     final c = context.sw;
     final v = widget.controller.text;
-    return GestureDetector(
-      onTap: () => _focus.requestFocus(),
-      child: Stack(children: [
-        Opacity(
-          opacity: 0,
-          child: SizedBox(
-            height: 60,
-            child: TextField(
-              controller: widget.controller,
-              focusNode: _focus,
-              enabled: widget.enabled,
-              keyboardType: TextInputType.number,
-              autofillHints: const [AutofillHints.oneTimeCode],
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(widget.length)],
-              showCursor: false,
-              enableInteractiveSelection: false,
+    final n = widget.length;
+    return LayoutBuilder(builder: (context, box) {
+      const gap = SwSpace.s2;
+      final fit = (box.maxWidth - gap * (n - 1)) / n;
+      // 40–56 dp boxes; below 40 only when the screen physically can't fit them (very narrow phones).
+      final double w = fit < 40 ? fit : fit.clamp(40.0, 56.0).toDouble();
+      final double h = (w * 1.22).clamp(52.0, 64.0).toDouble();
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _focus.requestFocus(),
+        onLongPressStart: (d) => _paste(d.globalPosition),
+        child: Stack(children: [
+          Opacity(
+            opacity: 0,
+            child: SizedBox(
+              height: h,
+              child: TextField(
+                controller: widget.controller,
+                focusNode: _focus,
+                readOnly: !widget.enabled,
+                keyboardType: TextInputType.number,
+                autofillHints: const [AutofillHints.oneTimeCode],
+                // Paste of a whole message ("Code: 123456") keeps just the digits.
+                inputFormatters: [_DigitsFormatter(), LengthLimitingTextInputFormatter(n)],
+                showCursor: false,
+                enableInteractiveSelection: false,
+              ),
             ),
           ),
-        ),
-        Semantics(
-          label: 'Verification code, ${v.length} of ${widget.length} digits entered',
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            for (var i = 0; i < widget.length; i++)
-              AnimatedContainer(
-                duration: SwMotion.fast,
-                width: 48,
-                height: 60,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: c.surface,
-                  borderRadius: BorderRadius.circular(SwRadius.sm),
-                  border: Border.all(
-                    color: widget.error ? c.danger : (i == v.length && _focus.hasFocus) ? c.ink : c.hairline,
-                    width: (i == v.length && _focus.hasFocus) ? 1.4 : 1,
+          AnimatedBuilder(
+            animation: _shake,
+            builder: (context, child) {
+              final t = _shake.value;
+              final dx = _shake.isAnimating ? math.sin(t * math.pi * 6) * 8 * (1 - t) : 0.0;
+              return Transform.translate(offset: Offset(dx, 0), child: child);
+            },
+            child: Semantics(
+              label: 'Verification code, ${v.length} of $n digits entered',
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                for (var i = 0; i < n; i++) ...[
+                  if (i > 0) const SizedBox(width: gap),
+                  _OtpBox(
+                    width: w,
+                    height: h,
+                    digit: i < v.length ? v[i] : '',
+                    active: i == v.length.clamp(0, n - 1) && v.length < n && _focus.hasFocus && widget.enabled,
+                    filled: i < v.length,
+                    error: widget.error,
+                    success: widget.success,
+                    caret: _caret,
                   ),
-                ),
-                child: Text(i < v.length ? v[i] : '', style: context.type.displayM),
-              ),
-          ]),
-        ),
-      ]),
+                ],
+              ]),
+            ),
+          ),
+        ]),
+      );
+    });
+  }
+}
+
+class _OtpBox extends StatelessWidget {
+  const _OtpBox({required this.width, required this.height, required this.digit, required this.active, required this.filled, required this.error, required this.success, required this.caret});
+  final double width, height;
+  final String digit;
+  final bool active, filled, error, success;
+  final Animation<double> caret;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.sw;
+    final color = success ? c.success : error ? c.danger : active ? c.accent : filled ? c.ink : c.hairline;
+    return AnimatedContainer(
+      duration: SwMotion.fast,
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: success ? c.successSoft : c.surface,
+        borderRadius: BorderRadius.circular(SwRadius.sm),
+        border: Border.all(color: color, width: active || success || error ? 1.5 : 1),
+      ),
+      child: digit.isNotEmpty
+          ? Text(digit, style: context.type.displayM.copyWith(color: error ? c.danger : c.ink))
+          : active
+              ? FadeTransition(opacity: caret, child: Container(width: 1.5, height: height * 0.42, color: c.accent))
+              : null,
     );
+  }
+}
+
+class _DigitsFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final d = newValue.text.replaceAll(RegExp(r'\D'), '');
+    return TextEditingValue(text: d, selection: TextSelection.collapsed(offset: d.length));
   }
 }
 

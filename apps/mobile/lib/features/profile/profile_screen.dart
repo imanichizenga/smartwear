@@ -10,6 +10,7 @@ import '../../design/theme.dart';
 import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
 import '../../ui/motion.dart';
+import '../shared/nav.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -29,7 +30,7 @@ class ProfileScreen extends ConsumerWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(s('profile.signInCta'), style: context.type.bodyM.copyWith(color: c.muted)),
               const SizedBox(height: SwSpace.s4),
-              SwButton(label: s('auth.loginRequired'), icon: Ic.user, expand: true, large: true, onPressed: () => context.push('/welcome?return=1')),
+              SwButton(label: s('auth.loginRequired'), icon: Ic.user, expand: true, large: true, onPressed: () => context.push(signInRoute(context))),
             ]),
           ),
         const SizedBox(height: SwSpace.s6),

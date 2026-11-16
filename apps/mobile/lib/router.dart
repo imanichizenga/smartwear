@@ -23,6 +23,10 @@ import 'features/shell/splash.dart';
 /// Root navigator; also the context for app-level toasts (e.g. "you were signed out").
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
+/// Pages that need an account. Guests are redirected to Welcome with `from`, and land back here after signing in.
+const _authOnlyPrefixes = ['/orders', '/checkout', '/chat/', '/wishlist', '/places', '/payments', '/wholesale', '/notifications', '/support', '/privacy', '/profile/edit', '/rider'];
+bool isAuthOnly(String loc) => _authOnlyPrefixes.any((p) => loc == p || loc.startsWith(p.endsWith('/') ? p : '$p/'));
+
 final routerProvider = Provider<GoRouter>((ref) {
   final session = ValueNotifier(ref.read(sessionProvider));
   ref.listen(sessionProvider, (_, n) => session.value = n);
@@ -34,16 +38,38 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final s = session.value;
       final loc = state.matchedLocation;
-      if (!s.ready) return loc == '/splash' ? null : '/splash';
-      if (loc == '/splash') return s.signedIn || ref.read(prefsProvider).getBool('sw.welcomed') == true ? '/' : '/welcome';
+      // Until the session is read, everything waits on the splash — but remember where we were going
+      // (deep link / push tap) and continue there afterwards.
+      if (!s.ready) {
+        if (loc == '/splash') return null;
+        return '/splash?next=${Uri.encodeComponent(state.uri.toString())}';
+      }
+      if (loc == '/splash') {
+        final next = state.uri.queryParameters['next'];
+        if (next != null && next.startsWith('/') && !next.startsWith('/splash')) return next;
+        return s.signedIn || ref.read(prefsProvider).getBool('sw.welcomed') == true ? '/' : '/welcome';
+      }
+      final completing = ref.read(sessionProvider.notifier).completingSignIn;
+      // Signed-in shoppers never see Welcome or the sign-in steps (the quiz is part of onboarding).
+      if (s.signedIn && !completing && (loc == '/welcome' || (loc.startsWith('/auth/') && loc != '/auth/quiz'))) return '/';
+      // Account-only pages send guests to sign in, then straight back.
+      if (!s.signedIn && isAuthOnly(loc)) return '/welcome?from=${Uri.encodeComponent(state.uri.toString())}';
       return null;
     },
     routes: [
       GoRoute(path: '/splash', builder: (c, s) => const SplashScreen()),
-      GoRoute(path: '/welcome', builder: (c, s) => const WelcomeScreen()),
-      GoRoute(path: '/auth/phone', builder: (c, s) => const PhoneScreen()),
-      GoRoute(path: '/auth/otp', builder: (c, s) => OtpScreen(phone: s.uri.queryParameters['phone'] ?? '')),
-      GoRoute(path: '/auth/quiz', builder: (c, s) => const StyleQuizScreen()),
+      GoRoute(path: '/welcome', name: 'welcome', builder: (c, s) => const WelcomeScreen()),
+      GoRoute(
+        path: '/auth/phone',
+        name: 'auth-phone',
+        builder: (c, s) => PhoneScreen(initialPhone: s.uri.queryParameters['phone'], from: s.uri.queryParameters['from'], pushed: s.uri.queryParameters['return'] == '1'),
+      ),
+      GoRoute(
+        path: '/auth/otp',
+        name: 'auth-otp',
+        builder: (c, s) => OtpScreen(phone: s.uri.queryParameters['phone'] ?? '', from: s.uri.queryParameters['from'], pushed: s.uri.queryParameters['return'] == '1'),
+      ),
+      GoRoute(path: '/auth/quiz', name: 'auth-quiz', builder: (c, s) => const StyleQuizScreen()),
       StatefulShellRoute.indexedStack(
         builder: (c, s, shell) => AppShell(shell: shell),
         branches: [

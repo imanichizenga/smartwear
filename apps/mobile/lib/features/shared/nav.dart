@@ -33,11 +33,19 @@ Future<void> toggleWishlist(BuildContext context, WidgetRef ref, String productI
   });
 }
 
+/// Gated action: guests sign in on pages pushed over this one (`return=1`) and come back to it explicitly
+/// (`from`), then the action runs.
 Future<void> requireSignIn(BuildContext context, WidgetRef ref, FutureOr<void> Function() action) async {
   if (ref.read(sessionProvider).signedIn) return action();
   HapticFeedback.selectionClick();
-  await context.push('/welcome?return=1');
-  if (ref.read(sessionProvider).signedIn) await action();
+  await context.push(signInRoute(context));
+  if (ref.read(sessionProvider).signedIn && context.mounted) await action();
+}
+
+/// `/welcome?return=1&from=<this page>` for sign-in started from the current page.
+String signInRoute(BuildContext context) {
+  final here = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+  return '/welcome?return=1&from=${Uri.encodeComponent(here)}';
 }
 
 /// Banner / story link → destination.

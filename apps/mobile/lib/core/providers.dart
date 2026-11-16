@@ -98,6 +98,12 @@ class SessionNotifier extends Notifier<SessionState> {
   Api get _api => ref.read(apiProvider);
   TokenStore get _tokens => ref.read(tokenStoreProvider);
 
+  /// True from a successful sign-in until the auth screen has navigated on (quiz, Home or back to where the
+  /// shopper started). The router's "signed-in users can't see auth screens" guard waits for it, so it can't
+  /// race the screen's own navigation.
+  bool completingSignIn = false;
+  void finishSignIn() => completingSignIn = false;
+
   Future<void> restore() async {
     final tokens = _tokens;
     if (!tokens.loaded) await tokens.load();
@@ -150,12 +156,14 @@ class SessionNotifier extends Notifier<SessionState> {
   Future<bool> verifyOtp(String phone, String code) async {
     final device = await _tokens.ensureDeviceId();
     final r = await _api.post<Json>('/auth/otp/verify', {'phone': phone, 'code': code, 'deviceId': device, 'platform': _platform, 'appVersion': appVersion});
+    completingSignIn = true;
     return completeLogin(r);
   }
 
   Future<bool> google(String idToken) async {
     final device = await _tokens.ensureDeviceId();
     final r = await _api.post<Json>('/auth/google', {'idToken': idToken, 'deviceId': device, 'platform': _platform, 'appVersion': appVersion});
+    completingSignIn = true;
     return completeLogin(r);
   }
 
