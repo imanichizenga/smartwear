@@ -34,12 +34,32 @@ class DeliveryPointNotifier extends Notifier<DeliveryPointState> {
 
   LocationService get _loc => ref.read(locationServiceProvider);
 
-  /// Silent start: if permission is already granted, take a fix straight away.
+  /// Silent start: if permission is already granted, take a fix straight away. Without location access,
+  /// start from the shopper's default saved place (if any).
   Future<void> init() async {
     if (state.point != null) return;
     final p = await _loc.permission();
     state = DeliveryPointState(permission: p, point: state.point);
-    if (p == LocPermission.granted) await locate();
+    if (p == LocPermission.granted) {
+      await locate();
+      return;
+    }
+    try {
+      final places = await ref.read(apiProvider).get<Json>('/me/places');
+      Json? d;
+      for (final x in places.list('saved')) {
+        if (x.flag('isDefault')) {
+          d = x;
+          break;
+        }
+      }
+      final at = d == null ? null : LatLngD.fromJson(d['location']);
+      if (d != null && at != null && state.point == null) {
+        state = DeliveryPointState(permission: p, point: DeliveryPoint(at, label: d.str('address'), area: d.strN('area') ?? d.strN('label'), landmark: d.strN('landmarkNote'), source: PointSource.saved));
+      }
+    } on ApiException {
+      // Offline / signed out: the shopper picks a place.
+    }
   }
 
   Future<void> requestAndLocate() async {

@@ -118,7 +118,15 @@ class WishlistView(APIView):
     def get(self, request):
         user = _user(request)
         _default_board(user)
-        return Response({"boards": [board_out(b) for b in WishlistBoard.objects.filter(user=user)], "productIds": [str(p) for p in WishlistItem.objects.filter(board__user=user).values_list("product_id", flat=True).distinct()]})
+        ids = list(WishlistItem.objects.filter(board__user=user).order_by("-added_at").values_list("product_id", flat=True))
+        ids = list(dict.fromkeys(ids))  # newest first, unique
+        out = {"boards": [board_out(b) for b in WishlistBoard.objects.filter(user=user)], "productIds": [str(p) for p in ids]}
+        # ?expand=products → the saved products as cards (only still-published ones), for the Wishlist screen.
+        if request.query_params.get("expand") == "products":
+            from catalog.views_public import _cards_by_ids
+
+            out["products"] = _cards_by_ids(ids, request)
+        return Response(out)
 
     def post(self, request):
         """Toggle-style save: {productId, boardId?, variantId?}. Saving again into the same board is a no-op."""
@@ -206,7 +214,7 @@ class SharedBoardView(APIView):
 
 # ================================================================ places & maps proxy
 def place_out(p: SavedPlace) -> dict:
-    return {"id": str(p.id), "kind": p.kind, "label": p.label or {"home": "Home", "work": "Work"}.get(p.kind, ""), "address": p.address, "area": p.area or None, "landmarkNote": p.landmark_note or None, "location": {"lat": p.location.y, "lng": p.location.x}, "placeId": p.place_id or None, "plusCode": p.plus_code or None, "lastUsedAt": p.last_used_at.isoformat() if p.last_used_at else None}
+    return {"id": str(p.id), "kind": p.kind, "label": p.label or {"home": "Home", "work": "Work"}.get(p.kind, ""), "address": p.address, "area": p.area or None, "landmarkNote": p.landmark_note or None, "location": {"lat": p.location.y, "lng": p.location.x}, "placeId": p.place_id or None, "plusCode": p.plus_code or None, "lastUsedAt": p.last_used_at.isoformat() if p.last_used_at else None, "isDefault": p.is_default}
 
 
 class PlacesView(APIView):
@@ -226,7 +234,11 @@ class PlacesView(APIView):
         with transaction.atomic():
             if kind in ("home", "work"):
                 SavedPlace.objects.filter(user=user, kind=kind).update(kind="other")
-            p = SavedPlace.objects.create(user=user, kind=kind, label=(d.get("label") or "")[:60], address=(d.get("address") or google_maps.offline_place(lat, lng)["address"])[:240], area=(d.get("area") or "")[:80], landmark_note=(d.get("landmarkNote") or "")[:120], location=Point(lng, lat, srid=4326), place_id=(d.get("placeId") or "")[:300], plus_code=(d.get("plusCode") or "")[:32])
+            first = not SavedPlace.objects.filter(user=user).exclude(kind="recent").exists()
+            make_default = bool(d.get("isDefault")) or first
+            if make_default:
+                SavedPlace.objects.filter(user=user, is_default=True).update(is_default=False)
+            p = SavedPlace.objects.create(user=user, kind=kind, label=(d.get("label") or "")[:60], address=(d.get("address") or google_maps.offline_place(lat, lng)["address"])[:240], area=(d.get("area") or "")[:80], landmark_note=(d.get("landmarkNote") or "")[:120], location=Point(lng, lat, srid=4326), place_id=(d.get("placeId") or "")[:300], plus_code=(d.get("plusCode") or "")[:32], is_default=make_default)
         return Response(place_out(p), status=201)
 
 
@@ -247,7 +259,15 @@ class PlaceView(APIView):
         if "lat" in d and "lng" in d:
             lat, lng = checkout_svc._validate_point(d["lat"], d["lng"])
             p.location = Point(lng, lat, srid=4326)
-        p.save()
+        with transaction.atomic():
+            if d.get("isDefault") is True:
+                SavedPlace.objects.filter(user=p.user, is_default=True).exclude(id=p.id).update(is_default=False)
+                p.is_default = True
+                if p.kind == "recent":
+                    p.kind = "other"  # a default place is a saved place
+            elif d.get("isDefault") is False:
+                p.is_default = False
+            p.save()
         return Response(place_out(p))
 
     def delete(self, request, pid):
@@ -344,6 +364,31 @@ class PaymentMethodView(APIView):
     def delete(self, request, mid):
         SavedPaymentMethod.objects.filter(user=_user(request), id=mid).delete()
         return Response({"ok": True})
+
+
+class PaymentHistoryView(APIView):
+    """`GET /v1/me/payments` — the shopper's payments across orders, newest first (keyset paginated)."""
+
+    permission_classes = [IsAppUser]
+
+    def get(self, request):
+        from .models import Payment
+
+        cursor, limit = page_params(request, 30, 100)
+        qs = Payment.objects.filter(order__user=_user(request)).select_related("order")
+        rows, nxt = keyset(qs, ["-created_at", "-id"], cursor, limit)
+        return Response({
+            "items": [
+                {
+                    "id": str(p.id), "method": p.method, "provider": p.provider, "status": p.status, "amount": p.amount, "currency": p.currency,
+                    "msisdn": (p.msisdn[:6] + "•••" + p.msisdn[-3:]) if p.msisdn else None, "refunded": p.refunded_amount,
+                    "createdAt": p.created_at.isoformat(), "paidAt": p.paid_at.isoformat() if p.paid_at else None,
+                    "order": {"id": str(p.order_id), "number": p.order.number},
+                }
+                for p in rows
+            ],
+            "nextCursor": nxt,
+        })
 
 
 # ================================================================ checkout & orders

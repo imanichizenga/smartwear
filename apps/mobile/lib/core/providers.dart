@@ -142,9 +142,16 @@ class SessionNotifier extends Notifier<SessionState> {
     state = SessionState(user: user, ready: true);
   }
 
+  /// Set just before an action that ends the session on purpose (deleting the account), so the resulting
+  /// revocation signs out quietly instead of saying "you were signed out".
+  bool _expectingSignOut = false;
+  void expectSignOut() => _expectingSignOut = true;
+  void cancelExpectedSignOut() => _expectingSignOut = false;
+
   void _ended(SignOutReason reason) {
     if (!state.signedIn) return;
-    state = SessionState(ready: true, endedBy: reason);
+    state = SessionState(ready: true, endedBy: _expectingSignOut ? null : reason);
+    _expectingSignOut = false;
     ref.invalidate(cartProvider);
     ref.invalidate(wishlistProvider);
   }
@@ -183,6 +190,15 @@ class SessionNotifier extends Notifier<SessionState> {
     } on ApiException {
       // Signing out locally must always work, even offline.
     }
+    await _tokens.clear();
+    state = const SessionState(ready: true);
+    ref.invalidate(cartProvider);
+    ref.invalidate(wishlistProvider);
+  }
+
+  /// After the account was deleted (the server already ended every session): forget it locally, quietly.
+  Future<void> forgetLocally() async {
+    _expectingSignOut = false;
     await _tokens.clear();
     state = const SessionState(ready: true);
     ref.invalidate(cartProvider);

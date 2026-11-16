@@ -15,7 +15,14 @@ import 'features/discover/discover_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/product/product_list_screen.dart';
 import 'features/product/product_screen.dart';
+import 'features/profile/edit_profile_screen.dart';
+import 'features/profile/notifications_screen.dart';
+import 'features/profile/payments_screen.dart';
+import 'features/profile/places_screen.dart';
+import 'features/profile/privacy_screen.dart';
 import 'features/profile/profile_screen.dart';
+import 'features/profile/wholesale_screen.dart';
+import 'features/profile/wishlist_screen.dart';
 import 'features/search/search_screen.dart';
 import 'features/shell/shell.dart';
 import 'features/shell/splash.dart';
@@ -104,6 +111,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/orders/:id/pay', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => PaymentWaitScreen(orderId: s.pathParameters['id']!)),
       GoRoute(path: '/chat/:id', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => ChatScreen(threadId: s.pathParameters['id']!, title: s.uri.queryParameters['title'])),
+      // Profile sub-pages (account-only; guests are sent to sign in by the guard above).
+      GoRoute(path: '/profile/edit', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const EditProfileScreen()),
+      GoRoute(path: '/wishlist', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const WishlistScreen()),
+      GoRoute(path: '/places', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const PlacesScreen()),
+      GoRoute(path: '/payments', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const PaymentsScreen()),
+      GoRoute(path: '/wholesale', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const WholesaleScreen()),
+      GoRoute(path: '/notifications', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const NotificationsScreen()),
+      GoRoute(path: '/privacy', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const PrivacyScreen()),
+      GoRoute(path: '/privacy/delete', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const DeleteAccountScreen()),
       GoRoute(path: '/rider', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const RiderHomeScreen()),
       GoRoute(path: '/rider/earnings', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const RiderEarningsScreen()),
       GoRoute(

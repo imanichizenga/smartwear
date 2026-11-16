@@ -16,6 +16,7 @@ urlpatterns = [
     path("me/places/<uuid:pid>", v.PlaceView.as_view()),
     path("me/payment-methods", v.PaymentMethodsView.as_view()),
     path("me/payment-methods/<uuid:mid>", v.PaymentMethodView.as_view()),
+    path("me/payments", v.PaymentHistoryView.as_view()),
     path("me/wholesale", v.WholesaleApplicationView.as_view()),
     path("me/loyalty", v.LoyaltyView.as_view()),
     path("maps/autocomplete", v.PlaceAutocompleteView.as_view()),

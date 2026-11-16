@@ -91,6 +91,8 @@ class SavedPlace(UUIDModel):
     place_id = models.CharField(max_length=300, blank=True, default="")
     plus_code = models.CharField(max_length=32, blank=True, default="")
     last_used_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    # The place checkout starts from when there's no GPS fix. At most one per user.
+    is_default = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["kind", "-last_used_at"]

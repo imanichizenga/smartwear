@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +9,8 @@ import '../../l10n/strings.dart';
 import '../../ui/kit.dart';
 import '../../ui/motion.dart';
 import '../shared/nav.dart';
+import 'edit_profile_screen.dart';
+import 'sub_page.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -21,7 +21,7 @@ class ProfileScreen extends ConsumerWidget {
     final u = session.user;
     final c = context.sw;
     return Scaffold(
-      body: ListView(padding: EdgeInsets.only(bottom: 120 + context.safe.bottom), children: [
+      body: ListView(padding: EdgeInsets.only(bottom: SwSpace.s6 + context.bottomInset), children: [
         _Header(user: u),
         if (u != null) const _Loyalty(),
         if (u == null)
@@ -35,31 +35,39 @@ class ProfileScreen extends ConsumerWidget {
           ),
         const SizedBox(height: SwSpace.s6),
         if (u != null) ...[
-          Reveal(index: 1, child: _Group(children: [
-            _Row(icon: Ic.receipt, label: s('profile.orders'), onTap: () => context.push('/orders')),
-            _Row(icon: Ic.heart, label: s('profile.wishlist'), onTap: () => context.push('/wishlist')),
-            _Row(icon: Ic.shirt, label: s('profile.styleProfile'), onTap: () => context.push('/auth/quiz')),
-            _Row(icon: Ic.mapPin, label: s('profile.savedPlaces'), onTap: () => context.push('/places')),
-            _Row(icon: Ic.wallet, label: s('profile.payments'), onTap: () => context.push('/payments')),
-            _Row(icon: Ic.briefcase, label: s('profile.wholesale'), trailing: _wholesale(ref, u), onTap: () => context.push('/wholesale')),
+          Reveal(index: 1, child: RowGroup(margin: const EdgeInsets.symmetric(horizontal: SwSpace.s5), children: [
+            ProfileRow(icon: Ic.user, label: s('profile.edit'), onTap: () => context.push('/profile/edit')),
+            ProfileRow(icon: Ic.receipt, label: s('profile.orders'), onTap: () => context.push('/orders')),
+            ProfileRow(icon: Ic.heart, label: s('profile.wishlist'), onTap: () => context.push('/wishlist')),
+            ProfileRow(icon: Ic.shirt, label: s('profile.styleProfile'), onTap: () => context.push('/auth/quiz')),
+            ProfileRow(icon: Ic.mapPin, label: s('profile.savedPlaces'), onTap: () => context.push('/places')),
+            ProfileRow(icon: Ic.wallet, label: s('profile.payments'), onTap: () => context.push('/payments')),
+            ProfileRow(icon: Ic.briefcase, label: s('profile.wholesale'), trailing: _wholesale(ref, u), onTap: () => context.push('/wholesale')),
           ])),
           const SizedBox(height: SwSpace.s6),
         ],
-        Reveal(index: 2, child: _Group(children: [
-          _Row(icon: Ic.bell, label: s('profile.notifications'), onTap: () => context.push('/notifications')),
-          _Row(icon: Ic.globe, label: s('profile.language'), trailing: Text(ref.watch(localeProvider) == 'sw' ? 'Kiswahili' : 'English', style: context.type.bodyS.copyWith(color: c.muted)), onTap: () => _language(context, ref)),
-          _Row(icon: Ic.sunMoon, label: s('profile.theme'), trailing: Text(s('profile.theme.${ref.watch(themeModeProvider).name}'), style: context.type.bodyS.copyWith(color: c.muted)), onTap: () => _theme(context, ref)),
-          _Row(icon: Ic.messageCircle, label: s('profile.help'), onTap: () => context.push('/support')),
-          if (u != null) _Row(icon: Ic.shield, label: s('profile.privacy'), onTap: () => context.push('/privacy')),
-          if (session.isRider) _Row(icon: Ic.bike, label: s('profile.riderMode'), onTap: () => context.go('/rider')),
+        Reveal(index: 2, child: RowGroup(margin: const EdgeInsets.symmetric(horizontal: SwSpace.s5), children: [
+          ProfileRow(icon: Ic.bell, label: s('profile.notifications'), onTap: () => context.push('/notifications')),
+          ProfileRow(icon: Ic.globe, label: s('profile.language'), trailing: Text(ref.watch(localeProvider) == 'sw' ? 'Kiswahili' : 'English', style: context.type.bodyS.copyWith(color: c.muted)), onTap: () => _language(context, ref)),
+          ProfileRow(icon: Ic.sunMoon, label: s('profile.theme'), trailing: Text(s('profile.theme.${ref.watch(themeModeProvider).name}'), style: context.type.bodyS.copyWith(color: c.muted)), onTap: () => _theme(context, ref)),
+          ProfileRow(icon: Ic.messageCircle, label: s('profile.help'), onTap: () => context.push('/support')),
+          if (u != null) ProfileRow(icon: Ic.shield, label: s('profile.privacy'), onTap: () => context.push('/privacy')),
+          if (session.isRider) ProfileRow(icon: Ic.bike, label: s('profile.riderMode'), onTap: () => context.go('/rider')),
         ])),
         if (u != null) ...[
           const SizedBox(height: SwSpace.s6),
-          _Group(children: [_Row(icon: Ic.logOut, label: s('auth.signOut'), onTap: () => ref.read(sessionProvider.notifier).signOut(), chevron: false)]),
+          RowGroup(margin: const EdgeInsets.symmetric(horizontal: SwSpace.s5), children: [ProfileRow(icon: Ic.logOut, label: s('auth.signOut'), onTap: () => _signOut(context, ref), chevron: false)]),
         ],
         Padding(padding: const EdgeInsets.all(SwSpace.s8), child: Center(child: Text(s('profile.version', {'version': appVersion}), style: context.type.caption.copyWith(color: c.subtle)))),
       ]),
     );
+  }
+
+  Future<void> _signOut(BuildContext context, WidgetRef ref) async {
+    final s = ref.s;
+    if (await confirmSw(context, title: s('profile.signOutConfirm'), confirm: s('auth.signOut')) && context.mounted) {
+      await ref.read(sessionProvider.notifier).signOut();
+    }
   }
 
   Widget? _wholesale(WidgetRef ref, Json u) {
@@ -115,7 +123,6 @@ class _Header extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.sw;
     final name = user?.str('displayName', user?.str('name') ?? '') ?? '';
-    final initials = name.trim().isEmpty ? 'SW' : name.trim().split(RegExp(r'\s+')).map((p) => p[0]).take(2).join().toUpperCase();
     return SizedBox(
       height: 196 + context.safe.top,
       child: Stack(children: [
@@ -130,14 +137,7 @@ class _Header extends ConsumerWidget {
           right: SwSpace.s5,
           bottom: 0,
           child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Container(
-              width: 96,
-              height: 96,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: c.ink, border: Border.all(color: c.canvas, width: 4)),
-              clipBehavior: Clip.antiAlias,
-              alignment: Alignment.center,
-              child: user?.obj('avatar') != null ? SwImage(user!.obj('avatar'), aspectRatio: 1, radius: 0) : Text(initials, style: context.type.displayS.copyWith(color: c.onInk)),
-            ),
+            Avatar(user: user),
             const SizedBox(width: SwSpace.s4),
             Expanded(
               child: Padding(
@@ -148,6 +148,11 @@ class _Header extends ConsumerWidget {
                 ]),
               ),
             ),
+            if (user != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: SwSpace.s2),
+                child: SwIconButton(icon: Ic.pencil, semanticLabel: ref.s('profile.edit'), filled: true, onPressed: () => context.push('/profile/edit')),
+              ),
           ]),
         ),
       ]),
@@ -197,51 +202,6 @@ class _Loyalty extends ConsumerWidget {
             ),
         ]),
       ),
-      ),
-    );
-  }
-}
-
-class _Group extends StatelessWidget {
-  const _Group({required this.children});
-  final List<Widget> children;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: SwSpace.s5),
-      decoration: BoxDecoration(color: context.sw.surface, borderRadius: BorderRadius.circular(SwRadius.md), border: Border.all(color: context.sw.hairline)),
-      child: Column(children: [
-        for (var i = 0; i < children.length; i++) ...[if (i > 0) const Hairline(indent: 56), children[i]],
-      ]),
-    );
-  }
-}
-
-class _Row extends StatelessWidget {
-  const _Row({required this.icon, required this.label, required this.onTap, this.trailing, this.chevron = true});
-  final IconData icon;
-  final String label;
-  final FutureOr<void> Function() onTap;
-  final Widget? trailing;
-  final bool chevron;
-  @override
-  Widget build(BuildContext context) {
-    return PressableLink(
-      onTap: onTap,
-      loaderOverlay: false,
-      scale: false,
-      semanticLabel: label,
-      child: SizedBox(
-        height: 56,
-        child: Row(children: [
-          const SizedBox(width: SwSpace.s4),
-          Icon(icon, size: 20, color: context.sw.ink),
-          const SizedBox(width: SwSpace.s4),
-          Expanded(child: Text(label, style: context.type.bodyM)),
-          ?trailing,
-          if (chevron) Padding(padding: const EdgeInsets.only(left: SwSpace.s2), child: Icon(Ic.chevronRight, size: 18, color: context.sw.subtle)),
-          const SizedBox(width: SwSpace.s4),
-        ]),
       ),
     );
   }
