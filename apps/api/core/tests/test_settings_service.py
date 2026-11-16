@@ -35,6 +35,15 @@ def test_validation_and_version_conflict(admin_user):
     assert e.value.code == "stale_settings"
 
 
+def test_first_save_of_unsaved_group_with_version_zero(admin_user):
+    """The admin UI sends version 0 for a group that was never saved; that first save must succeed."""
+    assert settings_service.admin_view("payments")["version"] == 0
+    out = settings_service.update("payments", settings_service.admin_view("payments")["value"], admin=admin_user, expected_version=0)
+    assert out["version"] == 1
+    out = settings_service.update("payments", out["value"], admin=admin_user, expected_version=1)
+    assert out["version"] == 2
+
+
 def test_cache_invalidation_without_restart(admin_user):
     assert settings_service.get("features").looksFeed is True
     settings_service.update("features", {"looksFeed": False}, admin=admin_user)
@@ -108,3 +117,32 @@ def test_empty_map_styles_fall_back_to_brand_silver(db):
     assert m.mapStyleDark and m.mapStyleDark != m.mapStyleLight
     custom = [{"elementType": "geometry", "stylers": [{"color": "#000000"}]}]
     assert MapsGoogle(mapStyleLight=custom).mapStyleLight == custom
+
+
+@pytest.mark.parametrize("group", sorted(settings_service.SETTINGS_GROUPS))
+def test_admin_ui_round_trip_saves_every_group(admin_user, group):
+    """Exactly what the admin UI does: GET the group, PUT it back with the version it was shown, then save again."""
+    c = admin_client(admin_user)
+    shown = c.get(f"/v1/admin/settings/{group}").json()
+    r = c.put(f"/v1/admin/settings/{group}", {"value": shown["value"], "version": shown["version"]}, format="json")
+    assert r.status_code == 200, r.json()
+    first = r.json()
+    assert first["version"] == shown["version"] + 1 and first["updatedAt"]
+    r = c.put(f"/v1/admin/settings/{group}", {"value": first["value"], "version": first["version"]}, format="json")
+    assert r.status_code == 200, r.json()
+    assert c.get(f"/v1/admin/settings/{group}").json()["version"] == first["version"] + 1
+
+
+def test_admin_ui_saves_keys_and_masked_resave_keeps_them(admin_user):
+    c = admin_client(admin_user)
+    shown = c.get("/v1/admin/settings/payments").json()
+    value = shown["value"] | {"snippeApiKey": "snp_live_key_9X7Q", "cashOnDeliveryEnabled": False}
+    saved = c.put("/v1/admin/settings/payments", {"value": value, "version": shown["version"]}, format="json").json()
+    assert saved["secrets"]["snippeApiKey"]["set"] is True and saved["value"]["snippeApiKey"].endswith("9X7Q")
+    assert "snp_live" not in str(Setting.objects.get(group="payments").value)
+    # Re-saving the form as displayed (masked key) must not wipe the stored key.
+    c.put("/v1/admin/settings/payments", {"value": saved["value"], "version": saved["version"]}, format="json")
+    assert settings_service.get("payments").snippeApiKey == "snp_live_key_9X7Q"
+    # The mobile app sees the non-secret change and never the key.
+    public = c.get("/v1/config/public").json()
+    assert public["payments"]["cashOnDeliveryEnabled"] is False and "snp_live" not in str(public)

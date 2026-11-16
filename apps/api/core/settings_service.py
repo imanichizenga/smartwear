@@ -222,8 +222,10 @@ def update(group: str, patch: dict[str, Any], *, admin=None, request=None, expec
         raise ApiError.not_found(f"Settings group {group}")
     ring = key_ring()
     with transaction.atomic():
-        row, _ = Setting.objects.select_for_update().get_or_create(group=group, defaults={"value": {}, "secret_paths": _secret_paths(group)})
-        if expected_version is not None and row.version != expected_version and row.version != 0:
+        # A group that was never saved reads as version 0 (admin_view), so a freshly created row must start at 0 too —
+        # otherwise the first save of every group fails the optimistic-lock check below.
+        row, _ = Setting.objects.select_for_update().get_or_create(group=group, defaults={"value": {}, "secret_paths": _secret_paths(group), "version": 0})
+        if expected_version is not None and row.version != expected_version:
             raise ApiError.conflict("stale_settings", "These settings were changed by someone else. Reload to see the latest values.", {"version": row.version})
         before_plain = _decrypt_value(group, row.value)
         merged = copy.deepcopy(before_plain)

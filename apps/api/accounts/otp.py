@@ -31,6 +31,21 @@ AUTO_BLOCK_AFTER_FAILED_CODES = 4  # codes that hit max attempts within 24h
 AUTO_BLOCK_HOURS = 24
 
 
+def otp_message(template: str, code: str, minutes: int, app_hash: str = "") -> str:
+    """The SMS text for a code. Accepts common placeholder spellings ({code}, {{code}}, {otp}, {pin}, {minutes}, {min}…)
+    and guarantees the code is in the message even if the admin's template has no code placeholder."""
+    message = render_template(
+        template or "", code=code, otp=code, pin=code, minutes=minutes, minute=minutes, mins=minutes, min=minutes, expiry=minutes, appHash=app_hash, hash=app_hash
+    )
+    if code not in message:
+        body, _, last = message.rpartition("\n")
+        if app_hash and last.strip() == app_hash:  # keep the Android auto-fill hash on the last line
+            message = f"{body}\nCode: {code}\n{app_hash}".strip()
+        else:
+            message = f"{message}\nCode: {code}".strip() if message else f"Your SmartWear code is {code}. It expires in {minutes} minutes."
+    return message
+
+
 def _is_blocked(phone: str) -> bool:
     now = timezone.now()
     return BlockedPhone.objects.filter(phone=phone).filter(Q(until__isnull=True) | Q(until__gt=now)).exists()
@@ -69,7 +84,7 @@ def request_code(raw_phone: str, request, purpose: str = "login", for_user=None)
         else:
             code = "".join(str(secrets.randbelow(10)) for _ in range(cfg.otpLength))
             ch.code_hash = _hasher.hash(code)
-            message = render_template(beem_cfg.otpTemplate, code=code, minutes=cfg.otpExpiryMinutes, appHash=beem_cfg.androidAppHash or "")
+            message = otp_message(beem_cfg.otpTemplate, code, cfg.otpExpiryMinutes, beem_cfg.androidAppHash or "")
             result = client.send_sms([phone], message)
             if not result.ok:
                 raise ApiError.upstream("Beem", f"SMS not accepted: {result.message}", details={"code": result.code})

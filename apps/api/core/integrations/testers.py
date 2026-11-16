@@ -69,7 +69,7 @@ def test_s3(params: dict) -> dict:
 
 
 def test_beem(params: dict) -> dict:
-    from core.integrations.beem import BeemClient
+    from core.integrations.beem import BeemClient, to_gsm
 
     client = BeemClient()
     cfg = client.cfg
@@ -91,9 +91,16 @@ def test_beem(params: dict) -> dict:
     if to:
         from accounts.phone import normalize_phone
 
+        from django.utils import timezone
+
+        # Use the admin's own text when given; otherwise build a plain-text (GSM-safe) message.
+        text = str((params or {}).get("testMessage") or "").strip()
+        if not text:
+            text = f"SmartWear test message: your SMS integration works. Sent {timezone.localtime():%d %b %Y %H:%M}."
         try:
-            r = client.send_sms([normalize_phone(to)], "SmartWear test message — your SMS integration works.")
-            checks.append(_check("Test SMS", r.ok, f"Accepted (request {r.request_id})" if r.ok else f"{r.message} (code {r.code})"))
+            r = client.send_sms([normalize_phone(to)], text)
+            detail = f"{r.message} (code {r.code})" if r.code is not None else r.message
+            checks.append(_check("Test SMS", r.ok, f"Accepted (request {r.request_id}) — sent: \"{to_gsm(text)}\"" if r.ok else detail))
         except ApiError as e:
             checks.append(_check("Test SMS", False, e.message))
     return _result(checks)

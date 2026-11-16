@@ -91,7 +91,7 @@ export const SETTINGS_META: Record<string, GroupMeta> = {
       androidAppHash: { label: 'Android app hash', help: '11-character hash for the SMS Retriever API (from your release signing key).' },
       riderInviteTemplate: { label: 'Rider invite', multiline: true, help: 'Variables: {{name}}, {{appLink}}.' },
     },
-    test: { label: 'Checks your Beem balance, then optionally sends a test SMS.', inputs: [{ key: 'testPhone', label: 'Send a test SMS to', placeholder: '+255 7XX XXX XXX', help: 'Optional.' }] },
+    test: { label: 'Checks your Beem balance, then optionally sends a test SMS.', inputs: [{ key: 'testPhone', label: 'Send a test SMS to', placeholder: '+255 7XX XXX XXX', help: 'Optional.' }, { key: 'testMessage', label: 'Test message', placeholder: 'Leave blank to send an automatic test message', help: 'Optional. Sent as plain text: emoji and special characters are removed.' }] },
   },
   auth: {
     title: 'Sign-in & sessions',

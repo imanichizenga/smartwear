@@ -51,9 +51,9 @@ export function SettingsEditor({ group, initial, integration, currency }: { grou
   const [test, setTest] = useState<TestResult | null>((integration?.lastTest as TestResult | null) ?? null);
   const [testInputs, setTestInputs] = useState<Record<string, string>>({});
 
-  const save = async () => {
+  const save = async (version = saved.version) => {
     try {
-      const next = await api<Initial>(`/admin/settings/${group}`, { method: 'PUT', body: { value, version: saved.version } });
+      const next = await api<Initial>(`/admin/settings/${group}`, { method: 'PUT', body: { value, version } });
       setSaved(next);
       setValue(next.value);
       setConflict(false);
@@ -70,6 +70,11 @@ export function SettingsEditor({ group, initial, integration, currency }: { grou
     setSaved(fresh);
     setValue(fresh.value);
     setConflict(false);
+  };
+  // Conflict resolution that keeps what the admin typed: save it on top of the latest stored version.
+  const overwrite = async () => {
+    const fresh = await api<Initial>(`/admin/settings/${group}`);
+    await save(fresh.version);
   };
   const runTest = async () => {
     try {
@@ -161,9 +166,10 @@ export function SettingsEditor({ group, initial, integration, currency }: { grou
             {conflict ? (
               <>
                 <Chip tone="warning">Changed elsewhere</Chip>
-                <span className="text-[13px] text-muted">Someone saved these settings after you opened them.</span>
+                <span className="text-[13px] text-muted">Someone saved these settings after you opened them. Your changes are not saved yet.</span>
                 <div className="ml-auto flex gap-2">
-                  <ActionButton variant="secondary" icon={<RotateCcw strokeWidth={1.5} />} onAction={reload}>Load latest</ActionButton>
+                  <ActionButton variant="ghost" icon={<RotateCcw strokeWidth={1.5} />} onAction={reload}>Discard mine, load latest</ActionButton>
+                  <ActionButton icon={<Save strokeWidth={1.5} />} onAction={overwrite}>Keep mine &amp; save</ActionButton>
                 </div>
               </>
             ) : (
@@ -171,7 +177,7 @@ export function SettingsEditor({ group, initial, integration, currency }: { grou
                 <span className="text-[13px] font-semibold">Unsaved changes</span>
                 <div className="ml-auto flex gap-2">
                   <Button variant="ghost" onClick={() => setValue(saved.value)}>Discard</Button>
-                  <ActionButton icon={<Save strokeWidth={1.5} />} onAction={save}>Save</ActionButton>
+                  <ActionButton icon={<Save strokeWidth={1.5} />} onAction={() => save()}>Save</ActionButton>
                 </div>
               </>
             )}
@@ -182,8 +188,9 @@ export function SettingsEditor({ group, initial, integration, currency }: { grou
   );
 }
 
-function formatDetails(d: Record<string, unknown>): string | undefined {
-  const errs = d.errors as { loc?: (string | number)[]; msg?: string }[] | undefined;
+function formatDetails(d: unknown): string | undefined {
+  // The API sends pydantic errors either as a bare list or wrapped as { errors: [...] }.
+  const errs = (Array.isArray(d) ? d : (d as { errors?: unknown } | null)?.errors) as { loc?: (string | number)[]; msg?: string }[] | undefined;
   if (Array.isArray(errs) && errs.length) return errs.slice(0, 3).map((e) => `${(e.loc ?? []).join('.')}: ${e.msg}`).join(' · ');
   return undefined;
 }

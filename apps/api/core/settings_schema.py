@@ -9,12 +9,15 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 SECRET_PLACEHOLDER = "__SECRET_UNCHANGED__"
 
 
 class StorageS3(BaseModel):
+    # Keys and bucket names are often pasted with a stray space — which silently breaks every signed URL.
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     provider: Literal["aws", "s3_compatible"] = "aws"
     bucket: str = ""
     region: str = "eu-west-1"

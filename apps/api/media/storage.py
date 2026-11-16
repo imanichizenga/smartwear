@@ -32,7 +32,9 @@ def _client_for(fingerprint: str, region: str, key_id: str, secret: str, endpoin
         region_name=region,
         aws_access_key_id=key_id,
         aws_secret_access_key=secret,
-        endpoint_url=endpoint or None,
+        # AWS: always use the bucket's regional endpoint. The global s3.amazonaws.com host only accepts us-east-1
+        # signatures, so presigned GET/POST URLs for buckets in any other region would fail with a 400.
+        endpoint_url=endpoint or (f"https://s3.{region}.amazonaws.com" if region else None),
         config=Config(signature_version="s3v4", s3={"addressing_style": "path" if path_style else "auto"}, retries={"max_attempts": 3, "mode": "standard"}, connect_timeout=5, read_timeout=30),
     )
 

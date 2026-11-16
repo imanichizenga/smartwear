@@ -177,7 +177,9 @@ class Command(BaseCommand):
 
         data = self._fetch(photo_id)
         sha = hashlib.sha256(data).hexdigest()
-        existing = Media.objects.filter(sha256=sha, status="READY", purpose=purpose, deleted_at__isnull=True).first()
+        # Reuse by source name: Media.sha256 is a hash of the decoded pixels, so the file hash alone never matches.
+        existing = (Media.objects.filter(original_name=f"unsplash-{photo_id}.jpg", status="READY", purpose=purpose, deleted_at__isnull=True).order_by("-created_at").first()
+                    or Media.objects.filter(sha256=sha, status="READY", purpose=purpose, deleted_at__isnull=True).first())
         if existing:
             return existing
         mid = uuid.uuid4()
@@ -418,4 +420,7 @@ class Command(BaseCommand):
             used.setdefault(v, []).append(k)
         for i in ids:
             lines.append(f"| [`{i}`](https://images.unsplash.com/photo-{i}) | {', '.join(used[i])} |")
-        doc.write_text("\n".join(lines) + "\n")
+        try:
+            doc.write_text("\n".join(lines) + "\n")
+        except OSError:  # deployed without the monorepo docs/ folder — credits stay in the repo copy
+            self.stdout.write(f"(skipped writing {doc})")

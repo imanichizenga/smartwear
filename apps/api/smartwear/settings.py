@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.gis",
     "django.contrib.postgres",
+    "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
     "corsheaders",
@@ -98,12 +99,15 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": [],
     "UNAUTHENTICATED_USER": None,
 }
-SPECTACULAR_SETTINGS = {"TITLE": "SmartWear API", "DESCRIPTION": "Fashion & beauty commerce — customers, riders, admin.", "VERSION": "1.0.0", "SERVE_INCLUDE_SCHEMA": False, "COMPONENT_SPLIT_REQUEST": True}
+SPECTACULAR_SETTINGS = {"TITLE": "SmartWear API", "DESCRIPTION": "Fashion & beauty commerce — customers, riders, admin.", "VERSION": "1.0.0", "SERVE_INCLUDE_SCHEMA": False, "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"], "SERVE_AUTHENTICATION": [], "COMPONENT_SPLIT_REQUEST": True}
 
+# Any origin may call the API (mobile, web, tools). Native apps send no Origin at all; browser clients get CORS
+# headers for any origin. Cookie auth stays safe: the admin cookie is SameSite=Lax and cookie-authenticated
+# writes also require the custom header check in accounts.authentication.
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = E.ADMIN_ORIGINS
-CORS_ALLOWED_ORIGIN_REGEXES = [r"^https?://(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+)(:\d+)?$"]
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ["content-type", "authorization", "x-device-id", "x-requested-with", "x-request-id", "if-none-match", "idempotency-key", "accept-language"]
+CORS_ALLOW_HEADERS = ["accept", "origin", "user-agent", "x-csrftoken", "cache-control", "content-type", "authorization", "x-device-id", "x-requested-with", "x-request-id", "if-none-match", "idempotency-key", "accept-language"]
 CORS_EXPOSE_HEADERS = ["ETag", "X-Request-Id"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
@@ -115,7 +119,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+import os as _os
+STATIC_ROOT = _os.environ.get("STATIC_ROOT") or (BASE_DIR / "staticfiles")
 STORAGES = {"staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"}}
 
 LOGGING = {

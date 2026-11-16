@@ -8,8 +8,13 @@ import pytest
 @pytest.fixture(autouse=True)
 def _clean_state(settings):
     """Every test starts with an empty Redis DB 15 and empty settings caches."""
+    from django.conf import settings as dj
+
     from core import settings_service
 
+    # DJANGO_SETTINGS_MODULE in the environment overrides pyproject's test settings; never flush a real Redis DB.
+    if not getattr(dj, "SETTINGS_PUBSUB_DISABLED", False):
+        pytest.exit("Refusing to run: tests need DJANGO_SETTINGS_MODULE=smartwear.settings_test (production settings detected).", returncode=2)
     settings_service.redis_client().flushdb()
     settings_service._local.clear()
     yield

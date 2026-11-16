@@ -10,6 +10,8 @@ Auth: HTTP Basic (API key : secret). Numbers are international format without '+
 """
 from __future__ import annotations
 
+import re
+import unicodedata
 from dataclasses import dataclass
 from typing import Any
 
@@ -37,6 +39,38 @@ class SmsResult:
     message: str
     valid: int = 0
     invalid: int = 0
+
+
+# Beem plain-text SMS (encoding 0) rejects anything it considers Unicode, so we send printable ASCII + newlines only.
+_GSM = set(chr(c) for c in range(32, 127)) | {"\n"}
+# Common "smart" punctuation that sneaks in from phones, Word and copy-paste.
+_PUNCT = {
+    "\u2014": "-", "\u2013": "-", "\u2012": "-", "\u2011": "-", "\u2010": "-", "\u2212": "-",
+    "\u2018": "'", "\u2019": "'", "\u201a": "'", "\u201b": "'", "\u2032": "'",
+    "\u201c": '"', "\u201d": '"', "\u201e": '"', "\u201f": '"', "\u2033": '"', "\u00ab": '"', "\u00bb": '"',
+    "\u2026": "...", "\u2022": "*", "\u00b7": "*", "\u00a0": " ", "\u2009": " ", "\u200a": " ", "\u202f": " ",
+    "\u200b": "", "\u200c": "", "\u200d": "", "\ufeff": "", "\u2122": "TM", "\u00ae": "(R)", "\u00a9": "(C)",
+    "\t": " ", "\r": "\n", "\u00a3": "GBP", "\u20ac": "EUR",
+}
+
+
+def to_gsm(text: str) -> str:
+    """Make any text safe for Beem plain-text SMS (encoding 0), which rejects Unicode outright.
+    Smart punctuation → ASCII, accents stripped (é → e), anything else (emoji, symbols) dropped."""
+    out = []
+    for ch in text.replace("\r\n", "\n"):
+        ch = _PUNCT.get(ch, ch)
+        if all(c in _GSM for c in ch):
+            out.append(ch)
+            continue
+        base = "".join(c for c in unicodedata.normalize("NFKD", ch) if not unicodedata.combining(c))
+        out.append("".join(c for c in base if c in _GSM))
+    return re.sub(r"[ ]{2,}", " ", "".join(out)).strip()
+
+
+def _plain(msg: str) -> str:
+    """Beem error messages can contain HTML (e.g. <strong>); show them as plain text."""
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", msg or "")).strip()
 
 
 def to_msisdn(e164: str) -> str:
@@ -68,6 +102,9 @@ class BeemClient:
 
     def send_sms(self, recipients: list[str], message: str, *, schedule_time: str = "") -> SmsResult:
         self._require()
+        message = to_gsm(message)
+        if not message:
+            raise ApiError("The SMS has no text left after removing unsupported characters.", status_code=400, code="sms_empty")
         body = {
             "source_addr": self.cfg.senderId,
             "schedule_time": schedule_time,
@@ -84,7 +121,7 @@ class BeemClient:
         if r.status_code == 401 or d.get("code") == 120:
             raise ApiError.upstream("Beem", "invalid API key or secret (code 120)")
         ok = r.is_success and bool(d.get("successful")) and d.get("code") in (100, None)
-        return SmsResult(ok=ok, request_id=str(d.get("request_id") or "") or None, code=d.get("code"), message=str(d.get("message") or r.reason_phrase), valid=int(d.get("valid") or 0), invalid=int(d.get("invalid") or 0))
+        return SmsResult(ok=ok, request_id=str(d.get("request_id") or "") or None, code=d.get("code"), message=_plain(str(d.get("message") or r.reason_phrase)), valid=int(d.get("valid") or 0), invalid=int(d.get("invalid") or 0))
 
     def balance(self) -> float:
         self._require(need_sender=False)
@@ -131,8 +168,16 @@ class BeemClient:
         return code == 117, code
 
 
+_PLACEHOLDER = re.compile(r"\{\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}\}|\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}")
+
+
 def render_template(template: str, **values: Any) -> str:
-    out = template
-    for k, v in values.items():
-        out = out.replace("{{" + k + "}}", str(v))
-    return out.replace("\n\n", "\n").strip()
+    """Fill {{name}} placeholders. Admins also write {name}, {{ name }} or {NAME}, so all of those work too.
+    Names are matched case-insensitively; placeholders with no value are left as typed (so mistakes stay visible)."""
+    lookup = {k.lower(): v for k, v in values.items()}
+
+    def sub(m: re.Match) -> str:
+        key = (m.group(1) or m.group(2)).lower()
+        return str(lookup[key]) if key in lookup else m.group(0)
+
+    return _PLACEHOLDER.sub(sub, template or "").replace("\n\n", "\n").strip()
