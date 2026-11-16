@@ -138,13 +138,13 @@ class Command(BaseSeed):
         return m if m.status == "READY" else None
 
     # ------------------------------------------------------------------ products
-    def _extra_products(self, admin, brands, stores, limit: int):
+    def _extra_products(self, admin, brands, stores, limit: int, catalogue=EXTRA, note: str = "seed_extra"):
         from catalog.models import Product
         from catalog.services.categories import refresh_counts
         from catalog.services.products import upsert_product
 
         out = {}
-        items = EXTRA[:limit] if limit else EXTRA
+        items = catalogue[:limit] if limit else catalogue
         for n, x in enumerate(items, 1):
             s = x.p
             self.stdout.write(f"[{n}/{len(items)}] {s.title}")
@@ -166,7 +166,7 @@ class Command(BaseSeed):
             payload["media"] = media
             existing = Product.objects.filter(title=s.title).first()
             with transaction.atomic():
-                p = upsert_product(payload, admin=admin, product=existing, note="seed_extra")
+                p = upsert_product(payload, admin=admin, product=existing, note=note)
             out[s.title] = p
             self.stdout.write(f"  product {p.status.lower()} · {len(imgs)} photos · {len(vids)} video")
             self.stdout.flush()
