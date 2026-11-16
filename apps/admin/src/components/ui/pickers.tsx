@@ -147,7 +147,9 @@ export function MediaPicker({ open, onOpenChange, onPick, kinds = ['IMAGE'], mul
       }
     >
       {lib.isPending ? (
-        <div className="flex justify-center py-16"><LoaderA size="lg" /></div>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4" aria-busy="true" aria-label="Loading media">
+          {Array.from({ length: 8 }, (_, i) => <div key={i} className="aspect-square animate-pulse rounded-sm bg-ink/[0.06]" />)}
+        </div>
       ) : items.length === 0 ? (
         <button type="button" onClick={() => file.current?.click()} className="flex w-full flex-col items-center gap-3 rounded-md border border-dashed border-ink/20 py-16 text-muted hover:border-ink/40 hover:text-ink">
           <ImagePlus className="size-7" strokeWidth={1.25} />

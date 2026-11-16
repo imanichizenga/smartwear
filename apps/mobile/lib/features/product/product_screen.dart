@@ -234,7 +234,8 @@ class _ProductViewState extends ConsumerState<_ProductView> {
             SliverToBoxAdapter(child: SectionHeader(s('product.pairsWellWith'))),
             SliverToBoxAdapter(child: ProductRail(items: p.list('pairsWellWith'), cardWidth: 140)),
           ],
-          SliverToBoxAdapter(child: SizedBox(height: 132 + context.safe.bottom)),
+          // Exactly the sticky bar (52 px large button + its vertical padding) plus breathing room — no blank band.
+          SliverToBoxAdapter(child: SizedBox(height: 52 + SwSpace.s3 * 2 + SwSpace.s6 + context.bottomInset)),
         ]),
         // Floating chrome over the photo.
         Positioned(
@@ -244,7 +245,15 @@ class _ProductViewState extends ConsumerState<_ProductView> {
           child: Row(children: [
             const _Back(),
             const Spacer(),
-            SwIconButton(icon: Ic.share2, filled: true, semanticLabel: s('common.share'), onPressed: () => Clipboard.setData(ClipboardData(text: 'https://smartwear.co.tz/p/${p.str('slug')}'))),
+            SwIconButton(
+              icon: Ic.share2,
+              filled: true,
+              semanticLabel: s('common.share'),
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: 'https://smartwear.co.tz/p/${p.str('slug')}'));
+                if (context.mounted) showSwToast(context, s('looks.linkCopied'), icon: Ic.share2);
+              },
+            ),
             SwIconButton(
               icon: Ic.heart,
               activeIcon: Ic.heart,
@@ -265,7 +274,7 @@ class _ProductViewState extends ConsumerState<_ProductView> {
             child: BackdropFilter(
               filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
               child: Container(
-                padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s3, SwSpace.s5, SwSpace.s3 + context.safe.bottom),
+                padding: EdgeInsets.fromLTRB(SwSpace.s5, SwSpace.s3, SwSpace.s5, SwSpace.s3 + context.bottomInset),
                 decoration: BoxDecoration(color: c.surface.withValues(alpha: 0.92), border: Border(top: BorderSide(color: c.hairline))),
                 child: Row(children: [
                   _QtyStepper(qty: _qty, onChanged: (q) => setState(() => _qty = q)),

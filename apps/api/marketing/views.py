@@ -43,7 +43,8 @@ class LooksFeedView(APIView):
         if not settings_service.get("features").looksFeed:
             raise ApiError.not_found("Looks")
         cursor, limit = page_params(request, 8, 20)
-        qs = Look.objects.filter(published=True).select_related("media")
+        # Only looks whose media finished processing — a look without a playable image/video is never shown.
+        qs = Look.objects.filter(published=True, media__status="READY", media__deleted_at__isnull=True).select_related("media")
         if request.query_params.get("department"):
             qs = qs.filter(department__in=[request.query_params["department"], ""])
         rows, nxt = keyset(qs, ["-published_at", "-id"], cursor, limit)

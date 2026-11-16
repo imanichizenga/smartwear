@@ -12,7 +12,7 @@ import { AppLink } from '@/components/ui/app-link';
 import { ActionButton, Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import { Field, Input, Select, Textarea } from '@/components/ui/field';
-import { Section } from '@/components/ui/kit';
+import { RowsSkeleton, Section } from '@/components/ui/kit';
 import { ProductPicker } from '@/components/ui/pickers';
 import { Card, Chip, Switch } from '@/components/ui/primitives';
 import { LoaderA } from '@/components/brand/LoaderA';
@@ -213,7 +213,7 @@ export function ProductEditor({ productId, currency }: { productId?: string; cur
   const allHints = [...hints, ...serverHints];
   const blocking = allHints.filter((x) => x.level === 'error');
 
-  if (productId && loaded.isPending) return <div className="flex h-[60vh] items-center justify-center"><LoaderA size="lg" /></div>;
+  if (productId && loaded.isPending) return <div className="grid gap-4"><div className="h-10 w-72 animate-pulse rounded-sm bg-ink/[0.06]" /><div className="rounded-md border border-hairline bg-surface"><RowsSkeleton rows={8} /></div></div>;
   if (productId && loaded.isError) return <div className="py-24 text-center"><p className="font-display text-2xl">We couldn’t load this product</p><AppLink href="/products" className="mt-4 text-sm underline">Back to products</AppLink></div>;
 
   const catAttrs = (attrs.data ?? []).filter((a) => primary?.attributeKeys.includes(a.key));
@@ -616,7 +616,7 @@ function VersionsDialog({ open, onOpenChange, productId, current, onReverted }: 
   const q = useQuery({ queryKey: ['versions', productId], enabled: open, queryFn: () => api<{ items: { version: number; note: string; by: string | null; createdAt: string; title: string; status: string }[] }>(`/admin/products/${productId}/versions`) });
   return (
     <Dialog open={open} onOpenChange={onOpenChange} side title="Version history" description="Every save keeps a snapshot. Reverting creates a new version, so nothing is lost.">
-      {q.isPending ? <div className="flex justify-center py-12"><LoaderA size="lg" /></div> : (
+      {q.isPending ? <RowsSkeleton rows={5} avatar /> : (
         <ol className="relative grid gap-0 border-l border-hairline pl-5">
           {q.data?.items.map((v) => (
             <li key={v.version} className="relative pb-5">

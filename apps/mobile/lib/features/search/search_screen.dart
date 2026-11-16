@@ -100,7 +100,7 @@ class _Idle extends ConsumerWidget {
     final recent = ref.watch(_recentProvider);
     final cats = ref.watch(categoriesProvider).value ?? const [];
     final trending = ref.watch(_suggestProvider('')).value?.list('trending') ?? const [];
-    return ListView(padding: EdgeInsets.fromLTRB(0, SwSpace.s4, 0, 120 + context.safe.bottom), children: [
+    return ListView(padding: EdgeInsets.fromLTRB(0, SwSpace.s4, 0, SwSpace.s8 + context.bottomInset), children: [
       if (recent.isNotEmpty) ...[
         _Label(s('search.recent'), action: s('search.clearAll'), onAction: () => ref.read(_recentProvider.notifier).clear()),
         Padding(

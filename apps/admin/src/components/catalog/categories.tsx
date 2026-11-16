@@ -10,7 +10,8 @@ import {
   Archive, ArchiveRestore, ChevronRight, CornerDownRight, EyeOff, FolderInput, GripVertical, Layers, Lock, Plus, Search, Sparkles, Star, Trash2,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { LoaderA, LoaderBlock } from '@/components/brand/LoaderA';
+import { LoaderA } from '@/components/brand/LoaderA';
+import { RowsSkeleton } from '@/components/ui/kit';
 import { ActionButton, Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import { Field, Input, Select, Textarea } from '@/components/ui/field';
@@ -128,7 +129,7 @@ export function CategoriesWorkspace() {
         }
       />
       {tree.isLoading ? (
-        <LoaderBlock />
+        <div className="rounded-md border border-hairline bg-surface"><RowsSkeleton rows={8} /></div>
       ) : tree.error ? (
         <EmptyState title="Couldn't load categories" body={(tree.error as Error).message} action={<Button onClick={() => void tree.refetch()}>Try again</Button>} />
       ) : (

@@ -15,7 +15,7 @@ import { LoaderA } from '@/components/brand/LoaderA';
 import { ActionButton, Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import { Field, Input, Select } from '@/components/ui/field';
-import { fromLocalInput, toLocalInput } from '@/components/ui/kit';
+import { fromLocalInput, RowsSkeleton, toLocalInput } from '@/components/ui/kit';
 import { MediaImage } from '@/components/ui/media-image';
 import { ProductPicker } from '@/components/ui/pickers';
 import { Card, Chip, PageHeader, Switch } from '@/components/ui/primitives';
@@ -82,7 +82,7 @@ export function HomeBuilder() {
         actions={<Button icon={<Plus strokeWidth={1.5} />} onClick={() => setEdit({ type: 'product_rail', isActive: true, config: { limit: 10 }, segment: {} })}>Add section</Button>} />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <Card className="overflow-hidden">
-          {q.isPending ? <div className="flex justify-center py-16"><LoaderA size="lg" /></div> : (
+          {q.isPending ? <RowsSkeleton rows={6} /> : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => void onSort(e)}>
               <SortableContext items={ordered.map((s) => s.id)} strategy={verticalListSortingStrategy}>
                 <ul className="divide-y divide-hairline">

@@ -528,6 +528,16 @@ const Map<String, String> messagesEn = {
   'privacy.delete.type': 'Type {{word}} to confirm',
   'privacy.delete.confirm': 'Delete my account',
   'privacy.deleted': 'Your account was deleted',
+  'looks.save': 'Save',
+  'looks.saved': 'Saved',
+  'looks.like': 'Like',
+  'looks.liked': 'Liked',
+  'looks.mute': 'Mute',
+  'looks.unmute': 'Unmute',
+  'looks.linkCopied': 'Link copied — paste it anywhere to share',
+  'looks.end.title': 'You\'re all caught up',
+  'looks.end.body': 'New looks are styled every week.',
+  'looks.end.top': 'Back to the top',
 };
 
 const Map<String, String> messagesSw = {
@@ -1051,4 +1061,14 @@ const Map<String, String> messagesSw = {
   'privacy.delete.type': 'Andika {{word}} kuthibitisha',
   'privacy.delete.confirm': 'Futa akaunti yangu',
   'privacy.deleted': 'Akaunti yako imefutwa',
+  'looks.save': 'Hifadhi',
+  'looks.saved': 'Imehifadhiwa',
+  'looks.like': 'Penda',
+  'looks.liked': 'Umependa',
+  'looks.mute': 'Zima sauti',
+  'looks.unmute': 'Washa sauti',
+  'looks.linkCopied': 'Kiungo kimenakiliwa — kibandike popote kushiriki',
+  'looks.end.title': 'Umeona yote',
+  'looks.end.body': 'Miwonekano mipya huandaliwa kila wiki.',
+  'looks.end.top': 'Rudi mwanzo',
 };

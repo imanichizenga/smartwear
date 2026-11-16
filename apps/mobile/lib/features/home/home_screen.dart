@@ -36,17 +36,12 @@ class HomeScreen extends ConsumerWidget {
               ],
               loading: () => [const SliverToBoxAdapter(child: _HomeSkeleton())],
               error: (e, _) => [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: EmptyState(
-                    title: ref.s('common.error.title'),
-                    body: ref.s('common.error.body'),
-                    action: SwButton(label: ref.s('common.retry'), variant: SwButtonVariant.secondary, onPressed: () => ref.refresh(homeProvider.future)),
-                  ),
-                ),
+                SliverFillRemaining(hasScrollBody: false, child: Center(child: LoadError(error: e, onRetry: () => ref.invalidate(homeProvider)))),
               ],
+              skipLoadingOnRefresh: true,
+              skipLoadingOnReload: true,
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 120 + context.safe.bottom)),
+            SliverToBoxAdapter(child: SizedBox(height: SwSpace.s8 + context.bottomInset)),
           ],
         ),
       ),
@@ -64,12 +59,45 @@ class _HomeHeader extends ConsumerWidget {
       backgroundColor: context.sw.canvas.withValues(alpha: 0.94),
       centerTitle: true,
       title: Text('SMARTWEAR', style: context.type.titleS.copyWith(letterSpacing: 13 * 0.32, fontSize: 13, fontWeight: FontWeight.w700)),
-      leading: SwIconButton(icon: Ic.search, semanticLabel: ref.s('common.search'), onPressed: () => context.go('/search')),
+      // Search lives in the tab bar; the top-left opens the wishlist (with a count when there's something saved).
+      leading: const _WishlistButton(),
       actions: [
         SwIconButton(icon: Ic.bell, semanticLabel: ref.s('notifications.title'), onPressed: () => context.push('/notifications')),
         const SizedBox(width: SwSpace.s2),
       ],
     );
+  }
+}
+
+class _WishlistButton extends ConsumerWidget {
+  const _WishlistButton();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.sw;
+    final count = ref.watch(wishlistProvider).value?.length ?? 0;
+    final label = count > 0 ? '${ref.s('profile.wishlist')}, $count' : ref.s('profile.wishlist');
+    return Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [
+      SwIconButton(icon: Ic.heart, semanticLabel: label, onPressed: () => requireSignIn(context, ref, () => context.push('/wishlist'))),
+      Positioned(
+        top: 6,
+        right: 4,
+        child: IgnorePointer(
+          child: AnimatedScale(
+            scale: count > 0 ? 1 : 0,
+            duration: context.reduceMotion ? Duration.zero : SwMotion.base,
+            curve: Curves.easeOutBack,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 16),
+              height: 16,
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: c.accent, borderRadius: BorderRadius.circular(8)),
+              child: Text(count > 99 ? '99+' : '$count', style: context.type.caption.copyWith(fontSize: 10, height: 1, color: c.onAccent, fontWeight: FontWeight.w700)),
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 }
 
