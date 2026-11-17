@@ -8,7 +8,6 @@
 *.keystore
 *.jks
 key.properties
-google-services.json
 GoogleService-Info.plist
 
 # ───────────────────────────── OS / editors

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157687476942",
+    "project_id": "smartwear-fe49b",
+    "storage_bucket": "smartwear-fe49b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157687476942:android:027919bb6c34975806569f",
+        "android_client_info": {
+          "package_name": "africa.smartwear.smartwear"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIfw3jxV_wJ_lrCHuj2nvKFseLHPEb5Hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
