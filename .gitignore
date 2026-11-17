@@ -42,6 +42,7 @@ apps/admin/next-env.d.ts
 apps/admin/AGENTS.md
 # Regenerated from packages/design-tokens by `predev` / `prebuild`
 apps/admin/src/app/styles/tokens.css
+apps/web/src/app/styles/tokens.css
 # Playwright
 test-results/
 playwright-report/

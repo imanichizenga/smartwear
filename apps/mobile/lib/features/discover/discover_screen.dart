@@ -104,25 +104,26 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const on = SwColors.dark;
+    // Discover follows the shopper's theme like every tab; only the text and controls drawn over a look's
+    // photo/video stay light-on-dark (on their own gradient scrim) so they read on any media.
+    final c = context.sw;
     final looks = ref.watch(looksFeedProvider);
     // The tab shell keeps Discover alive offstage with tickers disabled: that's our "tab not visible" signal.
     final visible = TickerMode.of(context) && _foreground;
     return Scaffold(
-      backgroundColor: on.canvas,
+      backgroundColor: c.canvas,
       body: looks.when(
         skipLoadingOnRefresh: true,
         skipLoadingOnReload: true,
         loading: () => const _DiscoverSkeleton(),
-        error: (e, _) => Theme(data: buildTheme(Brightness.dark), child: Center(child: LoadError(error: e, onRetry: () => ref.invalidate(looksFeedProvider)))),
+        error: (e, _) => Center(child: LoadError(error: e, onRetry: () => ref.invalidate(looksFeedProvider))),
         data: (feed) {
           if (feed.items.isEmpty) {
-            return Theme(
-              data: buildTheme(Brightness.dark),
-              child: RefreshIndicator(
-                onRefresh: () => ref.refresh(looksFeedProvider.future),
-                child: LayoutBuilder(builder: (context, box) => SingleChildScrollView(physics: const AlwaysScrollableScrollPhysics(), child: SizedBox(height: box.maxHeight, child: Center(child: EmptyState(title: ref.s('looks.empty'), icon: Ic.compass))))),
-              ),
+            return RefreshIndicator(
+              color: c.ink,
+              backgroundColor: c.surface,
+              onRefresh: () => ref.refresh(looksFeedProvider.future),
+              child: LayoutBuilder(builder: (context, box) => SingleChildScrollView(physics: const AlwaysScrollableScrollPhysics(), child: SizedBox(height: box.maxHeight, child: Center(child: EmptyState(title: ref.s('looks.empty'), icon: Ic.compass))))),
             );
           }
           // Deep link: /discover?look=<id> opens that look.
@@ -138,8 +139,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           }
           final count = feed.items.length + 1; // + end-of-feed page
           return RefreshIndicator(
-            color: on.ink,
-            backgroundColor: on.surface,
+            color: c.ink,
+            backgroundColor: c.surface,
             onRefresh: () async {
               await ref.refresh(looksFeedProvider.future);
               if (_pages.hasClients) _pages.jumpToPage(0);
@@ -147,6 +148,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             child: PageView.builder(
               controller: _pages,
               scrollDirection: Axis.vertical,
+              // Builds the neighbouring look too: its video initialises (paused, buffering) so a swipe starts at once.
+              allowImplicitScrolling: true,
               itemCount: count,
               onPageChanged: (i) => _onPage(i, feed),
               itemBuilder: (context, i) => i == feed.items.length
@@ -167,16 +170,16 @@ class _DiscoverSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottom = context.bottomInset + SwSpace.s6;
     return Stack(fit: StackFit.expand, children: [
-      const Skeleton.expand(dark: true),
+      const Skeleton.expand(),
       Positioned(
         right: SwSpace.s3,
         bottom: bottom,
         child: const Column(children: [
-          SkeletonAvatar(size: 44, dark: true),
+          SkeletonAvatar(size: 44),
           SizedBox(height: SwSpace.s5),
-          SkeletonAvatar(size: 44, dark: true),
+          SkeletonAvatar(size: 44),
           SizedBox(height: SwSpace.s5),
-          SkeletonAvatar(size: 44, dark: true),
+          SkeletonAvatar(size: 44),
         ]),
       ),
       Positioned(
@@ -184,11 +187,11 @@ class _DiscoverSkeleton extends StatelessWidget {
         right: 88,
         bottom: bottom,
         child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SkeletonLine(width: 220, height: 22, dark: true),
+          SkeletonLine(width: 220, height: 22),
           SizedBox(height: SwSpace.s2),
-          SkeletonLine(width: 150, height: 22, dark: true),
+          SkeletonLine(width: 150, height: 22),
           SizedBox(height: SwSpace.s4),
-          SkeletonBox(width: 200, height: 48, radius: SwRadius.full, dark: true),
+          SkeletonBox(width: 200, height: 48, radius: SwRadius.full),
         ]),
       ),
     ]);
@@ -202,18 +205,15 @@ class _EndOfFeed extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.s;
-    return Theme(
-      data: buildTheme(Brightness.dark),
-      child: Center(
-        child: loading
-            ? const ALoader(size: ALoaderSize.lg)
-            : EmptyState(
-                title: s('looks.end.title'),
-                body: s('looks.end.body'),
-                icon: Ic.sparkles,
-                action: SwButton(label: s('looks.end.top'), icon: Ic.chevronUp, variant: SwButtonVariant.secondary, onPressed: onTop),
-              ),
-      ),
+    return Center(
+      child: loading
+          ? const ALoader(size: ALoaderSize.lg)
+          : EmptyState(
+              title: s('looks.end.title'),
+              body: s('looks.end.body'),
+              icon: Ic.sparkles,
+              action: SwButton(label: s('looks.end.top'), icon: Ic.chevronUp, variant: SwButtonVariant.secondary, onPressed: onTop),
+            ),
     );
   }
 }
@@ -241,11 +241,15 @@ class _LookPageState extends ConsumerState<LookPage> with SingleTickerProviderSt
   Json get _media => widget.look.obj('media') ?? const {};
   bool get _isVideo => _media.str('type') == 'VIDEO';
 
-  String? get _videoUrl {
-    final u = _media.strN('url');
-    if (u != null && u.isNotEmpty) return u;
+  /// Adaptive stream first (360p → 1080p as the network allows, light first frame), progressive MP4 as fallback.
+  String? get _hlsUrl {
     final h = _media.strN('hlsUrl');
     return (h != null && h.isNotEmpty) ? h : null;
+  }
+
+  String? get _mp4Url {
+    final u = _media.strN('url');
+    return (u != null && u.isNotEmpty) ? u : null;
   }
 
   @override
@@ -255,23 +259,39 @@ class _LookPageState extends ConsumerState<LookPage> with SingleTickerProviderSt
   }
 
   Future<void> _initVideo() async {
-    final url = _videoUrl;
-    if (url == null) {
+    final hls = _hlsUrl, mp4 = _mp4Url;
+    if (hls == null && mp4 == null) {
       setState(() => _videoFailed = true);
       return;
     }
-    final c = VideoPlayerController.networkUrl(Uri.parse(url), videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
+    if (hls != null && await _open(hls, VideoFormat.hls)) return;
+    if (!mounted) return;
+    if (mp4 == null || !await _open(mp4, null)) {
+      if (mounted) setState(() => _videoFailed = true);
+    }
+  }
+
+  /// Opens one source; false when it can't be played (the caller falls back).
+  Future<bool> _open(String url, VideoFormat? hint) async {
+    final old = _video;
+    old?.removeListener(_onVideo);
+    await old?.dispose();
+    final c = VideoPlayerController.networkUrl(Uri.parse(url), formatHint: hint, videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
     _video = c;
     c.addListener(_onVideo);
     try {
       await c.initialize();
       await c.setLooping(true);
       await c.setVolume(_muted.value ? 0 : 1);
-      if (!mounted) return;
+      if (!mounted) return true;
       setState(() {});
       _sync();
+      return true;
     } catch (_) {
-      if (mounted) setState(() => _videoFailed = true);
+      c.removeListener(_onVideo);
+      if (identical(_video, c)) _video = null;
+      await c.dispose();
+      return false;
     }
   }
 
@@ -365,7 +385,7 @@ class _LookPageState extends ConsumerState<LookPage> with SingleTickerProviderSt
       child: Stack(fit: StackFit.expand, children: [
         // The still (image, or the video's poster / thumbhash) is always underneath: it shows while the video
         // buffers and stays if the video fails or has no source.
-        SwImage(widget.look.obj('media'), aspectRatio: null, radius: 0, dark: true),
+        SwImage(widget.look.obj('media'), aspectRatio: null, radius: 0, dark: context.isDark),
         if (playing)
           FittedBox(
             fit: BoxFit.cover,

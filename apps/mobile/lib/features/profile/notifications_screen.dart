@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/api.dart';
+import '../../core/push.dart';
 import '../../core/providers.dart';
 import '../../design/theme.dart';
 import '../../l10n/strings.dart';
@@ -10,16 +11,8 @@ import '../../ui/kit.dart';
 import 'profile_data.dart';
 import 'sub_page.dart';
 
-/// Where a notification leads: order → tracking, chat → the thread, product → its page.
-String? notificationRoute(Json data) {
-  final thread = data.strN('threadId');
-  if (thread != null) return '/chat/$thread';
-  final order = data.strN('orderId');
-  if (order != null) return '/orders/$order/track';
-  final slug = data.strN('productSlug');
-  if (slug != null) return '/p/$slug';
-  return null;
-}
+/// Where a notification leads: the push's own route (campaign / product), else order → tracking, chat → the thread.
+String? notificationRoute(Json data) => PushService.routeOf(data);
 
 /// Notifications: inbox with unread dots, mark-all-read, and per-channel switches.
 class NotificationsScreen extends ConsumerStatefulWidget {
@@ -90,6 +83,8 @@ class _Item extends ConsumerWidget {
       semanticLabel: '${unread ? '${ref.s('notifications.unread')}. ' : ''}${n.str('title')}. ${n.str('body')}',
       onTap: () {
         if (unread) ref.read(inboxProvider.notifier).markRead(ids: [n.str('id')]).catchError((_) {});
+        final campaign = n.obj('data')?.strN('campaignId');
+        if (campaign != null) ref.read(pushServiceProvider).reportOpen(campaign, 'inbox');
         if (route != null) context.push(route);
       },
       child: Padding(

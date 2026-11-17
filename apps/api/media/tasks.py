@@ -31,6 +31,9 @@ def purge_media(media_id: str) -> int:
     keys = [m.original_key] + [v["key"] for v in m.variants or []]
     try:
         storage.delete(keys)
+        for v in m.variants or []:
+            if v.get("format") == "m3u8":  # HLS segments live next to their playlist
+                storage.delete_prefix(v["key"].rsplit("/", 1)[0])
     except Exception as e:  # noqa: BLE001
         logger.warning("purge %s failed: %s", media_id, e)
         return 0

@@ -7,6 +7,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Push needs the Firebase config (Firebase console → Project settings → Android app → google-services.json, saved
+// as android/app/google-services.json — git-ignored). Without it the app builds and runs with push switched off.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 /**
  * The display-only Google Maps key, from (first match): --dart-define=MAPS_API_KEY=…,
  * the MAPS_API_KEY environment variable (EAS/CI secrets), or MAPS_API_KEY in android/local.properties.
@@ -36,6 +42,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // flutter_local_notifications uses java.time on older Android versions.
+        isCoreLibraryDesugaringEnabled = true
     }
 
     defaultConfig {
@@ -71,4 +79,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }

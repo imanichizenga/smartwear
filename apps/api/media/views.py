@@ -227,3 +227,76 @@ class EnhancePreviewView(APIView):
             img = pyvips.Image.new_from_file(f.name)
             out = _auto_enhance(img).write_to_buffer(".jpg", Q=82, strip=True)
         return Response({"before": media_out(m)["url"], "after": "data:image/jpeg;base64," + base64.b64encode(out).decode()})
+
+
+# ================================================================ adaptive streaming (HLS)
+from django.core.cache import cache  # noqa: E402
+from django.http import Http404, HttpResponse  # noqa: E402
+from rest_framework.permissions import AllowAny  # noqa: E402
+
+# Media that the storefront shows to anyone; private uploads (chat, documents, proofs) are never streamed here.
+PUBLIC_STREAM_PURPOSES = {"look", "story", "product", "brand", "collection", "category", "branding"}
+M3U8 = "application/vnd.apple.mpegurl"
+
+
+def _streamable(media_id) -> tuple[Media, list[dict]]:
+    m = Media.objects.filter(id=media_id, type="VIDEO", status="READY", deleted_at__isnull=True, purpose__in=PUBLIC_STREAM_PURPOSES).only("id", "variants", "width", "height").first()
+    if m is None:
+        raise Http404
+    rungs = sorted([v for v in m.variants or [] if v.get("format") == "m3u8" and str(v.get("label", "")).startswith("hls-")], key=lambda v: v.get("height") or 0)
+    if not rungs:
+        raise Http404
+    return m, rungs
+
+
+def _m3u8(body: str, max_age: int) -> HttpResponse:
+    r = HttpResponse(body, content_type=M3U8)
+    # Short client cache: segment links inside are signed for ~6 h.
+    r["Cache-Control"] = f"public, max-age={max_age}"
+    r["Access-Control-Allow-Origin"] = "*"
+    return r
+
+
+class HlsMasterView(APIView):
+    """`GET /v1/media/<id>/hls.m3u8` — the adaptive master playlist (every rung of the ladder)."""
+
+    permission_classes = [AllowAny]
+    authentication_classes: list = []
+
+    def get(self, request, media_id):
+        m, rungs = _streamable(media_id)
+        lines = ["#EXTM3U", "#EXT-X-VERSION:6", "#EXT-X-INDEPENDENT-SEGMENTS"]
+        for v in rungs:
+            res = str(v["label"]).removeprefix("hls-")
+            avg = int(v.get("bandwidth") or 800_000)
+            peak = max(int(v.get("maxBandwidth") or 0), int(avg * 1.25))  # BANDWIDTH must cover the real peak
+            attrs = [f"BANDWIDTH={peak}", f"AVERAGE-BANDWIDTH={avg}", f"RESOLUTION={v['width']}x{v['height']}", "FRAME-RATE=30.000"]
+            if v.get("codecs"):
+                attrs.append(f'CODECS="{v["codecs"]}"')
+            lines += [f"#EXT-X-STREAM-INF:{','.join(attrs)}", f"hls/{res}.m3u8"]
+        return _m3u8("\n".join(lines) + "\n", 300)
+
+
+class HlsVariantView(APIView):
+    """`GET /v1/media/<id>/hls/<res>.m3u8` — one rung's playlist with freshly signed segment URLs."""
+
+    permission_classes = [AllowAny]
+    authentication_classes: list = []
+
+    def get(self, request, media_id, res: int):
+        m, rungs = _streamable(media_id)
+        v = next((x for x in rungs if x["label"] == f"hls-{res}"), None)
+        if v is None:
+            raise Http404
+        key = v["key"]
+        ck = f"hls:{key}"
+        text = cache.get(ck)
+        if text is None:
+            try:
+                text = storage.read_text(key)
+            except Exception as e:  # noqa: BLE001
+                raise ApiError("Video is temporarily unavailable", status_code=503, code="unavailable") from e
+            cache.set(ck, text, 24 * 3600)  # playlists are immutable (content-hashed keys)
+        base = key.rsplit("/", 1)[0]
+        out = [storage.public_url(f"{base}/{ln.strip()}") if ln.strip() and not ln.startswith("#") else ln for ln in text.splitlines()]
+        return _m3u8("\n".join(out) + "\n", 600)

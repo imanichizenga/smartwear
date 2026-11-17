@@ -1,4 +1,4 @@
-"""Push delivery: Expo Push Service (default) or FCM v1 + APNs (HTTP/2, token auth) from DB credentials."""
+"""Push delivery from DB credentials: FCM HTTP v1 (Android + iOS, the Flutter apps), plus Expo and direct APNs for older tokens."""
 from __future__ import annotations
 
 import json
@@ -61,28 +61,57 @@ def _fcm_credentials(sa_json: str):
     return service_account.Credentials.from_service_account_info(info, scopes=["https://www.googleapis.com/auth/firebase.messaging"]), info["project_id"]
 
 
-def _fcm(tokens: list[PushToken], title: str, body: str, data: dict, channel: str) -> dict[str, Any]:
+def _fcm_message(t: PushToken, title: str, body: str, data: dict, channel: str, image: str | None, priority: str) -> dict:
+    """One FCM v1 message. iOS devices get their APNs fields through FCM (sound, rich image via mutable-content)."""
+    note: dict[str, Any] = {"title": title, "body": body}
+    if image:
+        note["image"] = image
+    android: dict[str, Any] = {"priority": "HIGH" if priority == "high" else "NORMAL", "notification": {"channel_id": channel, "sound": "default", "default_vibrate_timings": True}}
+    if image:
+        android["notification"]["image"] = image
+    apns = {"headers": {"apns-priority": "10" if priority == "high" else "5"}, "payload": {"aps": {"sound": "default", "mutable-content": 1}}, **({"fcm_options": {"image": image}} if image else {})}
+    return {"message": {"token": t.token, "notification": note, "data": {k: v if isinstance(v, str) else json.dumps(v) for k, v in data.items()}, "android": android, "apns": apns}}
+
+
+def _fcm(tokens: list[PushToken], title: str, body: str, data: dict, channel: str, image: str | None = None, priority: str = "high") -> dict[str, Any]:
     cfg = settings_service.get("push")
     if not cfg.fcmServiceAccountJson:
-        return {"sent": len(tokens), "ok": 0, "errors": ["FCM not configured"]}
-    from google.auth.transport.requests import Request
+        return {"sent": len(tokens), "ok": 0, "errors": ["FCM not configured"], "okTokens": []}
+    from concurrent.futures import ThreadPoolExecutor
 
-    creds, project = _fcm_credentials(cfg.fcmServiceAccountJson)
-    if not creds.valid:
-        creds.refresh(Request())
-    ok, errors = 0, []
-    with httpx.Client(timeout=10, headers={"Authorization": f"Bearer {creds.token}"}) as c:
-        for t in tokens:
-            msg = {"message": {"token": t.token, "notification": {"title": title, "body": body}, "data": {k: str(v) for k, v in data.items()}, "android": {"priority": "HIGH", "notification": {"channel_id": channel}}}}
-            r = c.post(f"https://fcm.googleapis.com/v1/projects/{project}/messages:send", json=msg)
+    import urllib3
+    from google.auth.transport.urllib3 import Request  # urllib3 is installed; the `requests` transport is not
+
+    try:
+        creds, project = _fcm_credentials(cfg.fcmServiceAccountJson)
+        if not creds.valid:
+            creds.refresh(Request(urllib3.PoolManager()))
+    except Exception as e:  # noqa: BLE001 — bad JSON / revoked key: report it, never crash the caller
+        logger.warning("FCM credentials rejected: %s", e)
+        return {"sent": len(tokens), "ok": 0, "errors": [f"FCM credentials rejected — check Settings → Push ({str(e)[:60]})"], "okTokens": []}
+    url = f"https://fcm.googleapis.com/v1/projects/{project}/messages:send"
+    ok_tokens: list[int] = []
+    errors: list[str] = []
+    with httpx.Client(timeout=10, headers={"Authorization": f"Bearer {creds.token}"}, limits=httpx.Limits(max_connections=8)) as c:
+
+        def one(t: PushToken) -> tuple[PushToken, str | None]:
+            try:
+                r = c.post(url, json=_fcm_message(t, title, body, data, channel, image, priority))
+            except httpx.HTTPError as e:
+                return t, str(e)[:80]
             if r.is_success:
-                ok += 1
-            else:
-                err = (r.json().get("error") or {}).get("status", f"HTTP {r.status_code}")
-                errors.append(err)
-                if err in ("NOT_FOUND", "UNREGISTERED"):
-                    PushToken.objects.filter(pk=t.pk).update(disabled_at=_now())
-    return {"sent": len(tokens), "ok": ok, "errors": errors[:5]}
+                return t, None
+            return t, ((r.json() if r.content else {}).get("error") or {}).get("status", f"HTTP {r.status_code}")
+
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for t, err in pool.map(one, tokens):
+                if err is None:
+                    ok_tokens.append(t.pk)
+                else:
+                    errors.append(err)
+                    if err in ("NOT_FOUND", "UNREGISTERED", "INVALID_ARGUMENT"):
+                        PushToken.objects.filter(pk=t.pk).update(disabled_at=_now())
+    return {"sent": len(tokens), "ok": len(ok_tokens), "errors": errors[:5], "okTokens": ok_tokens}
 
 
 _apns_jwt: dict[str, Any] = {}
@@ -110,18 +139,26 @@ def _apns(tokens: list[PushToken], title: str, body: str, data: dict, sound: str
     return {"sent": len(tokens), "ok": ok, "errors": errors[:5]}
 
 
-def send(tokens: list[PushToken], title: str, body: str, data: dict | None = None, *, sound: str | None = "default", channel: str = "default", priority: str = "high") -> dict[str, Any]:
+def send(tokens: list[PushToken], title: str, body: str, data: dict | None = None, *, sound: str | None = "default", channel: str = "default", priority: str = "high", image: str | None = None) -> dict[str, Any]:
+    """Delivers to every live token through the service that issued it (FCM for the Flutter apps; Expo / direct
+    APNs tokens from older builds still work). `okTokens` lists the token ids that were accepted."""
     data = data or {}
     tokens = [t for t in tokens if t.disabled_at is None]
     if not tokens:
-        return {"sent": 0, "ok": 0, "errors": [], "message": "No registered devices"}
-    cfg = settings_service.get("push")
-    if cfg.provider == "expo":
-        return _expo(tokens, title, body, data, sound=sound, channel=channel, priority=priority)
-    results = [_fcm([t for t in tokens if t.provider == "fcm"], title, body, data, channel) if any(t.provider == "fcm" for t in tokens) else None,
-               _apns([t for t in tokens if t.provider == "apns"], title, body, data, sound) if any(t.provider == "apns" for t in tokens) else None]
-    results = [r for r in results if r]
-    return {"sent": sum(r["sent"] for r in results), "ok": sum(r["ok"] for r in results), "errors": [e for r in results for e in r["errors"]][:5]}
+        return {"sent": 0, "ok": 0, "errors": [], "okTokens": [], "message": "No registered devices"}
+    groups = {p: [t for t in tokens if t.provider == p] for p in ("fcm", "expo", "apns")}
+    results = []
+    if groups["fcm"]:
+        results.append(_fcm(groups["fcm"], title, body, data, channel, image, priority))
+    if groups["expo"]:
+        r = _expo(groups["expo"], title, body, data, sound=sound, channel=channel, priority=priority)
+        r.setdefault("okTokens", [t.pk for t in groups["expo"]] if r["ok"] == len(groups["expo"]) else [])
+        results.append(r)
+    if groups["apns"]:
+        r = _apns(groups["apns"], title, body, data, sound)
+        r.setdefault("okTokens", [t.pk for t in groups["apns"]] if r["ok"] == len(groups["apns"]) else [])
+        results.append(r)
+    return {"sent": sum(r["sent"] for r in results), "ok": sum(r["ok"] for r in results), "errors": [e for r in results for e in r["errors"]][:5], "okTokens": [i for r in results for i in r.get("okTokens", [])]}
 
 
 def send_to_user(user, title: str, body: str, data: dict | None = None, **kw) -> dict[str, Any]:

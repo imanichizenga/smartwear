@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'core/providers.dart';
 import 'features/auth/auth_screens.dart';
 import 'features/bag/bag_screen.dart';
+import 'features/campaign/campaign_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/chat/support_screen.dart';
 import 'features/checkout/checkout_screen.dart';
@@ -124,6 +125,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/privacy/delete', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const DeleteAccountScreen()),
       GoRoute(path: '/rider', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const RiderHomeScreen()),
       GoRoute(path: '/rider/earnings', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => const RiderEarningsScreen()),
+      GoRoute(path: '/campaign/:id', parentNavigatorKey: rootNavigatorKey, builder: (c, s) => CampaignScreen(id: s.pathParameters['id']!)),
       GoRoute(
         path: '/c/:slug',
         parentNavigatorKey: rootNavigatorKey,

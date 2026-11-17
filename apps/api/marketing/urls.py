@@ -22,5 +22,8 @@ urlpatterns = [
     path("admin/looks/<uuid:lid>", v.AdminLookView.as_view()),
     path("admin/campaigns", v.AdminCampaignsView.as_view()),
     path("admin/campaigns/estimate", v.AdminCampaignEstimateView.as_view()),
+    path("admin/campaigns/<uuid:cid>/report", v.AdminCampaignReportView.as_view()),
     path("admin/campaigns/<uuid:cid>/<str:action>", v.AdminCampaignView.as_view()),
+    path("campaigns/<uuid:cid>", v.CampaignPublicView.as_view()),
+    path("campaigns/<uuid:cid>/opened", v.CampaignOpenedView.as_view()),
 ]

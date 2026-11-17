@@ -150,13 +150,13 @@ export const SETTINGS_META: Record<string, GroupMeta> = {
   push: {
     title: 'Push notifications',
     section: 'Integrations',
-    description: 'Order milestones, rider alerts and campaigns.',
+    description: 'Order milestones, rider alerts and campaigns. The SmartWear apps receive push through Firebase Cloud Messaging on Android and iPhone.',
     layout: [
-      { title: 'Provider', fields: ['provider', 'expoAccessToken'] },
-      { title: 'Firebase / APNs', description: 'Only when sending directly instead of through Expo.', fields: ['fcmServiceAccountJson', 'apnsKeyP8', 'apnsKeyId', 'apnsTeamId', 'apnsBundleId', 'apnsSandbox'] },
+      { title: 'Firebase Cloud Messaging', description: 'Firebase console → Project settings → Service accounts → Generate new private key. Paste the whole JSON file. For iPhones, also upload your APNs auth key in Firebase (Cloud Messaging tab).', fields: ['fcmServiceAccountJson'] },
+      { title: 'Legacy devices', description: 'Only for app builds that registered Expo or direct-APNs tokens. Each device is sent through the service that issued its token automatically.', fields: ['provider', 'expoAccessToken', 'apnsKeyP8', 'apnsKeyId', 'apnsTeamId', 'apnsBundleId', 'apnsSandbox'] },
     ],
     fields: {
-      provider: { label: 'Provider', options: { expo: 'Expo Push', fcm_apns: 'Firebase + APNs directly' } },
+      provider: { label: 'Legacy provider', options: { expo: 'Expo Push', fcm_apns: 'Direct APNs' } },
       expoAccessToken: { label: 'Expo access token' },
       fcmServiceAccountJson: { label: 'FCM service account JSON', multiline: true },
       apnsKeyP8: { label: 'APNs key (.p8)', multiline: true },

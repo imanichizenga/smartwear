@@ -4,8 +4,9 @@ Media processing (runs in the Celery `media` queue).
 Images  libvips: autorotate, sRGB, strip all metadata (EXIF/GPS), master ≤ 2400px, focal-point crop to 4:5 for
         product imagery, AVIF + WebP + JPEG at 320/640/960/1280/1920, BlurHash + ThumbHash, dominant colour,
         sharpness (variance of Laplacian) for the blur hint. Never composites text/badges onto pixels.
-Video   ffmpeg: H.264/AAC MP4 at 720p/1080p (capped bitrate, faststart, no metadata), HLS for long clips,
-        poster frame, short muted preview loop for the feed.
+Video   ffmpeg: H.264/AAC ladder 360p/540p (+720p/1080p when the source allows), capped VBV, 2 s keyframes,
+        faststart, no metadata; every rung also segmented to HLS for adaptive streaming (served through
+        /v1/media/<id>/hls.m3u8 with signed segment URLs); poster frame; short muted preview loop for the feed.
 Audio   ffmpeg: denoise + gate + EBU R128 loudness → AAC .m4a, waveform peaks JSON.
 Keys    content-hashed and immutable: media/<yyyy>/<mm>/<sha12>/<label>.<ext>
 """
@@ -237,6 +238,24 @@ def _streams(info: dict, kind: str) -> list[dict]:
     return [s for s in info.get("streams", []) if s.get("codec_type") == kind]
 
 
+# Streaming ladder. Every clip gets the two light rungs (they keep playback smooth on 3G / busy 4G) plus the
+# configured higher ones the source can fill. Bitrates are VBV caps for CRF encodes, tuned for phones.
+LADDER_KBPS = {360: 650, 480: 900, 540: 1200, 720: 2000, 1080: 3800}
+BASE_RUNGS = (360, 540)
+GOP_SECONDS = 2  # a keyframe every 2 s: fast start, clean seeking/looping, aligned HLS segments
+HLS_SEGMENT_SECONDS = 4
+
+
+def _nice(cmd: list[str]) -> list[str]:
+    """Transcodes run at low CPU priority: the single worker also serves dispatch and notifications."""
+    return ["nice", "-n", "10", *cmd] if shutil.which("nice") else cmd
+
+
+def _codecs(res: int, has_audio: bool) -> str:
+    v = "avc1.4d401f" if res <= 540 else "avc1.640028"  # Main@3.1 for light rungs, High@4.0 above
+    return f"{v},mp4a.40.2" if has_audio else v
+
+
 def process_video(m: Media, src: str, work: str) -> dict[str, Any]:
     ms = settings_service.get("media")
     info = probe(src)
@@ -261,20 +280,37 @@ def process_video(m: Media, src: str, work: str) -> dict[str, Any]:
     sha = _hash_file(src)
     variants: list[dict[str, Any]] = []
     short_edge = min(w, h)
-    targets = [r for r in ms.videoResolutions if r <= short_edge] or [min(ms.videoResolutions)]
+    wanted = sorted({*BASE_RUNGS, *(r for r in ms.videoResolutions if r in LADDER_KBPS)})
+    targets = [r for r in wanted if r <= short_edge] or [min(wanted)]
+    gop = 30 * GOP_SECONDS
+    hls_root = _key(m, sha, "hls", "m3u8").rsplit("/", 1)[0] + "/hls"
     for res in targets:
         out = os.path.join(work, f"{res}.mp4")
         scale = f"scale=-2:{res}" if w >= h else f"scale={res}:-2"
-        rate = int(ms.videoMaxBitrateKbps * (res / 1080) ** 1.4)
+        rate = min(LADDER_KBPS[res], ms.videoMaxBitrateKbps)
+        light = res <= 540
         cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", *ss, "-i", src, *to, "-map_metadata", "-1", "-map", "0:v:0", *(["-map", "0:a:0"] if has_audio else []),
-               "-vf", f"{scale},fps=fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "medium", "-profile:v", "high", "-crf", "23",
-               "-maxrate", f"{rate}k", "-bufsize", f"{rate * 2}k", "-movflags", "+faststart",
-               *(["-c:a", "aac", "-b:a", "128k", "-ac", "2"] if has_audio else ["-an"]), out]
-        _run(cmd)
+               "-vf", f"{scale}:flags=lanczos,fps=fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast" if light else "faster",
+               "-profile:v", "main" if light else "high", "-level", "3.1" if light else "4.0", "-crf", "24" if light else "22",
+               "-maxrate", f"{rate}k", "-bufsize", f"{int(rate * 1.5)}k", "-g", str(gop), "-keyint_min", str(gop), "-sc_threshold", "0",
+               "-force_key_frames", f"expr:gte(t,n_forced*{GOP_SECONDS})", "-movflags", "+faststart",
+               *(["-c:a", "aac", "-b:a", "96k" if light else "128k", "-ac", "2", "-ar", "44100"] if has_audio else ["-an"]), out]
+        _run(_nice(cmd))
         pi = _streams(probe(out), "video")[0]
         key = _key(m, sha, f"{res}p", "mp4")
         storage.upload_file(out, key, "video/mp4")
         variants.append({"width": int(pi["width"]), "height": int(pi["height"]), "format": "mp4", "key": key, "bytes": os.path.getsize(out), "label": f"{res}p"})
+        # The same encode, segmented for adaptive streaming (no re-encode: keyframes are already 2 s apart).
+        hdir = os.path.join(work, f"hls{res}")
+        os.makedirs(hdir, exist_ok=True)
+        _run(_nice(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", out, "-c", "copy", "-f", "hls", "-hls_time", str(HLS_SEGMENT_SECONDS), "-hls_playlist_type", "vod",
+                    "-hls_flags", "independent_segments", "-hls_segment_filename", os.path.join(hdir, "seg_%03d.ts"), os.path.join(hdir, "index.m3u8")]))
+        base = f"{hls_root}/{res}"
+        for fn in sorted(os.listdir(hdir)):
+            storage.upload_file(os.path.join(hdir, fn), f"{base}/{fn}", "application/vnd.apple.mpegurl" if fn.endswith(".m3u8") else "video/mp2t")
+        avg = int(os.path.getsize(out) * 8 / max(duration, 0.5))
+        variants.append({"width": int(pi["width"]), "height": int(pi["height"]), "format": "m3u8", "key": f"{base}/index.m3u8", "bytes": 0, "label": f"hls-{res}",
+                         "bandwidth": max(avg, 1) + (128_000 if has_audio else 0), "maxBandwidth": rate * 1000 + (128_000 if has_audio else 0), "codecs": _codecs(res, has_audio)})
     # Poster
     poster_at = ((m.options or {}).get("posterAtMs") or min(1000, int(duration * 500))) / 1000
     poster = os.path.join(work, "poster.jpg")
@@ -289,20 +325,10 @@ def process_video(m: Media, src: str, work: str) -> dict[str, Any]:
     # Muted preview loop for the feed
     prev = os.path.join(work, "preview.mp4")
     pl = min(ms.previewLoopSeconds, max(1, duration))
-    _run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", *ss, "-i", src, "-t", f"{pl:.2f}", "-an", "-map_metadata", "-1", "-vf", ("scale=-2:540" if w >= h else "scale=540:-2") + ",fps=fps=24,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-movflags", "+faststart", prev])
+    _run(_nice(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", *ss, "-i", src, "-t", f"{pl:.2f}", "-an", "-map_metadata", "-1", "-vf", ("scale=-2:540" if w >= h else "scale=540:-2") + ",fps=fps=24,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-movflags", "+faststart", prev]))
     prkey = _key(m, sha, "preview", "mp4")
     storage.upload_file(prev, prkey, "video/mp4")
     variants.append({"width": 540 if w < h else round(540 * w / h), "height": round(540 * h / w) if w < h else 540, "format": "mp4", "key": prkey, "bytes": os.path.getsize(prev), "label": "preview"})
-    # HLS for longer clips
-    if duration >= ms.hlsMinDurationSeconds:
-        hls_dir = os.path.join(work, "hls")
-        os.makedirs(hls_dir, exist_ok=True)
-        top = os.path.join(work, f"{targets[-1]}.mp4")
-        _run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", top, "-c", "copy", "-hls_time", "4", "-hls_playlist_type", "vod", "-hls_segment_filename", os.path.join(hls_dir, "seg_%03d.ts"), os.path.join(hls_dir, "index.m3u8")])
-        base = _key(m, sha, "hls", "m3u8").rsplit("/", 1)[0] + "/hls"
-        for fn in sorted(os.listdir(hls_dir)):
-            storage.upload_file(os.path.join(hls_dir, fn), f"{base}/{fn}", "application/vnd.apple.mpegurl" if fn.endswith(".m3u8") else "video/mp2t")
-        variants.append({"width": variants[-4]["width"] if len(variants) >= 4 else w, "height": h, "format": "m3u8", "key": f"{base}/index.m3u8", "bytes": 0, "label": "hls"})
     tiny = pimg.thumbnail_image(32)
     from PIL import Image as PILImage
     import blurhash
@@ -347,8 +373,12 @@ def process_audio(m: Media, src: str, work: str) -> dict[str, Any]:
 def process(media_id: str) -> Media:
     m = Media.objects.get(id=media_id)
     work = tempfile.mkdtemp(prefix="sw-media-")
+    # Re-processing a live video (new streaming ladder) keeps the current renditions on screen until the new ones are
+    # ready, and keeps them if the new encode fails — the feed never loses a look.
+    was_ready = m.status == "READY"
     try:
-        Media.objects.filter(id=m.id).update(status="PROCESSING", error="")
+        if not was_ready:
+            Media.objects.filter(id=m.id).update(status="PROCESSING", error="")
         src = os.path.join(work, "source")
         storage.download(m.original_key, src)
         with open(src, "rb") as f:
@@ -381,7 +411,10 @@ def process(media_id: str) -> Media:
         _after_ready(m)
         return m
     except PipelineError as e:
-        Media.objects.filter(id=m.id).update(status="FAILED", error=str(e)[:2000])
+        if was_ready:
+            Media.objects.filter(id=m.id).update(error=f"reprocess failed: {e}"[:2000])
+        else:
+            Media.objects.filter(id=m.id).update(status="FAILED", error=str(e)[:2000])
         logger.warning("media %s failed: %s", m.id, e)
         raise
     finally:

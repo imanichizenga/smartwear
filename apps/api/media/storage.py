@@ -129,6 +129,28 @@ def delete(keys: list[str]) -> None:
         client().delete_objects(Bucket=bucket(), Delete={"Objects": [{"Key": k} for k in keys[i : i + 1000]], "Quiet": True})
 
 
+def delete_prefix(prefix: str) -> int:
+    """Delete every object under `prefix` (an HLS rendition folder). Returns how many were removed."""
+    if not prefix or prefix.count("/") < 2:
+        return 0  # never wipe a bucket root by accident
+    c, n, token = client(), 0, None
+    while True:
+        kw = {"Bucket": bucket(), "Prefix": prefix.rstrip("/") + "/"}
+        if token:
+            kw["ContinuationToken"] = token
+        r = c.list_objects_v2(**kw)
+        keys = [o["Key"] for o in r.get("Contents", [])]
+        delete(keys)
+        n += len(keys)
+        if not r.get("IsTruncated"):
+            return n
+        token = r.get("NextContinuationToken")
+
+
+def read_text(key: str) -> str:
+    return client().get_object(Bucket=bucket(), Key=key)["Body"].read().decode("utf-8")
+
+
 _url_cache: dict[str, tuple[float, str]] = {}
 
 

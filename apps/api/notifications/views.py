@@ -28,6 +28,8 @@ class PushTokenView(APIView):
         if not token or len(token) > 300:
             raise ApiError.bad_request("Missing push token")
         provider = d.get("provider") or ("expo" if token.startswith("ExponentPushToken") else "fcm")
+        if provider not in ("fcm", "expo", "apns"):
+            raise ApiError.bad_request("Unknown push provider")
         defaults = {"provider": provider, "platform": (d.get("platform") or "")[:8], "device_id": (d.get("deviceId") or request.headers.get("X-Device-Id") or "")[:128], "disabled_at": None,
                     "user": p.user if p.kind != "admin" else None, "admin": p.admin if p.kind == "admin" else None, "locale": (getattr(p.user, "locale", "en") if p.kind != "admin" else "en")}
         PushToken.objects.update_or_create(token=token, defaults=defaults)

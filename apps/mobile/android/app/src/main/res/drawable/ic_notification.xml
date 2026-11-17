@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Atelier "A" (packages/brand geometry) as a monochrome status-bar icon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path android:pathData="M18,86 L50,14 L82,86" android:strokeColor="#FFFFFFFF" android:strokeWidth="10" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" />
+    <path android:pathData="M28.67,62 L71.33,62" android:strokeColor="#FFFFFFFF" android:strokeWidth="7" android:strokeLineCap="round" />
+    <path android:pathData="M50,4 C50.6,8.2 51.8,9.4 56,10 C51.8,10.6 50.6,11.8 50,16 C49.4,11.8 48.2,10.6 44,10 C48.2,9.4 49.4,8.2 50,4 Z" android:fillColor="#FFFFFFFF" />
+</vector>

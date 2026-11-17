@@ -30,6 +30,12 @@ dependencies:
   image_picker: ^1.2.4
   # Emoji panel for chat (replaces the keyboard while open). Run `flutter pub get` after pulling.
   emoji_picker_flutter: ^4.5.4
+  # Push notifications: Firebase Cloud Messaging on Android + iOS; local notifications show pushes that arrive
+  # while the app is open, with the same channels. Config files: android/app/google-services.json,
+  # ios/Runner/GoogleService-Info.plist (both git-ignored). Run `flutter pub get` after pulling.
+  firebase_core: ^4.2.0
+  firebase_messaging: ^16.0.3
+  flutter_local_notifications: ^19.5.0
 
 dev_dependencies:
   flutter_test:

@@ -214,7 +214,7 @@ export function OrderDetail({ initial }: { initial: Order }) {
           <Card>
             <CardHeader title="Customer" actions={canChat ? <ActionButton size="sm" variant="secondary" icon={<MessageCircle strokeWidth={1.5} />} onAction={messageCustomer}>Message customer</ActionButton> : undefined} />
             <div className="px-5 py-4 text-[13px]">
-              <AppLink href={`/customers/${o.customer.id}`} className="text-sm font-semibold hover:underline">{o.customer.name}</AppLink>
+              <AppLink href={`/customers?open=${o.customer.id}`} className="text-sm font-semibold hover:underline">{o.customer.name}</AppLink>
               <div className="mt-1 flex items-center gap-2 text-muted"><Phone className="size-3.5" strokeWidth={1.5} /> <a href={`tel:${o.contact.phone || o.customer.phone}`} className="tabular hover:text-ink">{o.contact.phone || o.customer.phone}</a></div>
               {o.contact.name && o.contact.name !== o.customer.name && <div className="mt-1 text-muted">Recipient: {o.contact.name}</div>}
               {Object.entries(o.extraFields ?? {}).map(([k, v]) => <div key={k} className="mt-1 text-muted">{titleCase(k)}: {v}</div>)}

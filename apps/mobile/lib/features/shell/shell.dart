@@ -28,7 +28,6 @@ class AppShell extends ConsumerWidget {
       (Ic.shoppingBag, s('tab.bag')),
       (Ic.user, s('tab.profile')),
     ];
-    final onDark = shell.currentIndex == 1; // Discover is full-bleed photography
     return Scaffold(
       extendBody: true,
       body: shell,
@@ -43,9 +42,9 @@ class AppShell extends ConsumerWidget {
               child: Container(
                 height: 64,
                 decoration: BoxDecoration(
-                  color: onDark ? Colors.black.withValues(alpha: 0.35) : context.sw.surface.withValues(alpha: 0.82),
+                  color: context.sw.surface.withValues(alpha: 0.82),
                   borderRadius: BorderRadius.circular(SwRadius.full),
-                  border: Border.all(color: onDark ? Colors.white.withValues(alpha: 0.12) : context.sw.hairline),
+                  border: Border.all(color: context.sw.hairline),
                 ),
                 child: LayoutBuilder(builder: (context, box) {
                   final w = box.maxWidth / tabs.length;
@@ -58,7 +57,7 @@ class AppShell extends ConsumerWidget {
                       top: 8,
                       width: 52,
                       height: 48,
-                      child: DecoratedBox(decoration: BoxDecoration(color: (onDark ? Colors.white : context.sw.ink).withValues(alpha: onDark ? 0.14 : 0.06), borderRadius: BorderRadius.circular(SwRadius.full))),
+                      child: DecoratedBox(decoration: BoxDecoration(color: context.sw.ink.withValues(alpha: 0.06), borderRadius: BorderRadius.circular(SwRadius.full))),
                     ),
                     Row(children: [
                       for (var i = 0; i < tabs.length; i++)
@@ -67,7 +66,6 @@ class AppShell extends ConsumerWidget {
                             icon: tabs[i].$1,
                             label: tabs[i].$2,
                             selected: i == shell.currentIndex,
-                            onDark: onDark,
                             badge: i == 3 ? bagCount : 0,
                             onTap: () {
                               HapticFeedback.selectionClick();
@@ -88,17 +86,17 @@ class AppShell extends ConsumerWidget {
 }
 
 class _Tab extends StatelessWidget {
-  const _Tab({required this.icon, required this.label, required this.selected, required this.onTap, required this.onDark, this.badge = 0});
+  const _Tab({required this.icon, required this.label, required this.selected, required this.onTap, this.badge = 0});
   final IconData icon;
   final String label;
-  final bool selected, onDark;
+  final bool selected;
   final int badge;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final fg = onDark ? Colors.white : context.sw.ink;
-    final dim = onDark ? Colors.white.withValues(alpha: 0.6) : context.sw.muted;
+    final fg = context.sw.ink;
+    final dim = context.sw.muted;
     return Semantics(
       selected: selected,
       button: true,

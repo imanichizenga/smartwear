@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api.dart';
+import 'push.dart';
 
 /* ------------------------------------------------------------------ device prefs */
 
@@ -218,6 +219,8 @@ class SessionNotifier extends Notifier<SessionState> {
   }
 
   Future<void> signOut() async {
+    // While still authenticated: stop this account's pushes reaching this phone.
+    await ref.read(pushServiceProvider).unregister();
     try {
       await _api.post<Json>('/auth/logout');
     } on ApiException {

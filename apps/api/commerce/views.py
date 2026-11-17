@@ -321,6 +321,19 @@ class ReverseGeocodeView(APIView):
             return Response({**google_maps.offline_place(lat, lng), "offline": True})
 
 
+class MapsClientConfigView(APIView):
+    """Browser map config for the web storefront (Maps JavaScript API). A browser key is public by design and must be
+    HTTP-referrer restricted in Google Cloud; without one the web app shows its branded plan view instead."""
+
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        m = settings_service.get("maps.google")
+        resp = Response({"browserApiKey": m.browserApiKey or None, "mapId": m.mapId or None, "regionCode": m.regionCode, "language": m.language})
+        resp["Cache-Control"] = "public, max-age=300"
+        return resp
+
+
 # ================================================================ payment methods
 class PaymentMethodsView(APIView):
     permission_classes = [IsAppUser]

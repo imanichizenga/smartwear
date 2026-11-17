@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
 import { Ban, Briefcase, Building2, Check, ExternalLink, FileText, LogOut, Search, ShieldCheck, Smartphone, Star, Users, X } from 'lucide-react';
@@ -50,7 +51,19 @@ export function CustomersWorkspace({ currency }: { currency: string }) {
   const [seg, setSeg] = useState<Seg>('');
   const [q, setQ] = useState('');
   const dq = useDebounced(q);
-  const [open, setOpen] = useState<string | null>(null);
+  // `?open=<customerId>` (e.g. from an order's customer link) opens that customer's sheet.
+  const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [open, setOpenState] = useState<string | null>(() => params.get('open'));
+  useEffect(() => {
+    const want = params.get('open');
+    if (want) setOpenState(want);
+  }, [params]);
+  const setOpen = (id: string | null) => {
+    setOpenState(id);
+    if (!id && params.get('open')) router.replace(pathname, { scroll: false });
+  };
   const apps = useQuery({ queryKey: ['wholesale', 'PENDING'], queryFn: () => api<{ items: WholesaleApp[]; counts: Record<string, number> }>('/admin/wholesale', { query: { status: 'PENDING' } }) });
   const query = useInfiniteQuery({
     queryKey: ['customers', seg, dq],

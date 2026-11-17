@@ -22,6 +22,7 @@ urlpatterns = [
     path("maps/autocomplete", v.PlaceAutocompleteView.as_view()),
     path("maps/places/<str:place_id>", v.PlaceDetailsView.as_view()),
     path("maps/reverse", v.ReverseGeocodeView.as_view()),
+    path("maps/client-config", v.MapsClientConfigView.as_view()),
     path("delivery/estimate", v.DeliveryEstimateView.as_view()),
     path("checkout/quote", v.CheckoutQuoteView.as_view()),
     path("orders", v.PlaceOrderView.as_view()),

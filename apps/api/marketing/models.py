@@ -160,3 +160,25 @@ class Campaign(UUIDModel):
     sent_at = models.DateTimeField(null=True, blank=True)
     stats = models.JSONField(default=dict, blank=True)
     created_by = models.ForeignKey("accounts.AdminUser", null=True, on_delete=models.SET_NULL, related_name="+")
+    # Push campaigns can feature products: one opens its page, several open the campaign page in the app.
+    product_ids = models.JSONField(default=list, blank=True)
+    image = models.ForeignKey("media.Media", null=True, blank=True, on_delete=models.SET_NULL, related_name="+", help_text="Notification picture; defaults to the first product's photo")
+
+
+class CampaignDelivery(models.Model):
+    """One recipient of a push campaign: whether it reached a device, and when (and from where) they opened it."""
+
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name="deliveries")
+    user = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="campaign_deliveries")
+    devices = models.PositiveSmallIntegerField(default=0)
+    delivered = models.BooleanField(default=False, help_text="At least one device accepted the push")
+    error = models.CharField(max_length=120, blank=True, default="")
+    sent_at = models.DateTimeField(auto_now_add=True)
+    opened_at = models.DateTimeField(null=True, blank=True)
+    open_source = models.CharField(max_length=8, blank=True, default="", help_text="push | inbox")
+    open_platform = models.CharField(max_length=8, blank=True, default="")
+    opens = models.PositiveIntegerField(default=0, help_text="Every open, including repeats")
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["campaign", "user"], name="uniq_campaign_delivery")]
+        indexes = [models.Index(fields=["campaign", "opened_at"])]

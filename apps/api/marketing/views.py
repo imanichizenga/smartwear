@@ -17,7 +17,7 @@ from core.exceptions import ApiError
 from core.media_urls import media_out
 from core.pagination import keyset, page_params
 
-from .models import SECTION_TYPES, Banner, Campaign, DropSubscription, HomeSection, Look, LookProductTag, LookReaction, Story, StoryItem, StoryView
+from .models import SECTION_TYPES, Banner, Campaign, CampaignDelivery, DropSubscription, HomeSection, Look, LookProductTag, LookReaction, Story, StoryItem, StoryView
 from .services import banner_out, look_out, render_home, story_out
 
 
@@ -352,15 +352,96 @@ def _apply_look(lk: Look, d: dict) -> None:
         raise ApiError.bad_request("Tag at least one product so the look is shoppable")
 
 
-def campaign_out(c: Campaign) -> dict:
-    return {"id": str(c.id), "channel": c.channel, "name": c.name, "title": c.title or None, "body": c.body, "bodySw": c.body_sw or None, "link": c.link, "audience": c.audience, "scheduledAt": c.scheduled_at.isoformat() if c.scheduled_at else None, "status": c.status, "sentAt": c.sent_at.isoformat() if c.sent_at else None, "stats": c.stats}
+def _link_route(link: dict | None) -> str | None:
+    if not link:
+        return None
+    ident = link.get("slug") or link.get("id")
+    t = link.get("type")
+    if not ident:
+        return link.get("url")
+    return {"product": f"/p/{ident}", "collection": f"/collection/{ident}", "category": f"/c/{ident}", "brand": f"/c/all?brand={ident}", "look": f"/discover?look={ident}"}.get(t)
+
+
+def campaign_route(c: Campaign) -> str:
+    """Where a tap on the push (or its inbox entry) lands in the app."""
+    ids = c.product_ids or []
+    if len(ids) == 1:
+        p = Product.objects.filter(id=ids[0]).only("slug").first()
+        if p:
+            return f"/p/{p.slug}"
+    if len(ids) > 1:
+        return f"/campaign/{c.id}"
+    return _link_route(c.link) or f"/campaign/{c.id}"
+
+
+def _campaign_media(c: Campaign):
+    if c.image_id:
+        return c.image
+    from catalog.models import ProductMedia
+
+    if not c.product_ids:
+        return None
+    pm = ProductMedia.objects.filter(product_id=c.product_ids[0], role="gallery", media__type="IMAGE", media__status="READY").select_related("media").order_by("sort_order", "id").first()
+    return pm.media if pm else None
+
+
+def campaign_image_url(c: Campaign) -> str | None:
+    """Rich-notification picture: a ~1 MB-safe JPEG rendition (FCM/APNs fetch it when the push arrives)."""
+    m = _campaign_media(c)
+    if m is None:
+        return None
+    from media.storage import public_url
+
+    jpegs = sorted([v for v in m.variants or [] if v.get("format") == "jpeg" and v.get("label") != "master"], key=lambda v: v.get("width") or 0)
+    pick = next((v for v in jpegs if (v.get("width") or 0) >= 640), jpegs[-1] if jpegs else None)
+    return public_url(pick["key"]) if pick else None
+
+
+def campaign_stats(c: Campaign) -> dict:
+    s = dict(c.stats or {})
+    if c.channel == "push" and c.status in ("SENDING", "SENT"):
+        from django.db.models import Count, Q, Sum
+
+        agg = CampaignDelivery.objects.filter(campaign=c).aggregate(recipients=Count("id"), delivered=Count("id", filter=Q(delivered=True)), opened=Count("id", filter=Q(opened_at__isnull=False)), fromPush=Count("id", filter=Q(open_source="push")), fromInbox=Count("id", filter=Q(open_source="inbox")), totalOpens=Sum("opens"))
+        delivered = agg["delivered"] or 0
+        s.update({"recipients": agg["recipients"], "delivered": delivered, "failed": (agg["recipients"] or 0) - delivered, "opened": agg["opened"], "openedFromPush": agg["fromPush"], "openedFromInbox": agg["fromInbox"], "totalOpens": agg["totalOpens"] or 0,
+                  "openRate": round(100 * agg["opened"] / delivered, 1) if delivered else 0.0, "anonymousOpens": int(s.get("anonymousOpens", 0))})
+    return s
+
+
+def campaign_out(c: Campaign, *, products: bool = False) -> dict:
+    out = {"id": str(c.id), "channel": c.channel, "name": c.name, "title": c.title or None, "body": c.body, "bodySw": c.body_sw or None, "link": c.link, "audience": c.audience,
+           "scheduledAt": c.scheduled_at.isoformat() if c.scheduled_at else None, "status": c.status, "sentAt": c.sent_at.isoformat() if c.sent_at else None, "createdAt": c.created_at.isoformat(),
+           "stats": campaign_stats(c), "productIds": [str(x) for x in c.product_ids or []], "image": media_out(c.image) if c.image_id else None, "route": campaign_route(c) if c.channel == "push" else None}
+    if products and c.product_ids:
+        rows = {str(p.id): p for p in Product.objects.filter(id__in=c.product_ids)}
+        from catalog.models import ProductMedia
+
+        covers = {}
+        for pm in ProductMedia.objects.filter(product_id__in=c.product_ids, role="gallery", media__type="IMAGE").select_related("media").order_by("sort_order", "id"):
+            covers.setdefault(str(pm.product_id), pm.media)
+        out["products"] = [{"id": i, "title": rows[i].title, "slug": rows[i].slug, "status": rows[i].status, "cover": media_out(covers.get(i))} for i in out["productIds"] if i in rows]
+    return out
+
+
+def _clean_product_ids(raw) -> list[str]:
+    import uuid as _uuid
+
+    ids: list[str] = []
+    for x in (raw or [])[:50]:
+        try:
+            ids.append(str(_uuid.UUID(str(x))))
+        except ValueError:
+            continue
+    found = set(str(i) for i in Product.objects.filter(id__in=ids, deleted_at__isnull=True).values_list("id", flat=True))
+    return [i for i in dict.fromkeys(ids) if i in found]
 
 
 class AdminCampaignsView(APIView):
     permission_classes = [AdminPerm("marketing.manage")]
 
     def get(self, request):
-        return Response({"items": [campaign_out(c) for c in Campaign.objects.order_by("-created_at")[:200]]})
+        return Response({"items": [campaign_out(c, products=True) for c in Campaign.objects.order_by("-created_at")[:200]]})
 
     def post(self, request):
         from .campaigns import audience_queryset
@@ -372,10 +453,19 @@ class AdminCampaignsView(APIView):
             raise ApiError.bad_request("Write the message")
         if d["channel"] == "sms" and len(d["body"]) > 459:
             raise ApiError.bad_request("SMS campaigns are limited to 3 messages (459 characters)")
-        c = Campaign.objects.create(channel=d["channel"], name=(d.get("name") or "Campaign")[:80], title=(d.get("title") or "")[:80], body=d["body"][:480], body_sw=(d.get("bodySw") or "")[:480], link=d.get("link") or {}, audience=d.get("audience") or {}, scheduled_at=parse_datetime(d["scheduledAt"]) if d.get("scheduledAt") else None, created_by=request.user.admin)
+        product_ids = _clean_product_ids(d.get("productIds")) if d["channel"] == "push" else []
+        if d.get("productIds") and d["channel"] == "push" and not product_ids:
+            raise ApiError.bad_request("Those products were not found", field="productIds")
+        image_id = d.get("imageMediaId") or None
+        if image_id:
+            from media.models import Media
+
+            if not Media.objects.filter(id=image_id, type="IMAGE", deleted_at__isnull=True).exists():
+                raise ApiError.bad_request("Picture not found", field="imageMediaId")
+        c = Campaign.objects.create(channel=d["channel"], name=(d.get("name") or "Campaign")[:80], title=(d.get("title") or "")[:80], body=d["body"][:480], body_sw=(d.get("bodySw") or "")[:480], link=d.get("link") or {}, audience=d.get("audience") or {}, scheduled_at=parse_datetime(d["scheduledAt"]) if d.get("scheduledAt") else None, created_by=request.user.admin, product_ids=product_ids, image_id=image_id)
         c.stats = {"audience": audience_queryset(c.audience, c.channel).count()}
         c.save(update_fields=["stats"])
-        return Response(campaign_out(c), status=201)
+        return Response(campaign_out(c, products=True), status=201)
 
 
 class AdminCampaignEstimateView(APIView):
@@ -403,6 +493,22 @@ class AdminCampaignView(APIView):
             raise ApiError.not_found("Campaign")
         if action == "estimate":
             return Response({"audience": audience_queryset(c.audience, c.channel).count()})
+        if action == "test":
+            # Sends the push to one customer (by phone) without counting it — check text, picture and the tap.
+            from accounts.models import User
+            from notifications.models import PushToken
+            from notifications.push import send
+
+            phone = (request.data or {}).get("phone") or ""
+            digits = "".join(ch for ch in phone if ch.isdigit())
+            u = User.objects.filter(phone__endswith=digits[-9:]).first() if len(digits) >= 9 else None
+            if u is None:
+                raise ApiError.bad_request("No customer with that phone number", field="phone")
+            tokens = list(PushToken.objects.filter(user=u, disabled_at__isnull=True))
+            if not tokens:
+                raise ApiError.bad_request("That customer has no device registered for notifications (they need the app, signed in, notifications allowed)", field="phone")
+            res = send(tokens, c.title or "SmartWear", c.body_sw if u.locale == "sw" and c.body_sw else c.body, {"type": "campaign", "campaignId": str(c.id), "route": campaign_route(c), "test": "1"}, channel="marketing", image=campaign_image_url(c))
+            return Response({"devices": len(tokens), "delivered": res["ok"], "errors": res["errors"]})
         if action == "send":
             if c.status not in ("DRAFT", "SCHEDULED"):
                 raise ApiError.conflict("sent", "This campaign was already sent")
@@ -415,9 +521,80 @@ class AdminCampaignView(APIView):
                 c.save(update_fields=["status"])
                 send_campaign.delay(str(c.id))
             audit("campaign.send", "campaign", c.id, request=request, meta={"channel": c.channel})
-            return Response(campaign_out(c))
+            return Response(campaign_out(c, products=True))
         if action == "cancel" and c.status in ("DRAFT", "SCHEDULED"):
             c.status = "CANCELLED"
             c.save(update_fields=["status"])
             return Response(campaign_out(c))
         raise ApiError.bad_request("Unknown action")
+
+
+class AdminCampaignReportView(APIView):
+    """`GET /admin/campaigns/<id>/report` — delivery funnel, opens over time and the latest people who opened."""
+
+    permission_classes = [AdminPerm("marketing.manage")]
+
+    def get(self, request, cid):
+        from django.db.models import Count
+        from django.db.models.functions import TruncHour
+
+        c = Campaign.objects.filter(id=cid).first()
+        if c is None:
+            raise ApiError.not_found("Campaign")
+        qs = CampaignDelivery.objects.filter(campaign=c)
+        timeline = [{"at": r["h"].isoformat(), "opens": r["n"]} for r in qs.filter(opened_at__isnull=False).annotate(h=TruncHour("opened_at")).values("h").annotate(n=Count("id")).order_by("h")]
+        latest = [{"name": d.user.display_name or d.user.name or "", "phone": d.user.phone, "openedAt": d.opened_at.isoformat(), "source": d.open_source, "platform": d.open_platform, "opens": d.opens}
+                  for d in qs.filter(opened_at__isnull=False).select_related("user").order_by("-opened_at")[:50]]
+        errors = list(qs.filter(delivered=False).exclude(error="").values("error").annotate(n=Count("id")).order_by("-n")[:5])
+        return Response({"campaign": campaign_out(c, products=True), "timeline": timeline, "latestOpens": latest, "deliveryErrors": [{"error": e["error"], "count": e["n"]} for e in errors]})
+
+
+class CampaignPublicView(APIView):
+    """`GET /v1/campaigns/<id>` — the in-app campaign page (message + featured products)."""
+
+    permission_classes = [AllowAny]
+
+    def get(self, request, cid):
+        from catalog.services.products import card_queryset, cards
+        from catalog.services.viewer import context_for_user
+
+        c = Campaign.objects.filter(id=cid, channel="push", status__in=("SENDING", "SENT")).first()
+        if c is None:
+            raise ApiError.not_found("Campaign")
+        user = request_user(request)
+        loc = locale_of(request)
+        order = {pid: i for i, pid in enumerate(c.product_ids or [])}
+        prods = sorted(card_queryset(Product.objects.filter(id__in=c.product_ids or [], status="PUBLISHED", deleted_at__isnull=True)), key=lambda p: order.get(str(p.id), 999))
+        m = _campaign_media(c)
+        return Response({"id": str(c.id), "title": c.title or "SmartWear", "body": c.body_sw if loc == "sw" and c.body_sw else c.body, "image": media_out(m) if m else None, "sentAt": c.sent_at.isoformat() if c.sent_at else None,
+                         "products": cards(prods, context_for_user(user), user=user, locale=loc)})
+
+
+class CampaignOpenedView(APIView):
+    """`POST /v1/campaigns/<id>/opened {source: push|inbox, platform}` — counts an open (unique per person + total)."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request, cid):
+        d = request.data or {}
+        source = d.get("source") if d.get("source") in ("push", "inbox") else "push"
+        platform = (d.get("platform") or "")[:8]
+        user = request_user(request)
+        c = Campaign.objects.filter(id=cid).only("id", "stats").first()
+        if c is None:
+            raise ApiError.not_found("Campaign")
+        if user is None:
+            # Signed out since it was sent: still an open, just not attributable to a person.
+            Campaign.objects.filter(id=c.id).update(stats={**(c.stats or {}), "anonymousOpens": int((c.stats or {}).get("anonymousOpens", 0)) + 1})
+            return Response({"ok": True})
+        now = timezone.now()
+        n = CampaignDelivery.objects.filter(campaign_id=c.id, user=user, opened_at__isnull=True).update(opened_at=now, open_source=source, open_platform=platform, opens=F("opens") + 1)
+        if not n:
+            CampaignDelivery.objects.filter(campaign_id=c.id, user=user).update(opens=F("opens") + 1)
+        try:
+            from notifications.realtime import broadcast
+
+            broadcast("admin.campaigns", {"type": "campaign.opened", "campaignId": str(c.id)})
+        except Exception:  # noqa: BLE001
+            pass
+        return Response({"ok": True})

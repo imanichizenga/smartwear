@@ -39,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Push (Firebase Cloud Messaging): monochrome status-bar icon (the Atelier A), brand tint, default channel. -->
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_notification" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/notification_accent" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="default" />
         <!-- Google Maps SDK (display only, restricted key). Injected at build time from
              --dart-define=MAPS_API_KEY=…, the MAPS_API_KEY env var or android/local.properties.
              Without a key the app renders its branded plan view instead of native maps. -->

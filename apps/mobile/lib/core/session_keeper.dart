@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api.dart';
 import 'providers.dart';
+import 'push.dart';
 import 'realtime.dart';
 
 /// Keeps a signed-in session healthy for the app's lifetime:
@@ -47,6 +48,8 @@ class SessionKeeper {
     if (next.signedIn) {
       _schedule();
       ref.read(realtimeProvider).ensure();
+      // Push: (re)register this device for the signed-in account (asks for permission the first time).
+      if (prev?.signedIn != true) unawaited(ref.read(pushServiceProvider).register(locale: next.user?['locale']?.toString() ?? 'en'));
     } else if (prev?.signedIn == true) {
       _timer?.cancel();
       ref.read(realtimeProvider).reset();

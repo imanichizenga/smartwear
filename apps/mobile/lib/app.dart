@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/api.dart';
 import 'core/providers.dart';
+import 'core/push.dart';
 import 'core/session_keeper.dart';
 import 'design/theme.dart';
 import 'l10n/strings.dart';
@@ -18,6 +19,7 @@ class SmartWearApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     final locale = ref.watch(localeProvider);
     ref.watch(sessionKeeperProvider);
+    ref.watch(pushRouterProvider);
     // The server ended the session (admin block / revoke / account deleted): go to Welcome and say why.
     ref.listen<SessionState>(sessionProvider, (prev, next) {
       if (prev?.signedIn != true || next.signedIn || next.endedBy == null) return;
@@ -95,3 +97,30 @@ class _OfflineBanner extends ConsumerWidget {
     );
   }
 }
+
+/// Opens the screen a push points at (product, campaign, order, chat…) — immediately when the app is running, or
+/// once the session is restored after a cold start from the notification.
+final pushRouterProvider = Provider<void>((ref) {
+  final push = ref.read(pushServiceProvider);
+  final router = ref.read(routerProvider);
+  Future<void> go(Map<String, dynamic> data) async {
+    final route = PushService.routeOf(data);
+    if (route == null) return;
+    // After a cold start: wait until the splash has handed over (session restored, first screen shown).
+    for (var i = 0; i < 60 && (!ref.read(sessionProvider).ready || router.routerDelegate.currentConfiguration.uri.path == '/splash'); i++) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    router.push(route);
+  }
+
+  final sub = push.opens.listen((d) {
+    push.takePendingOpen();
+    go(d);
+  });
+  ref.onDispose(sub.cancel);
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await push.init();
+    final pending = push.takePendingOpen();
+    if (pending != null) await go(pending);
+  });
+});
